@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LoteClip</string>
+    <string name="title_activity_main">LoteClip</string>
+    <string name="package_name">com.loteclip.app</string>
+    <string name="custom_url_scheme">com.loteclip.app</string>
+</resources>
