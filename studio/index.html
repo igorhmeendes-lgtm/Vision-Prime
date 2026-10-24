@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AfiliaClip Studio</title>
+<meta name="description" content="Transforme o link de um produto em vídeo de venda para TikTok afiliado — direto no navegador, sem custo.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'sans-serif'],
+          display: ['Manrope', 'ui-sans-serif', 'sans-serif'],
+        },
+        colors: {
+          accent: { DEFAULT: '#6366F1', light: '#818CF8', dark: '#4F46E5' },
+          accent2: '#22D3EE',
+        },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .font-display { font-family: 'Manrope', sans-serif; }
+  :root { --bg: #F8FAFC; --surface: #FFFFFF; --border-c: #E2E8F0; }
+  html.dark { --bg: #0B1120; --surface: #111827; --border-c: #1F2937; }
+  body { background: var(--bg); }
+  .surface { background: var(--surface); }
+  .border-app { border-color: var(--border-c); }
+  .gradient-btn { background: linear-gradient(90deg, #6366F1 0%, #4F46E5 100%); }
+  .gradient-text { background: linear-gradient(90deg, #6366F1 0%, #22D3EE 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .field { width: 100%; border-radius: 0.75rem; border: 1px solid var(--border-c); background: var(--surface); padding: 0.6rem 0.8rem; font-size: 0.9rem; }
+  .field:focus { outline: 2px solid #6366F1; outline-offset: 1px; }
+  .nav-btn[aria-current="page"] { background: rgba(99,102,241,0.12); color: #6366F1; }
+  html.dark .nav-btn[aria-current="page"] { background: rgba(99,102,241,0.22); color: #A5B4FC; }
+  .preview-wrap { aspect-ratio: 9 / 16; }
+  .preview-wrap canvas { width: 100%; height: 100%; display: block; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body class="text-slate-800 dark:text-slate-100 min-h-screen">
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="hidden md:flex w-60 shrink-0 flex-col border-r border-app surface p-4 gap-1">
+    <div class="flex items-center gap-2 px-2 py-3 mb-2">
+      <div class="w-9 h-9 rounded-xl gradient-btn grid place-items-center text-white font-display font-extrabold">A</div>
+      <div>
+        <p class="font-display font-extrabold leading-tight">AfiliaClip</p>
+        <p class="text-xs text-slate-500">Studio</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1" id="nav">
+      <button class="nav-btn text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800" data-view="dashboard">📊 Painel</button>
+      <button class="nav-btn text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800" data-view="create">🎬 Criar vídeo</button>
+      <button class="nav-btn text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800" data-view="products">📦 Produtos</button>
+      <button class="nav-btn text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800" data-view="videos">📈 Vídeos & resultados</button>
+      <button class="nav-btn text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800" data-view="settings">⚙️ Configurações</button>
+    </nav>
+    <div class="mt-auto text-xs text-slate-500 px-2">
+      <p>Plano: <span id="plan-label" class="font-semibold"></span></p>
+      <p>Dados salvos neste navegador.</p>
+    </div>
+  </aside>
+
+  <div class="flex-1 min-w-0 flex flex-col">
+    <!-- Topbar -->
+    <header class="flex items-center justify-between gap-3 border-b border-app surface px-4 md:px-8 py-3">
+      <select id="nav-mobile" class="field md:hidden max-w-[200px]" aria-label="Navegação">
+        <option value="dashboard">📊 Painel</option>
+        <option value="create">🎬 Criar vídeo</option>
+        <option value="products">📦 Produtos</option>
+        <option value="videos">📈 Vídeos & resultados</option>
+        <option value="settings">⚙️ Configurações</option>
+      </select>
+      <h1 id="view-title" class="hidden md:block font-display font-extrabold text-xl">Painel</h1>
+      <div class="flex items-center gap-2">
+        <button id="btn-new" class="gradient-btn text-white text-sm font-semibold px-4 py-2 rounded-xl">+ Novo vídeo</button>
+        <button id="btn-theme" class="w-10 h-10 rounded-xl border border-app grid place-items-center" aria-label="Alternar modo escuro" title="Alternar modo escuro">🌙</button>
+      </div>
+    </header>
+
+    <main class="flex-1 px-4 md:px-8 py-6 max-w-7xl w-full mx-auto">
+
+      <!-- ===== PAINEL ===== -->
+      <section data-panel="dashboard">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="kpis"></div>
+        <div class="grid lg:grid-cols-3 gap-4 mt-6">
+          <div class="surface border border-app rounded-2xl p-5 lg:col-span-2">
+            <h2 class="font-display font-bold mb-1">Desempenho por ângulo de venda</h2>
+            <p class="text-xs text-slate-500 mb-4">Média de visualizações e conversão dos vídeos que você marcou como postados. Use o ângulo vencedor nos próximos vídeos.</p>
+            <div id="angle-table"></div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-display font-bold mb-3">Últimos vídeos</h2>
+            <ul id="recent-videos" class="space-y-2 text-sm"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CRIAR VÍDEO ===== -->
+      <section data-panel="create" hidden>
+        <ol class="flex items-center gap-2 text-sm font-semibold mb-6" id="stepper">
+          <li data-step="1" class="step px-3 py-1.5 rounded-full border border-app">1. Produto</li>
+          <li class="text-slate-400">→</li>
+          <li data-step="2" class="step px-3 py-1.5 rounded-full border border-app">2. Roteiro</li>
+          <li class="text-slate-400">→</li>
+          <li data-step="3" class="step px-3 py-1.5 rounded-full border border-app">3. Vídeo</li>
+        </ol>
+
+        <!-- Passo 1 -->
+        <div data-stepbox="1" class="grid lg:grid-cols-3 gap-6">
+          <form id="product-form" class="surface border border-app rounded-2xl p-5 lg:col-span-2 space-y-4" novalidate>
+            <input type="hidden" name="id">
+            <div>
+              <label class="text-sm font-semibold" for="pf-url">Link do produto</label>
+              <input id="pf-url" name="url" type="url" class="field mt-1" placeholder="https://shopee.com.br/... ou link do TikTok Shop">
+              <p class="text-xs text-slate-500 mt-1">Dica: use o <b>botão Capturar</b> (em Configurações) na página do produto para preencher tudo automaticamente.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <label class="text-sm font-semibold" for="pf-name">Nome do produto *</label>
+                <input id="pf-name" name="name" class="field mt-1" required>
+                <p class="text-xs text-rose-500 mt-1" data-error="name" hidden>Informe o nome do produto para gerar os roteiros.</p>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="pf-price">Preço atual (R$)</label>
+                <input id="pf-price" name="price" inputmode="decimal" class="field mt-1" placeholder="49,90">
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="pf-old">Preço antigo (R$)</label>
+                <input id="pf-old" name="oldPrice" inputmode="decimal" class="field mt-1" placeholder="89,90">
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="pf-cat">Categoria</label>
+                <select id="pf-cat" name="category" class="field mt-1"></select>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="pf-commission">Comissão (%)</label>
+                <input id="pf-commission" name="commissionPct" inputmode="decimal" class="field mt-1" placeholder="10">
+              </div>
+            </div>
+            <div>
+              <label class="text-sm font-semibold" for="pf-benefits">Benefícios (um por linha)</label>
+              <textarea id="pf-benefits" name="benefits" rows="4" class="field mt-1" placeholder="Não gruda&#10;Lava na máquina&#10;Cabe na gaveta"></textarea>
+            </div>
+            <div>
+              <label class="text-sm font-semibold" for="pf-pain">Dor do cliente (opcional)</label>
+              <input id="pf-pain" name="pain" class="field mt-1" placeholder="ex.: panela que gruda tudo">
+            </div>
+            <div>
+              <p class="text-sm font-semibold">Fotos do produto *</p>
+              <label class="mt-1 flex flex-col items-center justify-center gap-1 border-2 border-dashed border-app rounded-xl p-5 text-center cursor-pointer hover:border-accent">
+                <span class="text-2xl">🖼️</span>
+                <span class="text-sm font-semibold">Clique ou arraste fotos aqui</span>
+                <span class="text-xs text-slate-500">JPG, PNG ou WEBP — de 3 a 6 fotos dão o melhor resultado</span>
+                <input id="pf-files" type="file" accept="image/*" multiple class="sr-only">
+              </label>
+              <div id="pf-thumbs" class="grid grid-cols-4 sm:grid-cols-6 gap-2 mt-3"></div>
+              <p id="pf-img-msg" class="text-xs mt-2 text-amber-600" hidden></p>
+            </div>
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button type="submit" class="gradient-btn text-white font-semibold px-5 py-2.5 rounded-xl">Salvar e gerar roteiros →</button>
+              <button type="button" id="pf-clear" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Limpar formulário</button>
+            </div>
+          </form>
+          <aside class="space-y-4">
+            <div class="surface border border-app rounded-2xl p-5">
+              <h3 class="font-display font-bold mb-2">Usar produto salvo</h3>
+              <select id="pick-product" class="field"><option value="">Selecione…</option></select>
+            </div>
+            <div class="surface border border-app rounded-2xl p-5 text-sm space-y-2">
+              <h3 class="font-display font-bold">Como funciona</h3>
+              <p>1. Cadastre o produto (link + fotos).</p>
+              <p>2. O agente cria <b>3 roteiros</b>: Dor, Achadinho e Oferta.</p>
+              <p>3. Escolha o tema e a música e baixe o vídeo 9:16.</p>
+              <p class="text-slate-500">Para ter narração grátis: no app do TikTok, toque em <b>Texto → Texto para voz</b> e cole a narração que geramos.</p>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Passo 2 -->
+        <div data-stepbox="2" hidden>
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+              <p class="text-sm text-slate-500">Produto</p>
+              <p id="s2-product" class="font-display font-bold text-lg"></p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <select id="s2-cta" class="field w-auto">
+                <option value="carrinho">CTA: carrinho laranja</option>
+                <option value="bio">CTA: link na bio</option>
+                <option value="comente">CTA: comente</option>
+              </select>
+              <button id="s2-regen" class="px-4 py-2 rounded-xl border border-app font-semibold text-sm">🔄 Novas variações</button>
+              <button id="s2-ai" class="px-4 py-2 rounded-xl border border-app font-semibold text-sm">✨ Turbinar com IA grátis</button>
+              <button id="s2-back" class="px-4 py-2 rounded-xl border border-app font-semibold text-sm">← Voltar</button>
+            </div>
+          </div>
+          <div id="s2-ai-box" class="surface border border-app rounded-2xl p-5 mb-4 space-y-3" hidden>
+            <p class="text-sm"><b>1.</b> Copie o prompt e cole no Claude.ai ou no ChatGPT (plano grátis). <b>2.</b> Cole aqui embaixo a resposta em JSON.</p>
+            <div class="flex gap-2"><button id="s2-copy-prompt" class="gradient-btn text-white text-sm font-semibold px-4 py-2 rounded-xl">Copiar prompt</button></div>
+            <textarea id="s2-ai-json" rows="5" class="field font-mono text-xs" placeholder='[{"angle":"dor","hook":"...","scenes":[...]}]'></textarea>
+            <p id="s2-ai-err" class="text-xs text-rose-500" hidden></p>
+            <button id="s2-ai-apply" class="px-4 py-2 rounded-xl border border-app font-semibold text-sm">Usar roteiros da IA</button>
+          </div>
+          <div id="s2-scripts" class="grid lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- Passo 3 -->
+        <div data-stepbox="3" hidden class="grid lg:grid-cols-5 gap-6">
+          <div class="lg:col-span-2">
+            <div class="preview-wrap mx-auto max-w-[340px] rounded-3xl overflow-hidden border border-app bg-black relative">
+              <canvas id="canvas"></canvas>
+              <!-- Simulação da interface do TikTok (só no preview, não é gravada) -->
+              <div id="safe-overlay" class="pointer-events-none absolute inset-0" hidden>
+                <div class="absolute right-2 bottom-[22%] flex flex-col gap-3 items-center opacity-70">
+                  <div class="w-8 h-8 rounded-full bg-white/80"></div><div class="w-7 h-7 rounded-full bg-white/60"></div><div class="w-7 h-7 rounded-full bg-white/60"></div><div class="w-7 h-7 rounded-full bg-white/60"></div>
+                </div>
+                <div class="absolute left-3 right-14 bottom-4 space-y-1 opacity-70">
+                  <div class="h-3 w-24 rounded bg-white/80"></div><div class="h-2.5 w-44 rounded bg-white/60"></div>
+                  <div class="h-6 w-36 rounded-md bg-orange-500/80 mt-2"></div>
+                </div>
+              </div>
+            </div>
+            <div class="max-w-[340px] mx-auto mt-3">
+              <div class="h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden"><div id="s3-progress" class="h-full bg-accent w-0"></div></div>
+              <p id="s3-time" class="text-xs text-slate-500 mt-1 text-center">0,0s</p>
+            </div>
+          </div>
+          <div class="lg:col-span-3 space-y-4">
+            <div class="surface border border-app rounded-2xl p-5 space-y-4">
+              <div class="grid sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="text-sm font-semibold" for="s3-theme">Tema</label>
+                  <select id="s3-theme" class="field mt-1"></select>
+                </div>
+                <div>
+                  <label class="text-sm font-semibold" for="s3-res">Resolução</label>
+                  <select id="s3-res" class="field mt-1">
+                    <option value="1080">1080 × 1920 (recomendado)</option>
+                    <option value="720">720 × 1280 (PC mais fraco)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-sm font-semibold" for="s3-music">Música (opcional)</label>
+                  <input id="s3-music" type="file" accept="audio/*" class="field mt-1 text-xs">
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <label for="s3-vol" class="text-sm font-semibold whitespace-nowrap">Volume da música</label>
+                <input id="s3-vol" type="range" min="0" max="1" step="0.05" value="0.6" class="flex-1">
+              </div>
+              <label class="flex items-center gap-2 text-sm"><input id="s3-safe" type="checkbox" class="rounded"> Mostrar a interface do TikTok no preview (para conferir as áreas seguras)</label>
+              <div class="flex flex-wrap gap-3">
+                <button id="s3-play" class="px-5 py-2.5 rounded-xl border border-app font-semibold">▶ Pré-visualizar</button>
+                <button id="s3-render" class="gradient-btn text-white font-semibold px-5 py-2.5 rounded-xl">⬇ Gerar e baixar vídeo</button>
+                <button id="s3-back" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">← Roteiros</button>
+              </div>
+              <p class="text-xs text-slate-500">Formato de saída neste navegador: <b id="s3-mime"></b>. Durante a gravação, mantenha esta aba aberta e visível — a gravação acontece em tempo real.</p>
+              <p id="s3-status" class="text-sm font-semibold" role="status" aria-live="polite"></p>
+            </div>
+
+            <div class="surface border border-app rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-display font-bold">Cenas (edite os textos)</h3>
+                <span id="s3-dur" class="text-xs text-slate-500"></span>
+              </div>
+              <div id="s3-scenes" class="space-y-2"></div>
+            </div>
+
+            <div class="surface border border-app rounded-2xl p-5 space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="font-display font-bold">Legenda do post</h3>
+                <button data-copy="s3-caption" class="text-sm font-semibold text-accent">Copiar</button>
+              </div>
+              <textarea id="s3-caption" rows="6" class="field text-sm"></textarea>
+              <div class="flex items-center justify-between">
+                <h3 class="font-display font-bold">Narração (para usar no Texto para voz do TikTok)</h3>
+                <button data-copy="s3-narration" class="text-sm font-semibold text-accent">Copiar</button>
+              </div>
+              <textarea id="s3-narration" rows="4" class="field text-sm"></textarea>
+              <div id="s3-issues"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PRODUTOS ===== -->
+      <section data-panel="products" hidden>
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <input id="prod-search" class="field max-w-sm" placeholder="Buscar produto…" aria-label="Buscar produto">
+        </div>
+        <div id="prod-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </section>
+
+      <!-- ===== VÍDEOS ===== -->
+      <section data-panel="videos" hidden>
+        <p class="text-sm text-slate-500 mb-4">Depois de postar, atualize os números de cada vídeo. O painel usa esses dados para mostrar qual ângulo de venda converte mais.</p>
+        <div class="surface border border-app rounded-2xl overflow-x-auto">
+          <table class="w-full text-sm min-w-[860px]">
+            <thead class="text-left text-xs uppercase text-slate-500 border-b border-app">
+              <tr>
+                <th class="p-3">Vídeo</th><th class="p-3">Ângulo</th><th class="p-3">Status</th>
+                <th class="p-3">Views</th><th class="p-3">Cliques</th><th class="p-3">Vendas</th>
+                <th class="p-3">Comissão (R$)</th><th class="p-3">Conversão</th><th class="p-3"></th>
+              </tr>
+            </thead>
+            <tbody id="vid-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== CONFIGURAÇÕES ===== -->
+      <section data-panel="settings" hidden class="grid lg:grid-cols-2 gap-6">
+        <div class="surface border border-app rounded-2xl p-5 space-y-3">
+          <h2 class="font-display font-bold">Botão "Capturar produto"</h2>
+          <p class="text-sm">Arraste o botão abaixo para a barra de favoritos do Chrome. Na página de um produto (Shopee, Mercado Livre, Amazon, TikTok Shop…), clique nele: o Studio abre com o nome, o preço, a descrição e as fotos preenchidos.</p>
+          <a id="bookmarklet" class="inline-block gradient-btn text-white font-semibold px-4 py-2 rounded-xl cursor-move" href="#">📥 Capturar p/ AfiliaClip</a>
+          <p id="bm-warn" class="text-xs text-amber-600" hidden>O Studio está aberto como arquivo local (file://). Para o botão funcionar, publique a pasta no GitHub Pages (grátis); o guia está no README.</p>
+          <p class="text-xs text-slate-500">Se a loja bloquear o download das fotos, o Studio avisa: é só salvar as imagens e enviá-las manualmente.</p>
+        </div>
+        <div class="surface border border-app rounded-2xl p-5 space-y-3">
+          <h2 class="font-display font-bold">Backup dos dados</h2>
+          <p class="text-sm">Seus produtos, roteiros e resultados ficam salvos neste navegador. Exporte um backup de vez em quando ou use-o para levar os dados para outro computador.</p>
+          <div class="flex flex-wrap gap-3">
+            <button id="btn-export" class="gradient-btn text-white font-semibold px-4 py-2 rounded-xl text-sm">Exportar backup (.json)</button>
+            <label class="px-4 py-2 rounded-xl border border-app font-semibold text-sm cursor-pointer">Importar backup<input id="btn-import" type="file" accept="application/json" class="sr-only"></label>
+          </div>
+          <p id="backup-msg" class="text-sm" role="status"></p>
+        </div>
+        <div class="surface border border-app rounded-2xl p-5 space-y-2 lg:col-span-2 text-sm">
+          <h2 class="font-display font-bold">Sobre</h2>
+          <p><span id="about-app"></span> — modo <b id="about-mode"></b>. Pronto para virar SaaS: veja <code>docs/ARQUITETURA.md</code>.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-lg" hidden role="status" aria-live="polite"></div>
+
+<script src="js/config.js"></script>
+<script src="js/util.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/copywriter.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
