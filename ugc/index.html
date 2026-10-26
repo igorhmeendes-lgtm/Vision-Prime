@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CriaVende | Vídeos UGC com IA que vendem</title>
+<meta name="description" content="CriaVende: crie vídeos UGC, roteiros virais e criativos para TikTok Shop em minutos, sem gravar nada.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'sans-serif'],
+          display: ['Manrope', 'ui-sans-serif', 'sans-serif'],
+        },
+        colors: {
+          accent: { DEFAULT: '#7C3AED', light: '#A78BFA', dark: '#6D28D9' },
+          accent2: '#F43F5E',
+        },
+        boxShadow: { soft: '0 20px 45px -20px rgba(124,58,237,0.35)' },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; }
+  .font-display { font-family: 'Manrope', sans-serif; }
+  :root { --bg: #F8FAFC; --surface: #FFFFFF; --border-c: #E2E8F0; --muted: #64748B; }
+  html.dark { --bg: #0B0F1A; --surface: #121826; --border-c: #1F2937; --muted: #94A3B8; }
+  body { background: var(--bg); }
+  .surface { background: var(--surface); }
+  .border-app { border-color: var(--border-c); }
+  .muted { color: var(--muted); }
+  .gradient-text { background: linear-gradient(90deg, #7C3AED 0%, #F43F5E 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .gradient-btn { background: linear-gradient(90deg, #7C3AED 0%, #6D28D9 100%); }
+  .gradient-btn:hover { filter: brightness(1.08); }
+  .input { width: 100%; border-radius: 0.75rem; border: 1px solid var(--border-c); background: var(--surface); padding: 0.625rem 0.875rem; font-size: 0.875rem; outline: none; }
+  .input:focus { border-color: #7C3AED; box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
+  .nav-item.active { background: rgba(124,58,237,0.12); color: #7C3AED; }
+  html.dark .nav-item.active { color: #A78BFA; }
+  .persona.selected { outline: 2px solid #7C3AED; outline-offset: 2px; }
+  :focus-visible { outline: 2px solid #7C3AED; outline-offset: 2px; }
+  details summary::-webkit-details-marker { display: none; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body class="text-slate-900 dark:text-slate-100 antialiased">
+
+<!-- ====================== LANDING ====================== -->
+<div id="landing">
+  <header class="sticky top-0 z-40 backdrop-blur border-b border-app" style="background:color-mix(in srgb, var(--surface) 88%, transparent)">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <a href="#top" class="font-display font-extrabold text-xl">Cria<span class="gradient-text">Vende</span></a>
+      <nav class="hidden md:flex items-center gap-6 text-sm muted">
+        <a href="#recursos" class="hover:text-accent">Recursos</a>
+        <a href="#como-funciona" class="hover:text-accent">Como funciona</a>
+        <a href="#planos" class="hover:text-accent">Planos</a>
+        <a href="#faq" class="hover:text-accent">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <button data-theme-toggle class="w-9 h-9 rounded-lg border border-app grid place-items-center" aria-label="Alternar tema" title="Alternar tema"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
+        <button data-open-auth class="hidden sm:inline-flex text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Já tenho acesso</button>
+        <a href="#planos" class="text-sm font-semibold text-white gradient-btn px-4 py-2 rounded-lg">Assinar</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="max-w-6xl mx-auto px-4 pt-16 pb-20 grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-accent/10 text-accent">Plataforma de vídeos UGC com inteligência artificial</span>
+        <h1 class="font-display font-extrabold text-4xl sm:text-5xl leading-tight mt-5">Crie <span class="gradient-text">vídeos UGC</span> que vendem por você.</h1>
+        <p class="muted text-lg mt-5 max-w-lg">Gere conteúdos UGC em poucos minutos e transforme ideias em vídeos prontos para vender, <strong class="text-slate-900 dark:text-white">sem gravar nada</strong>.</p>
+        <div class="flex flex-wrap gap-3 mt-8">
+          <button data-open-auth class="gradient-btn text-white font-semibold px-6 py-3 rounded-xl shadow-soft">Criar meu primeiro vídeo</button>
+          <a href="#como-funciona" class="px-6 py-3 rounded-xl border border-app font-semibold">Ver como funciona</a>
+        </div>
+      </div>
+      <div class="flex justify-center">
+        <div class="relative w-64 aspect-[9/16] rounded-[2rem] border-8 border-slate-900 dark:border-slate-700 overflow-hidden shadow-soft bg-gradient-to-br from-violet-600 to-rose-500">
+          <div class="absolute top-6 inset-x-4 text-center text-white font-display font-extrabold text-lg leading-tight">Gente, esse sérum mudou minha pele em 7 dias</div>
+          <div class="absolute inset-x-6 top-1/3 aspect-square rounded-2xl bg-white/20 grid place-items-center text-white/80 text-sm">seu produto aqui</div>
+          <div class="absolute bottom-16 inset-x-4 text-center"><span class="bg-black/60 text-white font-bold text-sm px-2 py-1 rounded">Toque no carrinho laranja</span></div>
+          <div class="absolute bottom-4 left-4 flex items-center gap-2"><span class="w-8 h-8 rounded-full bg-white text-violet-700 font-bold grid place-items-center text-xs">JU</span><span class="text-white text-xs font-semibold">@ju.indica</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recursos" class="max-w-6xl mx-auto px-4 py-16">
+      <p class="text-sm font-semibold text-accent">Recursos</p>
+      <h2 class="font-display font-extrabold text-3xl mt-2">Tudo que você precisa para criar conteúdo que converte.</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+        <div class="surface border border-app rounded-2xl p-6"><h3 class="font-semibold">Crie vídeos UGC</h3><p class="muted text-sm mt-2">Vídeos com aparência natural, legendas animadas e CTA prontos para o feed.</p></div>
+        <div class="surface border border-app rounded-2xl p-6"><h3 class="font-semibold">Escolha seu criador</h3><p class="muted text-sm mt-2">Personas com estilos diferentes para representar cada produto.</p></div>
+        <div class="surface border border-app rounded-2xl p-6"><h3 class="font-semibold">Conteúdo em minutos</h3><p class="muted text-sm mt-2">De uma ideia a um vídeo pronto para publicar, sem câmera.</p></div>
+        <div class="surface border border-app rounded-2xl p-6"><h3 class="font-semibold">Venda mais</h3><p class="muted text-sm mt-2">Ganchos e roteiros pensados para prender atenção e gerar desejo.</p></div>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="max-w-6xl mx-auto px-4 py-16">
+      <div class="surface border border-app rounded-3xl p-8 md:p-12">
+        <p class="text-sm font-semibold text-accent2">TikTok Shop com IA</p>
+        <h2 class="font-display font-extrabold text-3xl mt-2">Modelos que <span class="gradient-text">vendem por você</span></h2>
+        <p class="muted mt-3">Envie o produto e a foto da modelo: a plataforma monta o criativo, sem fotógrafo e sem estúdio.</p>
+        <ol class="grid md:grid-cols-3 gap-4 mt-8">
+          <li class="rounded-2xl border border-app p-5"><span class="text-xs font-bold text-accent">1</span><p class="font-semibold mt-1">Produto</p><p class="muted text-sm">Foto do item que você vende.</p></li>
+          <li class="rounded-2xl border border-app p-5"><span class="text-xs font-bold text-accent">2</span><p class="font-semibold mt-1">Modelo</p><p class="muted text-sm">Foto da pessoa que vai apresentar.</p></li>
+          <li class="rounded-2xl border border-app p-5"><span class="text-xs font-bold text-accent">3</span><p class="font-semibold mt-1">Resultado</p><p class="muted text-sm">Criativo final + variação para teste A/B.</p></li>
+        </ol>
+        <button data-open-auth class="mt-8 gradient-btn text-white font-semibold px-6 py-3 rounded-xl">Criar modelo TikTok Shop</button>
+      </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 py-16">
+      <h2 class="font-display font-extrabold text-3xl text-center">Feito para quem quer transformar conteúdo em vendas.</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 text-center">
+        <div class="surface border border-app rounded-2xl p-6"><p class="font-display font-extrabold text-3xl gradient-text">+10.000</p><p class="muted text-sm mt-1">vídeos criados</p></div>
+        <div class="surface border border-app rounded-2xl p-6"><p class="font-display font-extrabold text-3xl gradient-text">+2.000</p><p class="muted text-sm mt-1">criadores</p></div>
+        <div class="surface border border-app rounded-2xl p-6"><p class="font-display font-extrabold text-3xl gradient-text">100%</p><p class="muted text-sm mt-1">gerado com IA</p></div>
+        <div class="surface border border-app rounded-2xl p-6"><p class="font-display font-extrabold text-3xl gradient-text">&lt; 5 min</p><p class="muted text-sm mt-1">para o primeiro vídeo</p></div>
+      </div>
+      <p class="muted text-xs text-center mt-3">Números ilustrativos: substitua pelos seus dados reais antes de publicar.</p>
+    </section>
+
+    <section id="planos" class="max-w-6xl mx-auto px-4 py-16">
+      <p class="text-sm font-semibold text-accent text-center">Planos</p>
+      <h2 class="font-display font-extrabold text-3xl text-center mt-2">Escolha o ritmo da sua criação.</h2>
+      <p class="muted text-center mt-2">Cancele quando quiser. Sem letras miúdas.</p>
+      <div class="max-w-md mx-auto mt-6 flex gap-2">
+        <input id="coupon" class="input" placeholder="Cupom de desconto" aria-label="Cupom de desconto">
+        <button id="applyCoupon" class="px-4 rounded-xl border border-app font-semibold text-sm">Aplicar</button>
+      </div>
+      <p id="couponMsg" class="text-center text-sm mt-2 min-h-[1.25rem]"></p>
+      <div class="grid md:grid-cols-2 gap-6 mt-6 max-w-4xl mx-auto">
+        <div class="surface border border-app rounded-3xl p-8 flex flex-col">
+          <h3 class="font-display font-bold text-xl">Mensal</h3>
+          <p class="muted text-sm mt-1">Acesso completo com flexibilidade total.</p>
+          <p class="mt-6"><span class="font-display font-extrabold text-4xl" data-price="319.90">R$ 319,90</span><span class="muted">/mês</span></p>
+          <ul class="mt-6 space-y-2 text-sm flex-1" data-features="base"></ul>
+          <button data-open-auth class="mt-8 w-full py-3 rounded-xl border border-accent text-accent font-semibold">Assinar mensal</button>
+        </div>
+        <div class="surface border-2 border-accent rounded-3xl p-8 flex flex-col relative shadow-soft">
+          <span class="absolute -top-3 left-8 text-xs font-bold text-white gradient-btn px-3 py-1 rounded-full">Mais escolhido</span>
+          <h3 class="font-display font-bold text-xl">Vitalício</h3>
+          <p class="muted text-sm mt-1">Pague uma vez. Use para sempre.</p>
+          <p class="mt-6"><span class="font-display font-extrabold text-4xl" data-price="597">R$ 597,00</span><span class="muted"> pagamento único</span></p>
+          <ul class="mt-6 space-y-2 text-sm flex-1" data-features="full"></ul>
+          <button data-open-auth class="mt-8 w-full py-3 rounded-xl gradient-btn text-white font-semibold">Garantir vitalício</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="max-w-3xl mx-auto px-4 py-16">
+      <h2 class="font-display font-extrabold text-3xl text-center">Perguntas frequentes</h2>
+      <div id="faqList" class="mt-8 space-y-3"></div>
+    </section>
+  </main>
+
+  <footer class="border-t border-app">
+    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row justify-between gap-4 text-sm muted">
+      <p>© <span id="year"></span> CriaVende. Todos os direitos reservados.</p>
+      <div class="flex gap-4"><a href="#recursos">Recursos</a><a href="#planos">Preços</a><a href="#faq">FAQ</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ====================== AUTH ====================== -->
+<div id="auth" class="hidden fixed inset-0 z-50 bg-black/50 grid place-items-center p-4" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <form id="authForm" class="surface w-full max-w-sm rounded-2xl p-6 border border-app">
+    <h2 id="authTitle" class="font-display font-bold text-xl">Entrar na CriaVende</h2>
+    <p class="muted text-sm mt-1">Modo demonstração: os dados ficam salvos só neste navegador.</p>
+    <label class="block text-sm font-medium mt-5" for="authName">Nome</label>
+    <input id="authName" class="input mt-1" required autocomplete="name">
+    <label class="block text-sm font-medium mt-3" for="authEmail">E-mail</label>
+    <input id="authEmail" type="email" class="input mt-1" required autocomplete="email">
+    <div class="flex gap-2 mt-6">
+      <button type="button" id="authCancel" class="flex-1 py-2.5 rounded-xl border border-app font-semibold text-sm">Voltar</button>
+      <button class="flex-1 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Entrar</button>
+    </div>
+  </form>
+</div>
+
+<!-- ====================== APP ====================== -->
+<div id="app" class="hidden min-h-screen md:flex">
+  <aside class="hidden md:flex w-60 shrink-0 flex-col border-r border-app surface p-4 sticky top-0 h-screen">
+    <p class="font-display font-extrabold text-xl px-2">Cria<span class="gradient-text">Vende</span></p>
+    <nav id="sideNav" class="mt-6 space-y-1 text-sm flex-1 overflow-y-auto"></nav>
+    <div class="border-t border-app pt-3 flex items-center gap-2">
+      <button data-theme-toggle class="w-9 h-9 rounded-lg border border-app grid place-items-center" aria-label="Alternar tema" title="Alternar tema"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
+      <button id="logout" class="flex-1 text-sm py-2 rounded-lg border border-app">Sair</button>
+    </div>
+  </aside>
+
+  <div class="flex-1 min-w-0 pb-24 md:pb-0">
+    <header class="md:hidden sticky top-0 z-30 surface border-b border-app h-14 px-4 flex items-center justify-between">
+      <p class="font-display font-extrabold">Cria<span class="gradient-text">Vende</span></p>
+      <button id="mobileMenuBtn" class="text-sm px-3 py-1.5 rounded-lg border border-app">Menu</button>
+    </header>
+    <div id="mobileMenu" class="hidden md:hidden fixed inset-0 z-40 bg-black/40" aria-hidden="true">
+      <div class="surface absolute right-0 top-0 h-full w-64 p-4 border-l border-app">
+        <nav id="mobileNav" class="space-y-1 text-sm"></nav>
+        <div class="mt-4 flex gap-2"><button data-theme-toggle class="flex-1 text-sm py-2 rounded-lg border border-app">Tema</button><button data-logout class="flex-1 text-sm py-2 rounded-lg border border-app">Sair</button></div>
+      </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 py-6 md:py-8">
+
+      <!-- Painel -->
+      <section data-view="painel">
+        <h1 class="font-display font-extrabold text-2xl">Olá, <span id="userName"></span></h1>
+        <p class="muted text-sm mt-1">Resumo da sua produção de conteúdo.</p>
+        <div id="kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6"></div>
+        <div class="grid lg:grid-cols-2 gap-4 mt-6">
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">Atalhos</h2>
+            <div class="grid grid-cols-2 gap-2 mt-4 text-sm">
+              <button data-go="criar" class="p-3 rounded-xl border border-app text-left hover:border-accent">Criar vídeo UGC</button>
+              <button data-go="viral" class="p-3 rounded-xl border border-app text-left hover:border-accent">Gerar roteiro viral</button>
+              <button data-go="radar" class="p-3 rounded-xl border border-app text-left hover:border-accent">Ver produtos em alta</button>
+              <button data-go="shop" class="p-3 rounded-xl border border-app text-left hover:border-accent">Modelo TikTok Shop</button>
+            </div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">Últimos vídeos</h2>
+            <ul id="recentList" class="mt-4 space-y-2 text-sm"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Radar -->
+      <section data-view="radar" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Radar de Produtos</h1>
+        <p class="muted text-sm mt-1">Produtos com maior tração nos últimos 7 dias. Dados de demonstração.</p>
+        <div class="grid sm:grid-cols-4 gap-2 mt-5">
+          <input id="radarSearch" class="input sm:col-span-2" placeholder="Buscar produto" aria-label="Buscar produto">
+          <select id="radarCat" class="input" aria-label="Categoria"></select>
+          <select id="radarSort" class="input" aria-label="Ordenar por">
+            <option value="receita">Maior receita</option>
+            <option value="crescimento">Maior crescimento</option>
+            <option value="vendas">Mais vendidos</option>
+            <option value="comissao">Maior comissão</option>
+          </select>
+        </div>
+        <div class="surface border border-app rounded-2xl mt-4 overflow-x-auto">
+          <table class="w-full text-sm min-w-[640px]">
+            <thead class="muted text-left"><tr class="border-b border-app"><th class="p-3">Produto</th><th class="p-3">Categoria</th><th class="p-3 text-right">Preço</th><th class="p-3 text-right">Vendas 7d</th><th class="p-3 text-right">Cresc.</th><th class="p-3 text-right">Comissão</th><th class="p-3 text-right">Receita 7d</th><th class="p-3"></th></tr></thead>
+            <tbody id="radarBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Criar UGC -->
+      <section data-view="legenda" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Vídeo legendado</h1>
+        <p class="muted text-sm mt-1">Gera no navegador um vídeo 9:16 em WebM, com foto do produto, legendas animadas e CTA. Não usa IA nem tem custo.</p>
+        <div class="grid lg:grid-cols-[1fr_340px] gap-6 mt-6">
+          <form id="ugcForm" class="surface border border-app rounded-2xl p-5 space-y-4">
+            <div>
+              <p class="text-sm font-medium">1. Criador</p>
+              <div id="personas" class="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-2"></div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div><label class="text-sm font-medium" for="ugcProduct">2. Produto</label><input id="ugcProduct" class="input mt-1" required placeholder="Ex.: Sérum vitamina C"></div>
+              <div><label class="text-sm font-medium" for="ugcImg">Foto do produto</label><input id="ugcImg" type="file" accept="image/*" class="input mt-1 text-xs"></div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between"><label class="text-sm font-medium" for="ugcScript">3. Roteiro (uma frase por linha)</label><button type="button" id="ugcAutoScript" class="text-xs font-semibold text-accent">Gerar automaticamente</button></div>
+              <textarea id="ugcScript" rows="6" class="input mt-1" required placeholder="Gancho na 1ª linha&#10;Benefícios nas linhas do meio&#10;CTA na última linha"></textarea>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div><label class="text-sm font-medium" for="ugcCta">Texto de CTA fixo</label><input id="ugcCta" class="input mt-1" value="Toque no carrinho e garanta o seu"></div>
+              <div><label class="text-sm font-medium" for="ugcSpeed">Tempo por frase</label><select id="ugcSpeed" class="input mt-1"><option value="2">2 s (rápido)</option><option value="2.6" selected>2,6 s</option><option value="3.2">3,2 s (calmo)</option></select></div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" id="ugcPreview" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Pré-visualizar</button>
+              <button type="button" id="ugcVoice" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Ouvir narração</button>
+              <button id="ugcRender" class="px-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar vídeo</button>
+            </div>
+            <div id="ugcProgressWrap" class="hidden">
+              <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden"><div id="ugcProgress" class="h-full gradient-btn w-0"></div></div>
+              <p id="ugcStatus" class="text-xs muted mt-1"></p>
+            </div>
+          </form>
+          <div class="surface border border-app rounded-2xl p-4">
+            <canvas id="ugcCanvas" width="720" height="1280" class="w-full rounded-xl bg-slate-900"></canvas>
+            <a id="ugcDownload" class="hidden mt-3 block text-center py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm" download="criavende-ugc.webm">Baixar vídeo</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- TikTok Shop -->
+      <section data-view="shop" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Modelo TikTok Shop</h1>
+        <p class="muted text-sm mt-1">Produto + modelo = criativo pronto e uma variação para teste A/B.</p>
+        <div class="grid md:grid-cols-3 gap-4 mt-6">
+          <div class="surface border border-app rounded-2xl p-4"><label class="text-sm font-medium" for="shopProduct">1. Produto</label><input id="shopProduct" type="file" accept="image/*" class="input mt-2 text-xs"><img id="shopProductPrev" class="hidden mt-3 rounded-xl w-full aspect-square object-cover" alt="Produto"></div>
+          <div class="surface border border-app rounded-2xl p-4"><label class="text-sm font-medium" for="shopModel">2. Modelo</label><input id="shopModel" type="file" accept="image/*" class="input mt-2 text-xs"><img id="shopModelPrev" class="hidden mt-3 rounded-xl w-full aspect-square object-cover" alt="Modelo"></div>
+          <div class="surface border border-app rounded-2xl p-4 space-y-3">
+            <div><label class="text-sm font-medium" for="shopTitle">Chamada</label><input id="shopTitle" class="input mt-1" value="Achadinho do dia"></div>
+            <div><label class="text-sm font-medium" for="shopPrice">Preço (R$)</label><input id="shopPrice" type="number" min="0" step="0.01" class="input mt-1" value="49.90"></div>
+            <div><label class="text-sm font-medium" for="shopCam">Formato</label><select id="shopCam" class="input mt-1"></select></div>
+            <button id="shopAI" class="w-full py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar com IA (Nano Banana)</button>
+            <button id="shopGenerate" class="w-full py-2.5 rounded-xl border border-app font-semibold text-sm">Montagem rápida (sem IA)</button>
+            <p id="shopMsg" class="text-xs muted"></p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4 mt-4 max-w-2xl">
+          <div class="surface border border-app rounded-2xl p-3"><p class="text-sm font-medium mb-2">Resultado</p><canvas id="shopA" width="720" height="1280" class="w-full rounded-xl bg-slate-200 dark:bg-slate-800"></canvas><a id="shopADl" class="hidden mt-2 block text-center text-sm font-semibold text-accent" download="resultado.png">Baixar PNG</a></div>
+          <div class="surface border border-app rounded-2xl p-3"><p class="text-sm font-medium mb-2">Variação</p><canvas id="shopB" width="720" height="1280" class="w-full rounded-xl bg-slate-200 dark:bg-slate-800"></canvas><a id="shopBDl" class="hidden mt-2 block text-center text-sm font-semibold text-accent" download="variacao.png">Baixar PNG</a></div>
+        </div>
+        <div id="shopPromptWrap" class="hidden surface border border-app rounded-2xl p-4 mt-4 max-w-2xl"><p class="text-sm muted">Sem modelo de imagem configurado? Cole este prompt no Flow com as duas fotos. Funciona com os créditos gratuitos diários.</p><textarea id="shopPrompt" rows="6" class="input mt-2 font-mono text-xs" readonly></textarea><button type="button" data-copy-target="shopPrompt" class="mt-2 px-3 py-2 rounded-lg border border-app text-sm font-semibold">Copiar prompt</button></div>
+      </section>
+
+      <!-- Viral Boost -->
+      <section data-view="viral" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Viral Boost</h1>
+        <p class="muted text-sm mt-1">Roteiros com gancho, desenvolvimento e CTA em segundos.</p>
+        <form id="viralForm" class="surface border border-app rounded-2xl p-5 mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+          <div><label class="text-sm font-medium" for="vProduct">Produto</label><input id="vProduct" class="input mt-1" required placeholder="Ex.: Mini processador"></div>
+          <div><label class="text-sm font-medium" for="vBenefit">Principal benefício</label><input id="vBenefit" class="input mt-1" required placeholder="Ex.: pica tudo em 5 segundos"></div>
+          <div><label class="text-sm font-medium" for="vAudience">Público</label><input id="vAudience" class="input mt-1" placeholder="Ex.: quem cozinha todo dia"></div>
+          <div><label class="text-sm font-medium" for="vTone">Tom</label><select id="vTone" class="input mt-1"><option value="amiga">Amiga indicando</option><option value="urgente">Urgência / oferta</option><option value="review">Review honesto</option><option value="problema">Problema → solução</option></select></div>
+          <button class="sm:col-span-2 lg:col-span-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar 3 roteiros</button>
+        </form>
+        <div id="viralOut" class="grid lg:grid-cols-3 gap-4 mt-4"></div>
+      </section>
+
+
+      <!-- Criar UGC (assistente igual ao fluxo Creator) -->
+      <section data-view="criar" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Criar vídeo UGC com IA</h1>
+        <p class="muted text-sm mt-1">Configure o vídeo: a IA escreve as falas, gera a imagem de referência e monta um prompt por take para o Google Flow (VEO 3) ou o Grok.</p>
+        <div id="aiBanner" class="hidden mt-4 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 p-3 text-sm">Sem chave de IA configurada: as falas saem dos modelos prontos e as imagens do gerador gratuito. <button data-go="ia" class="font-semibold text-accent">Configurar Integrações IA</button></div>
+        <form id="wzForm" class="mt-6 space-y-4">
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">1. Produto</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
+              <div class="lg:col-span-2"><label class="text-sm font-medium" for="wzName">Nome do produto</label><input id="wzName" class="input mt-1" required placeholder="Ex.: Escova secadora 3 em 1"></div>
+              <div><label class="text-sm font-medium" for="wzCat">Categoria</label><select id="wzCat" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzPrice">Preço (R$)</label><input id="wzPrice" type="number" min="0" step="0.01" class="input mt-1" placeholder="0,00"></div>
+              <div class="lg:col-span-2"><label class="text-sm font-medium" for="wzProdImg">Foto do produto</label><input id="wzProdImg" type="file" accept="image/*" class="input mt-1 text-xs"></div>
+              <div class="lg:col-span-2"><label class="text-sm font-medium" for="wzInstr">Como mostrar o produto (opcional)</label><input id="wzInstr" class="input mt-1" placeholder="Ex.: mostrar a escova secando a ponta do cabelo"></div>
+            </div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">2. Criador (influenciador)</h2>
+            <div class="grid sm:grid-cols-2 gap-3 mt-3">
+              <div><label class="text-sm font-medium" for="wzCreatorImg">Enviar foto do avatar</label><input id="wzCreatorImg" type="file" accept="image/*" class="input mt-1 text-xs"><p class="muted text-xs mt-1">Use só avatares fictícios ou pessoas que autorizaram o uso da imagem.</p></div>
+              <div><label class="text-sm font-medium" for="wzCreatorDesc">Ou descreva para a IA criar</label><div class="flex gap-2 mt-1"><input id="wzCreatorDesc" class="input" value="Mulher brasileira de 28 anos, cabelo castanho ondulado, sorriso simpático, roupa casual"><button type="button" id="wzCreatorGen" class="px-3 rounded-xl border border-app text-sm font-semibold whitespace-nowrap">Gerar avatar</button></div></div>
+            </div>
+            <img id="wzCreatorPrev" class="hidden mt-3 w-28 aspect-[9/16] object-cover rounded-xl border border-app" alt="Avatar selecionado">
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">3. Cena</h2>
+            <div id="wzScenes" class="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-3"></div>
+            <div class="mt-3"><label class="text-sm font-medium" for="wzSceneImg">Foto do cenário (opcional)</label><input id="wzSceneImg" type="file" accept="image/*" class="input mt-1 text-xs max-w-sm"></div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">4. Formato de câmera</h2>
+            <div id="wzCams" class="grid sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-3"></div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">5. Performance e duração</h2>
+            <div class="grid sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-3">
+              <div><label class="text-sm font-medium" for="wzMove">Movimento</label><select id="wzMove" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzTone">Tom</label><select id="wzTone" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzVoice">Voz</label><select id="wzVoice" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzPitch">Personalidade da voz</label><select id="wzPitch" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzPlat">Plataforma</label><select id="wzPlat" class="input mt-1"><option>Flow VEO3</option><option>Grok</option></select></div>
+              <div><label class="text-sm font-medium" for="wzTakes">Duração</label><select id="wzTakes" class="input mt-1"></select></div>
+            </div>
+            <div class="mt-3"><label class="text-sm font-medium" for="wzExtra">Direção extra (opcional)</label><input id="wzExtra" class="input mt-1" placeholder="Ex.: terminar apontando para o carrinho"></div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2"><h2 class="font-semibold">6. Falas por take</h2><button type="button" id="wzFalasBtn" class="px-4 py-2 rounded-xl border border-app text-sm font-semibold">Gerar falas com IA</button></div>
+            <p class="muted text-xs mt-1">No máximo 20 palavras por take. Você pode editar antes de gerar os prompts.</p>
+            <div id="wzFalas" class="space-y-2 mt-3"></div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" id="wzImgBtn" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Gerar imagem de referência</button>
+            <button id="wzPromptBtn" class="px-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar prompts para o Flow</button>
+            <p id="wzStatus" class="text-sm muted self-center" role="status"></p>
+          </div>
+        </form>
+        <div id="wzRefWrap" class="hidden surface border border-app rounded-2xl p-5 mt-4">
+          <h2 class="font-semibold">Imagem de referência</h2>
+          <div class="grid md:grid-cols-[200px_1fr] gap-4 mt-3">
+            <div><img id="wzRefImg" class="hidden w-full aspect-[9/16] object-cover rounded-xl border border-app" alt="Imagem de referência gerada"><a id="wzRefDl" class="hidden mt-2 block text-center text-sm font-semibold text-accent" download="referencia.png">Baixar imagem</a></div>
+            <div><p class="text-sm muted">Prompt de fusão de imagens. Cole no Flow com as fotos de produto, criador e cena; usa os créditos gratuitos do Nano Banana.</p><textarea id="wzRefPrompt" rows="8" class="input mt-2 font-mono text-xs" readonly></textarea><button type="button" data-copy-target="wzRefPrompt" class="mt-2 px-3 py-2 rounded-lg border border-app text-sm font-semibold">Copiar prompt</button></div>
+          </div>
+        </div>
+        <div id="wzOut" class="mt-4 space-y-3"></div>
+      </section>
+
+      <!-- Virais: Em alta + Historinhas -->
+      <section data-view="virais" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Virais: Em alta e Historinhas</h1>
+        <p class="muted text-sm mt-1">Escolha um personagem, ajuste as decisões da cena e gere as falas e os prompts prontos para o Flow ou o Grok.</p>
+        <div class="flex gap-2 mt-5" role="tablist">
+          <button type="button" data-vmode="alta" class="vtab px-4 py-2 rounded-xl border border-app text-sm font-semibold">Personagens em alta</button>
+          <button type="button" data-vmode="frutas" class="vtab px-4 py-2 rounded-xl border border-app text-sm font-semibold">Historinhas de frutas</button>
+        </div>
+        <form id="vrForm" class="surface border border-app rounded-2xl p-5 mt-4 space-y-4">
+          <div><p class="text-sm font-medium">Personagem</p><div id="vrChars" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2 mt-2"></div></div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div id="vrStoryWrap"><label class="text-sm font-medium" for="vrStory">História</label><select id="vrStory" class="input mt-1"></select></div>
+            <div><label class="text-sm font-medium" for="vrGoal">Objetivo</label><select id="vrGoal" class="input mt-1"></select></div>
+            <div><label class="text-sm font-medium" for="vrPlace">Cenário</label><input id="vrPlace" class="input mt-1" placeholder="Deixar a IA decidir"></div>
+            <div><label class="text-sm font-medium" for="vrOutfit">Roupa / visual</label><input id="vrOutfit" class="input mt-1" placeholder="Deixar a IA decidir"></div>
+            <div><label class="text-sm font-medium" for="vrFrame">Enquadramento</label><select id="vrFrame" class="input mt-1"><option>Close no rosto</option><option selected>Meio corpo</option><option>Corpo inteiro</option></select></div>
+            <div><label class="text-sm font-medium" for="vrCam">Estilo de câmera</label><select id="vrCam" class="input mt-1"><option>Câmera frontal parada</option><option>Câmera acompanhando</option><option>Gravação casual por outra pessoa</option><option>Selfie na mão</option></select></div>
+            <div><label class="text-sm font-medium" for="vrAction">Ação</label><select id="vrAction" class="input mt-1"><option>Fazendo gestos sutis</option><option>Caminhando devagar</option><option>Apontando para a câmera</option><option>Falando de forma séria</option></select></div>
+            <div><label class="text-sm font-medium" for="vrPlat">Plataforma</label><select id="vrPlat" class="input mt-1"><option>Flow VEO3</option><option>Grok</option></select></div>
+            <div class="sm:col-span-2"><label class="text-sm font-medium" for="vrTheme">Tema / detalhe que ajuda a IA</label><input id="vrTheme" class="input mt-1" placeholder="Ex.: o preço do tomate subiu de novo"></div>
+            <div><label class="text-sm font-medium" for="vrTakes">Takes</label><select id="vrTakes" class="input mt-1"></select></div>
+            <div><label class="text-sm font-medium" for="vrAvatar">Foto do personagem (opcional)</label><input id="vrAvatar" type="file" accept="image/*" class="input mt-1 text-xs"></div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2"><p class="text-sm font-medium">Falas</p><button type="button" id="vrFalasBtn" class="px-4 py-2 rounded-xl border border-app text-sm font-semibold">Gerar falas com IA</button></div>
+          <div id="vrFalas" class="space-y-2"></div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" id="vrImgBtn" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Gerar imagem do personagem</button>
+            <button class="px-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar prompts</button>
+            <p id="vrStatus" class="text-sm muted self-center" role="status"></p>
+          </div>
+          <div id="vrRefWrap" class="hidden"><img id="vrRefImg" class="w-32 aspect-[9/16] object-cover rounded-xl border border-app" alt="Personagem gerado"><a id="vrRefDl" class="mt-1 inline-block text-sm font-semibold text-accent" download="personagem.png">Baixar imagem de referência</a></div>
+        </form>
+        <div id="vrOut" class="mt-4 space-y-3"></div>
+      </section>
+
+      <!-- Integrações IA -->
+      <section data-view="ia" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Integrações IA</h1>
+        <p class="muted text-sm mt-1">Mesma estrutura da plataforma de referência: Gemini para texto e Nano Banana (Gemini Image) para imagens. Os vídeos são gerados fora daqui, no Google Flow (VEO 3) ou no Grok, usando os prompts.</p>
+        <form id="iaForm" class="surface border border-app rounded-2xl p-5 mt-6 grid sm:grid-cols-2 gap-3 max-w-3xl">
+          <div class="sm:col-span-2"><label class="text-sm font-medium" for="iaKey">Chave da API do Gemini</label><input id="iaKey" type="password" class="input mt-1" autocomplete="off" placeholder="AIza..."><p class="muted text-xs mt-1">Crie grátis em aistudio.google.com/apikey. A chave fica salva só neste navegador. Em produção, use o proxy abaixo para não expor a chave.</p></div>
+          <div class="sm:col-span-2"><label class="text-sm font-medium" for="iaProxy">URL do proxy (opcional, recomendado para publicar)</label><input id="iaProxy" class="input mt-1" placeholder="https://criavende-ia.SEU-USUARIO.workers.dev"><p class="muted text-xs mt-1">Cloudflare Worker em ugc/worker/gemini-proxy.js. Com o proxy preenchido, a chave acima é ignorada.</p></div>
+          <div><label class="text-sm font-medium" for="iaText">Modelo de texto</label><select id="iaText" class="input mt-1"><option value="gemini-flash-latest">gemini-flash-latest</option></select></div>
+          <div><label class="text-sm font-medium" for="iaImage">Modelo de imagem (Nano Banana)</label><select id="iaImage" class="input mt-1"><option value="">Nenhum (usar gerador gratuito)</option></select></div>
+          <label class="sm:col-span-2 flex items-center gap-2 text-sm"><input id="iaFree" type="checkbox"> Usar o gerador gratuito Pollinations quando não houver modelo de imagem (não aceita fotos de referência)</label>
+          <div class="sm:col-span-2 flex flex-wrap gap-2">
+            <button type="button" id="iaTest" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Testar conexão e listar modelos</button>
+            <button class="px-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Salvar integrações</button>
+          </div>
+          <p id="iaMsg" class="sm:col-span-2 text-sm min-h-[1.25rem]" role="status"></p>
+        </form>
+      </section>
+
+      <!-- Studio -->
+      <section data-view="studio" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Studio</h1>
+        <p class="muted text-sm mt-1">Envie um vídeo, enquadre em 9:16, adicione gancho e legenda e exporte com áudio.</p>
+        <div class="grid lg:grid-cols-[1fr_340px] gap-6 mt-6">
+          <div class="surface border border-app rounded-2xl p-5 space-y-3">
+            <div><label class="text-sm font-medium" for="stFile">Vídeo</label><input id="stFile" type="file" accept="video/*" class="input mt-1 text-xs"></div>
+            <div><label class="text-sm font-medium" for="stHook">Gancho (topo)</label><input id="stHook" class="input mt-1" value="Ninguém te conta isso sobre..."></div>
+            <div><label class="text-sm font-medium" for="stCaption">Legenda (base)</label><input id="stCaption" class="input mt-1" value="Link no carrinho"></div>
+            <div class="grid grid-cols-2 gap-3">
+              <div><label class="text-sm font-medium" for="stStart">Início (s)</label><input id="stStart" type="number" min="0" step="0.1" value="0" class="input mt-1"></div>
+              <div><label class="text-sm font-medium" for="stEnd">Fim (s)</label><input id="stEnd" type="number" min="0" step="0.1" value="0" class="input mt-1"></div>
+            </div>
+            <label class="flex items-center gap-2 text-sm"><input id="stZoom" type="checkbox" checked> Zoom suave (efeito dinâmico)</label>
+            <button id="stExport" class="w-full py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm disabled:opacity-50" disabled>Exportar vídeo</button>
+            <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden"><div id="stProgress" class="h-full gradient-btn w-0"></div></div>
+            <p id="stStatus" class="text-xs muted">Selecione um vídeo para começar.</p>
+          </div>
+          <div class="surface border border-app rounded-2xl p-4">
+            <canvas id="stCanvas" width="720" height="1280" class="w-full rounded-xl bg-slate-900"></canvas>
+            <a id="stDownload" class="hidden mt-3 block text-center py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm" download="criavende-studio.webm">Baixar vídeo</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Biblioteca -->
+      <section data-view="biblioteca" class="hidden">
+        <div class="flex items-center justify-between gap-3"><div><h1 class="font-display font-extrabold text-2xl">Meus conteúdos</h1><p class="muted text-sm mt-1">Histórico do que foi gerado neste navegador.</p></div><button id="clearLib" class="text-sm px-3 py-2 rounded-lg border border-app">Limpar histórico</button></div>
+        <div class="surface border border-app rounded-2xl mt-6 overflow-x-auto">
+          <table class="w-full text-sm min-w-[520px]"><thead class="muted text-left"><tr class="border-b border-app"><th class="p-3">Data</th><th class="p-3">Tipo</th><th class="p-3">Título</th><th class="p-3 text-right">Duração</th></tr></thead><tbody id="libBody"></tbody></table>
+        </div>
+      </section>
+
+      <!-- Personalize -->
+      <section data-view="personalize" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Personalize IA</h1>
+        <p class="muted text-sm mt-1">Esses dados alimentam os roteiros gerados.</p>
+        <form id="brandForm" class="surface border border-app rounded-2xl p-5 mt-6 grid sm:grid-cols-2 gap-3 max-w-2xl">
+          <div><label class="text-sm font-medium" for="bName">Nome da loja</label><input id="bName" class="input mt-1"></div>
+          <div><label class="text-sm font-medium" for="bNiche">Nicho</label><input id="bNiche" class="input mt-1" placeholder="Ex.: beleza, casa, fitness"></div>
+          <div class="sm:col-span-2"><label class="text-sm font-medium" for="bWords">Palavras que a marca usa</label><input id="bWords" class="input mt-1" placeholder="Ex.: achadinho, amei, perfeito"></div>
+          <div class="sm:col-span-2"><label class="text-sm font-medium" for="bAvoid">Palavras proibidas</label><input id="bAvoid" class="input mt-1" placeholder="Ex.: milagre, cura"></div>
+          <button class="sm:col-span-2 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Salvar preferências</button>
+          <p id="brandMsg" class="sm:col-span-2 text-sm text-emerald-600 min-h-[1.25rem]"></p>
+        </form>
+      </section>
+
+      <!-- Academy -->
+      <section data-view="academy" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Academy</h1>
+        <p class="muted text-sm mt-1">Trilha de treinamento. Progresso: <strong id="acadPct">0%</strong></p>
+        <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden mt-3 max-w-md"><div id="acadBar" class="h-full gradient-btn w-0"></div></div>
+        <ul id="acadList" class="mt-6 space-y-2 max-w-2xl"></ul>
+      </section>
+
+      <!-- Indique -->
+      <section data-view="indique" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Indique e Ganhe</h1>
+        <p class="muted text-sm mt-1">Compartilhe seu link e receba comissão por cada assinatura.</p>
+        <div class="surface border border-app rounded-2xl p-5 mt-6 max-w-2xl">
+          <label class="text-sm font-medium" for="refLink">Seu link</label>
+          <div class="flex gap-2 mt-1"><input id="refLink" class="input" readonly><button id="copyRef" class="px-4 rounded-xl border border-app font-semibold text-sm">Copiar</button></div>
+          <div class="grid sm:grid-cols-3 gap-3 mt-5">
+            <div><label class="text-sm font-medium" for="refMonthly">Indicações mensal</label><input id="refMonthly" type="number" min="0" value="5" class="input mt-1"></div>
+            <div><label class="text-sm font-medium" for="refLife">Indicações vitalício</label><input id="refLife" type="number" min="0" value="2" class="input mt-1"></div>
+            <div><label class="text-sm font-medium" for="refPct">Comissão (%)</label><input id="refPct" type="number" min="0" max="100" value="30" class="input mt-1"></div>
+          </div>
+          <p class="mt-5 text-sm muted">Ganho estimado</p>
+          <p id="refTotal" class="font-display font-extrabold text-3xl gradient-text">R$ 0,00</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav id="dock" class="md:hidden fixed bottom-0 inset-x-0 z-30 surface border-t border-app grid grid-cols-5 text-[11px]"></nav>
+</div>
+
+<div id="toast" class="hidden fixed bottom-24 md:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-sm px-4 py-2 rounded-lg" role="status"></div>
+
+<script>
+(() => {
+  // ---------- utilidades ----------
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const num = v => { const n = parseFloat(v); return Number.isFinite(n) && n > 0 ? n : 0; };
+  const brl = v => num(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const toast = msg => { const t = $('#toast'); t.textContent = msg; t.classList.remove('hidden'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.add('hidden'), 2600); };
+
+  const KEY = 'criavende_state_v1';
+  const defaults = { user: null, theme: null, library: [], scripts: 0, brand: {}, academy: [] };
+  let state;
+  try { state = { ...defaults, ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { state = { ...defaults }; }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  state.ai = { key: '', proxy: '', textModel: 'gemini-flash-latest', imageModel: '', freeImages: true, ...(state.ai || {}) };
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-copy-target]'); if (!b) return;
+    const el = document.getElementById(b.dataset.copyTarget);
+    navigator.clipboard?.writeText(el.value ?? el.textContent).then(() => toast('Copiado'), () => { el.select?.(); toast('Não foi possível copiar. O texto foi selecionado: use Ctrl+C.'); });
+  });
+
+  // ---------- tema ----------
+  const applyTheme = () => {
+    const dark = state.theme ? state.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.toggle('dark', dark);
+  };
+  applyTheme();
+  $$('[data-theme-toggle]').forEach(b => b.addEventListener('click', () => {
+    state.theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+    save(); applyTheme();
+  }));
+
+  // ---------- landing ----------
+  $('#year').textContent = new Date().getFullYear();
+  const baseFeat = ['Radar de Produtos', 'Criador UGC com IA (prompts VEO 3 e Grok)', 'Em alta e Historinhas virais', 'Viral Boost (roteiros)', 'Studio (editor de vídeo)', 'Personalize IA', 'Academy (treinamento)', 'Indique e Ganhe'];
+  const fullFeat = [...baseFeat, 'Comunidade exclusiva', 'Mentoria em grupo mensal'];
+  const li = f => `<li class="flex gap-2"><svg class="w-4 h-4 mt-0.5 text-accent shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>${f}</li>`;
+  $('[data-features="base"]').innerHTML = baseFeat.map(li).join('');
+  $('[data-features="full"]').innerHTML = fullFeat.map(li).join('');
+
+  const COUPONS = { BEMVINDO10: 10, CRIA20: 20 };
+  $('#applyCoupon').addEventListener('click', () => {
+    const code = $('#coupon').value.trim().toUpperCase();
+    const pct = COUPONS[code] || 0;
+    $$('[data-price]').forEach(el => { el.textContent = brl(num(el.dataset.price) * (1 - pct / 100)); });
+    const msg = $('#couponMsg');
+    msg.className = 'text-center text-sm mt-2 min-h-[1.25rem] ' + (pct ? 'text-emerald-600' : 'text-rose-600');
+    msg.textContent = pct ? `Cupom ${code} aplicado: ${pct}% de desconto.` : 'Não encontramos esse cupom. Confira o código e tente de novo.';
+  });
+
+  const FAQ = [
+    ['O que é a CriaVende?', 'Uma plataforma para criar vídeos UGC, roteiros e criativos de TikTok Shop sem precisar gravar.'],
+    ['Preciso saber editar vídeos?', 'Não. Você escreve ou gera o roteiro, escolhe a persona e a plataforma monta o vídeo.'],
+    ['Os vídeos são gerados por IA?', 'Sim. A plataforma escreve as falas com o Gemini, cria a imagem de referência com o Nano Banana e entrega um prompt por take para gerar o vídeo no Google Flow (VEO 3) ou no Grok.'],
+    ['Posso usar os vídeos em anúncios?', 'Sim. Os arquivos são seus e saem no formato 9:16, pronto para TikTok, Reels e Shorts.'],
+    ['Quanto tempo leva para criar um vídeo?', 'Menos de 5 minutos do roteiro ao arquivo final.'],
+    ['Posso cancelar quando quiser?', 'Sim. O plano mensal pode ser cancelado a qualquer momento, sem multa.'],
+  ];
+  $('#faqList').innerHTML = FAQ.map(([q, a]) => `<details class="surface border border-app rounded-xl p-4"><summary class="font-semibold cursor-pointer flex justify-between gap-4">${q}<span class="text-accent">+</span></summary><p class="muted text-sm mt-3">${a}</p></details>`).join('');
+
+  // ---------- auth ----------
+  const openAuth = () => { $('#auth').classList.remove('hidden'); $('#authName').focus(); };
+  const closeAuth = () => $('#auth').classList.add('hidden');
+  $$('[data-open-auth]').forEach(b => b.addEventListener('click', () => state.user ? enterApp() : openAuth()));
+  $('#authCancel').addEventListener('click', closeAuth);
+  $('#auth').addEventListener('keydown', e => { if (e.key === 'Escape') closeAuth(); });
+  $('#authForm').addEventListener('submit', e => {
+    e.preventDefault();
+    state.user = { name: $('#authName').value.trim() || 'Criador', email: $('#authEmail').value.trim() };
+    save(); closeAuth(); enterApp();
+  });
+  const logout = () => { state.user = null; save(); $('#app').classList.add('hidden'); $('#landing').classList.remove('hidden'); location.hash = ''; };
+  $('#logout').addEventListener('click', logout);
+  $$('[data-logout]').forEach(b => b.addEventListener('click', logout));
+
+  // ---------- navegação ----------
+  const VIEWS = [
+    ['painel', 'Painel'], ['radar', 'Radar de Produtos'], ['criar', 'Criar UGC'], ['shop', 'Modelo TikTok Shop'],
+    ['virais', 'Em alta e Historinhas'], ['viral', 'Viral Boost'], ['legenda', 'Vídeo legendado'], ['studio', 'Studio'],
+    ['biblioteca', 'Meus conteúdos'], ['personalize', 'Personalize IA'], ['ia', 'Integrações IA'],
+    ['academy', 'Academy'], ['indique', 'Indique e Ganhe'],
+  ];
+  const DOCK = ['painel', 'radar', 'criar', 'virais', 'shop'];
+  const navBtn = ([id, label]) => `<button data-go="${id}" class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">${label}</button>`;
+  $('#sideNav').innerHTML = VIEWS.map(navBtn).join('');
+  $('#mobileNav').innerHTML = VIEWS.map(navBtn).join('');
+  $('#dock').innerHTML = DOCK.map(id => `<button data-go="${id}" class="nav-item py-3">${VIEWS.find(v => v[0] === id)[1].split(' ')[0]}</button>`).join('');
+
+  const show = id => {
+    if (!VIEWS.some(v => v[0] === id)) id = 'painel';
+    $$('[data-view]').forEach(s => s.classList.toggle('hidden', s.dataset.view !== id));
+    $$('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.go === id));
+    $('#mobileMenu').classList.add('hidden');
+    if (id === 'painel') renderPainel();
+    if (id === 'biblioteca') renderLib();
+    if (id === 'criar') $('#aiBanner').classList.toggle('hidden', hasAI());
+    window.scrollTo(0, 0);
+  };
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-go]');
+    if (b) { location.hash = '#app/' + b.dataset.go; }
+  });
+  window.addEventListener('hashchange', () => { if (state.user && location.hash.startsWith('#app/')) show(location.hash.slice(5)); });
+  $('#mobileMenuBtn').addEventListener('click', () => $('#mobileMenu').classList.remove('hidden'));
+  $('#mobileMenu').addEventListener('click', e => { if (e.target.id === 'mobileMenu') e.currentTarget.classList.add('hidden'); });
+
+  const enterApp = () => {
+    $('#landing').classList.add('hidden');
+    $('#app').classList.remove('hidden');
+    $('#userName').textContent = state.user.name.split(' ')[0];
+    $('#refLink').value = `${location.origin}${location.pathname}?ref=${encodeURIComponent((state.user.email || state.user.name).split('@')[0].toLowerCase())}`;
+    const target = location.hash.startsWith('#app/') ? location.hash.slice(5) : 'painel';
+    location.hash = '#app/' + target;
+    show(target);
+  };
+
+  // ---------- biblioteca / KPIs ----------
+  const addLib = (tipo, titulo, dur = 0) => { state.library.unshift({ data: new Date().toISOString(), tipo, titulo, dur }); state.library = state.library.slice(0, 200); save(); };
+  const renderPainel = () => {
+    const count = tipos => state.library.filter(i => tipos.includes(i.tipo)).length;
+    const vids = count(['Vídeo UGC', 'Vídeo Studio']);
+    const prompts = count(['Prompts UGC', 'Historinha', 'Viral em alta']);
+    const imagens = count(['Criativo', 'Imagem de referência']);
+    const horas = (vids * 45 + prompts * 30 + imagens * 20 + state.scripts * 10) / 60;
+    const kpis = [['Vídeos exportados', vids], ['Prompts de vídeo (Flow/Grok)', prompts], ['Criativos e imagens', imagens], ['Horas economizadas', horas.toFixed(1).replace('.', ',')]];
+    $('#kpis').innerHTML = kpis.map(([l, v]) => `<div class="surface border border-app rounded-2xl p-5"><p class="muted text-xs">${l}</p><p class="font-display font-extrabold text-3xl mt-1">${v}</p></div>`).join('');
+    $('#recentList').innerHTML = state.library.slice(0, 5).map(i => `<li class="flex justify-between gap-2"><span class="truncate">${esc(i.titulo)}</span><span class="muted shrink-0">${esc(i.tipo)}</span></li>`).join('') || '<li class="muted">Nenhum conteúdo ainda. <button data-go="criar" class="text-accent font-semibold">Criar o primeiro vídeo</button></li>';
+  };
+  const renderLib = () => {
+    $('#libBody').innerHTML = state.library.map(i => `<tr class="border-b border-app last:border-0"><td class="p-3 muted">${new Date(i.data).toLocaleString('pt-BR')}</td><td class="p-3">${esc(i.tipo)}</td><td class="p-3">${esc(i.titulo)}</td><td class="p-3 text-right">${i.dur ? num(i.dur).toFixed(1) + ' s' : '—'}</td></tr>`).join('') || '<tr><td colspan="4" class="p-6 text-center muted">Nada por aqui ainda. Os vídeos e criativos que você gerar aparecem nesta lista.</td></tr>';
+  };
+  $('#clearLib').addEventListener('click', () => { if (confirm('Limpar todo o histórico de conteúdos? Essa ação não pode ser desfeita.')) { state.library = []; save(); renderLib(); } });
+
+  // ---------- Radar de Produtos ----------
+  const CATS = { Beleza: ['Sérum vitamina C', 'Máscara de cílios à prova d’água', 'Escova secadora 3 em 1', 'Protetor solar com cor', 'Kit skincare noturno', 'Gloss volumizador'], Casa: ['Mini processador elétrico', 'Organizador de geladeira', 'Mop giratório', 'Luminária sensor LED', 'Escova elétrica de limpeza', 'Air fryer 4L'], Fitness: ['Garrafa motivacional 2L', 'Faixa elástica kit 5', 'Corda de pular digital', 'Creatina 300g', 'Legging cintura alta'], Pets: ['Escova removedora de pelos', 'Bebedouro fonte', 'Brinquedo mordedor'], Eletrônicos: ['Fone bluetooth TWS', 'Ring light 26cm', 'Carregador magnético', 'Mini projetor portátil', 'Smartwatch esportivo'], Moda: ['Bolsa transversal', 'Óculos retrô', 'Tênis casual branco', 'Conjunto canelado'] };
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const PRODUCTS = Object.entries(CATS).flatMap(([cat, names]) => names.map(nome => {
+    const preco = Math.round((15 + rnd() * 185) * 100) / 100;
+    const vendas = Math.round(200 + rnd() * 9800);
+    return { nome, cat, preco, vendas, crescimento: Math.round(rnd() * 320), comissao: Math.round(5 + rnd() * 20), receita: preco * vendas };
+  }));
+  $('#radarCat').innerHTML = '<option value="">Todas as categorias</option>' + Object.keys(CATS).map(c => `<option>${c}</option>`).join('');
+  const renderRadar = () => {
+    const q = $('#radarSearch').value.trim().toLowerCase(), c = $('#radarCat').value, s = $('#radarSort').value;
+    const rows = PRODUCTS.filter(p => (!c || p.cat === c) && (!q || p.nome.toLowerCase().includes(q))).sort((a, b) => b[s] - a[s]);
+    $('#radarBody').innerHTML = rows.map(p => `<tr class="border-b border-app last:border-0"><td class="p-3 font-medium">${esc(p.nome)}</td><td class="p-3 muted">${p.cat}</td><td class="p-3 text-right">${brl(p.preco)}</td><td class="p-3 text-right">${p.vendas.toLocaleString('pt-BR')}</td><td class="p-3 text-right text-emerald-600">+${p.crescimento}%</td><td class="p-3 text-right">${p.comissao}%</td><td class="p-3 text-right font-semibold">${brl(p.receita)}</td><td class="p-3 text-right"><button data-use="${esc(p.nome)}" class="text-accent font-semibold whitespace-nowrap">Criar vídeo</button></td></tr>`).join('') || '<tr><td colspan="8" class="p-6 text-center muted">Nenhum produto com esse filtro. <button id="radarReset" class="text-accent font-semibold">Limpar filtros</button></td></tr>';
+  };
+  ['input', 'change'].forEach(ev => ['#radarSearch', '#radarCat', '#radarSort'].forEach(s => $(s).addEventListener(ev, renderRadar)));
+  $('#radarBody').addEventListener('click', e => {
+    if (e.target.id === 'radarReset') { $('#radarSearch').value = ''; $('#radarCat').value = ''; renderRadar(); return; }
+    const b = e.target.closest('[data-use]'); if (!b) return;
+    const prod = PRODUCTS.find(x => x.nome === b.dataset.use);
+    $('#wzName').value = prod.nome; $('#wzPrice').value = prod.preco; $('#wzCat').value = RADAR_CAT[prod.cat] || 'outros';
+    renderFalaInputs('#wzFalas', num($('#wzTakes').value) || 2, []);
+    location.hash = '#app/criar';
+  });
+  renderRadar();
+
+  // ---------- Viral Boost (motor de roteiros) ----------
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const HOOKS = {
+    amiga: ['Gente, eu precisava mostrar esse {p} pra vocês', 'Achei o {p} que todo mundo tá comprando', 'Para tudo: esse {p} é bom demais'],
+    urgente: ['Corre: o {p} entrou em promoção', 'Última chance de pegar o {p} nesse preço', 'Se você viu esse vídeo, o {p} ainda tá com desconto'],
+    review: ['Testei o {p} por 7 dias, minha opinião sincera', 'Vale a pena comprar o {p}? Testei', 'O que ninguém te conta sobre o {p}'],
+    problema: ['Cansada de perder tempo? O {p} resolve', 'Eu sofria com isso até achar o {p}', 'Se você {a}, precisa conhecer o {p}'],
+  };
+  const BODY = ['Ele {b}, sem complicação', 'Uso todo dia e já virou indispensável', 'O acabamento é muito melhor do que eu esperava', 'Chegou rápido e bem embalado', 'Custa menos do que você imagina', 'Fácil de usar desde o primeiro dia'];
+  const CTAS = ['Toque no carrinho e garanta o seu', 'Link no carrinho laranja, corre', 'Clica no carrinho antes que acabe', 'Salva esse vídeo e aproveita o desconto'];
+  const buildScripts = (p, b, a, tone) => {
+    const br = state.brand || {};
+    const avoid = (br.avoid || '').split(',').map(w => w.trim().toLowerCase()).filter(Boolean);
+    const words = (br.words || '').split(',').map(w => w.trim()).filter(Boolean);
+    const fill = s => s.replace(/\{p\}/g, p).replace(/\{b\}/g, b || 'resolve o problema').replace(/\{a\}/g, a || 'quer praticidade');
+    const clean = s => avoid.reduce((t, w) => t.replace(new RegExp(w, 'gi'), '').replace(/\s{2,}/g, ' ').trim(), s);
+    return [0, 1, 2].map(i => {
+      const hooks = HOOKS[tone] || HOOKS.amiga;
+      const body = [...BODY].sort(() => Math.random() - 0.5).slice(0, 3);
+      const lines = [hooks[i % hooks.length], ...body, pick(CTAS)].map(fill);
+      if (words.length) lines[1] = `${pick(words)}: ${lines[1].charAt(0).toLowerCase()}${lines[1].slice(1)}`;
+      return { lines: lines.map(clean), dur: lines.length * 2.6 };
+    });
+  };
+  $('#viralForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const p = $('#vProduct').value.trim(), b = $('#vBenefit').value.trim(), a = $('#vAudience').value.trim(), t = $('#vTone').value;
+    const out = buildScripts(p, b, a, t);
+    state.scripts += out.length; save();
+    $('#viralOut').innerHTML = out.map((s, i) => `<article class="surface border border-app rounded-2xl p-5 flex flex-col"><p class="text-xs font-semibold text-accent">Roteiro ${i + 1} · ~${Math.round(s.dur)} s</p><p class="font-semibold mt-2">${esc(s.lines[0])}</p><ul class="muted text-sm mt-2 space-y-1 flex-1">${s.lines.slice(1, -1).map(l => `<li>${esc(l)}</li>`).join('')}</ul><p class="text-sm font-semibold mt-2">${esc(s.lines.at(-1))}</p><div class="flex gap-2 mt-4"><button data-copy="${i}" class="flex-1 py-2 rounded-lg border border-app text-sm font-semibold">Copiar</button><button data-send="${i}" class="flex-1 py-2 rounded-lg gradient-btn text-white text-sm font-semibold">Usar no vídeo</button></div></article>`).join('');
+    $('#viralOut').onclick = ev => {
+      const c = ev.target.closest('[data-copy]'), s = ev.target.closest('[data-send]');
+      if (c) { navigator.clipboard?.writeText(out[c.dataset.copy].lines.join('\n')).then(() => toast('Roteiro copiado'), () => toast('Não foi possível copiar. Selecione o texto manualmente.')); }
+      if (s) { $('#ugcProduct').value = p; $('#ugcScript').value = out[s.dataset.send].lines.join('\n'); drawUgcFrame(0.5); location.hash = '#app/legenda'; }
+    };
+  });
+
+  // ---------- Vídeo legendado (render em canvas + MediaRecorder) ----------
+  const PERSONAS = [
+    { id: 'ju', nome: 'Ju', handle: '@ju.indica', c1: '#7C3AED', c2: '#F43F5E', voice: 'female' },
+    { id: 'rafa', nome: 'Rafa', handle: '@rafa.testa', c1: '#0EA5E9', c2: '#22C55E', voice: 'male' },
+    { id: 'bia', nome: 'Bia', handle: '@bia.beauty', c1: '#EC4899', c2: '#F59E0B', voice: 'female' },
+    { id: 'leo', nome: 'Léo', handle: '@leo.tech', c1: '#111827', c2: '#6366F1', voice: 'male' },
+    { id: 'mari', nome: 'Mari', handle: '@mari.casa', c1: '#14B8A6', c2: '#84CC16', voice: 'female' },
+    { id: 'gabi', nome: 'Gabi', handle: '@gabi.fit', c1: '#EF4444', c2: '#F97316', voice: 'female' },
+  ];
+  let persona = PERSONAS[0];
+  $('#personas').innerHTML = PERSONAS.map((p, i) => `<button type="button" data-persona="${p.id}" class="persona ${i ? '' : 'selected'} rounded-xl p-2 border border-app text-center"><span class="block w-10 h-10 mx-auto rounded-full text-white font-bold grid place-items-center text-sm" style="background:linear-gradient(135deg,${p.c1},${p.c2})">${p.nome.slice(0, 2).toUpperCase()}</span><span class="block text-xs mt-1">${p.nome}</span></button>`).join('');
+  $('#personas').addEventListener('click', e => {
+    const b = e.target.closest('[data-persona]'); if (!b) return;
+    persona = PERSONAS.find(p => p.id === b.dataset.persona);
+    $$('.persona').forEach(x => x.classList.toggle('selected', x === b));
+    drawUgcFrame(0.5);
+  });
+
+  const loadImg = file => new Promise((res, rej) => { if (!file) return res(null); const img = new Image(); img.onload = () => res(img); img.onerror = rej; img.src = URL.createObjectURL(file); });
+  let productImg = null;
+  $('#ugcImg').addEventListener('change', async e => { productImg = await loadImg(e.target.files[0]).catch(() => null); drawUgcFrame(0.5); });
+  $('#ugcAutoScript').addEventListener('click', () => {
+    const p = $('#ugcProduct').value.trim() || 'produto';
+    $('#ugcScript').value = buildScripts(p, '', '', 'amiga')[0].lines.join('\n');
+    state.scripts++; save(); drawUgcFrame(0.5);
+  });
+
+  const roundRect = (ctx, x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
+  const wrap = (ctx, text, maxW) => { const words = text.split(' '); const lines = []; let cur = ''; words.forEach(w => { const t = cur ? cur + ' ' + w : w; if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; }); if (cur) lines.push(cur); return lines; };
+  const drawCover = (ctx, img, W, H, scale = 1) => { const r = Math.max(W / img.width, H / img.height) * scale; const w = img.width * r, h = img.height * r; ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h); };
+  const getLines = () => $('#ugcScript').value.split('\n').map(l => l.trim()).filter(Boolean);
+
+  const ugcCanvas = $('#ugcCanvas'), uctx = ugcCanvas.getContext('2d');
+  const drawUgcFrame = t => {
+    const W = 720, H = 1280, ctx = uctx;
+    const lines = getLines(); const seg = num($('#ugcSpeed').value) || 2.6;
+    const total = Math.max(lines.length, 1) * seg;
+    const idx = Math.min(Math.floor(t / seg), Math.max(lines.length - 1, 0));
+    const local = (t - idx * seg) / seg;
+    const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, persona.c1); g.addColorStop(1, persona.c2);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    // produto com efeito Ken Burns
+    const zoom = 1 + 0.08 * (t / total);
+    const box = 520 * zoom, bx = (W - box) / 2, by = 330 - (box - 520) / 2;
+    ctx.save(); roundRect(ctx, bx, by, box, box, 36); ctx.clip();
+    if (productImg) { const r = Math.max(box / productImg.width, box / productImg.height); const w = productImg.width * r, h = productImg.height * r; ctx.drawImage(productImg, bx + (box - w) / 2, by + (box - h) / 2, w, h); }
+    else { ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(bx, by, box, box); ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.font = '600 34px Inter'; ctx.textAlign = 'center'; ctx.fillText($('#ugcProduct').value || 'Seu produto', W / 2, by + box / 2); }
+    ctx.restore();
+    // gancho no topo durante a 1ª frase
+    ctx.textAlign = 'center';
+    if (idx === 0 && lines[0]) {
+      ctx.font = '800 54px Manrope'; const hl = wrap(ctx, lines[0], 640);
+      hl.forEach((l, i) => { ctx.lineWidth = 10; ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.strokeText(l, W / 2, 130 + i * 62); ctx.fillStyle = '#fff'; ctx.fillText(l, W / 2, 130 + i * 62); });
+    }
+    // legenda palavra a palavra
+    const cur = lines[idx] || '';
+    if (cur && idx > 0) {
+      const words = cur.split(' '); const shown = Math.max(1, Math.ceil(words.length * Math.min(local * 1.4, 1)));
+      ctx.font = '800 50px Manrope'; const cl = wrap(ctx, words.slice(0, shown).join(' '), 620);
+      cl.forEach((l, i) => { const y = 980 + i * 60; const w = ctx.measureText(l).width + 30; ctx.fillStyle = 'rgba(0,0,0,0.6)'; roundRect(ctx, (W - w) / 2, y - 46, w, 60, 12); ctx.fill(); ctx.fillStyle = i === cl.length - 1 ? '#FDE047' : '#fff'; ctx.fillText(l, W / 2, y); });
+    }
+    // CTA fixo no final
+    const cta = $('#ugcCta').value.trim();
+    if (cta && idx === lines.length - 1 && cta.toLowerCase() !== cur.toLowerCase()) { ctx.font = '700 36px Inter'; const w = ctx.measureText(cta).width + 50; ctx.fillStyle = '#F97316'; roundRect(ctx, (W - w) / 2, 1110, w, 64, 32); ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillText(cta, W / 2, 1154); }
+    // persona + ondas de "fala"
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(80, 1210, 36, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = persona.c1; ctx.font = '800 26px Inter'; ctx.textAlign = 'center'; ctx.fillText(persona.nome.slice(0, 2).toUpperCase(), 80, 1220);
+    ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '700 28px Inter'; ctx.fillText(persona.handle, 130, 1220);
+    for (let i = 0; i < 5; i++) { const h = 8 + Math.abs(Math.sin(t * 9 + i * 1.3)) * 28; ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillRect(560 + i * 18, 1210 - h / 2, 10, h); }
+    return total;
+  };
+  ['input', 'change'].forEach(ev => ['#ugcScript', '#ugcProduct', '#ugcCta', '#ugcSpeed'].forEach(s => $(s).addEventListener(ev, () => drawUgcFrame(0.5))));
+
+  const play = (draw, total, onTick) => new Promise(res => {
+    const t0 = performance.now();
+    const step = now => { const t = (now - t0) / 1000; draw(Math.min(t, total)); onTick?.(Math.min(t / total, 1)); if (t < total) requestAnimationFrame(step); else res(); };
+    requestAnimationFrame(step);
+  });
+  let busy = false;
+  $('#ugcPreview').addEventListener('click', () => { if (busy) return; busy = true; play(drawUgcFrame, drawUgcFrame(0)).then(() => busy = false); });
+  $('#ugcVoice').addEventListener('click', () => {
+    if (!('speechSynthesis' in window)) return toast('Seu navegador não tem narração por voz. Tente o Chrome ou o Edge.');
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(getLines().join('. ')); u.lang = 'pt-BR'; u.rate = 1.05;
+    const vs = speechSynthesis.getVoices().filter(v => v.lang.startsWith('pt'));
+    if (vs.length) u.voice = vs[persona.voice === 'male' ? vs.length - 1 : 0];
+    speechSynthesis.speak(u);
+  });
+
+  const pickMime = () => ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4'].find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m));
+  const record = async (canvas, run, audioTracks = []) => {
+    const mime = pickMime(); if (!mime) throw new Error('Seu navegador não grava vídeo. Use o Chrome, o Edge ou o Firefox.');
+    const stream = canvas.captureStream(30); audioTracks.forEach(t => stream.addTrack(t));
+    const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 5_000_000 }); const chunks = [];
+    rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+    const done = new Promise(r => rec.onstop = r);
+    rec.start(200); await run(); rec.stop(); await done;
+    return URL.createObjectURL(new Blob(chunks, { type: mime.split(';')[0] }));
+  };
+
+  $('#ugcForm').addEventListener('submit', async e => {
+    e.preventDefault(); if (busy) return;
+    if (!getLines().length) return toast('Escreva pelo menos uma frase no roteiro.');
+    busy = true; $('#ugcProgressWrap').classList.remove('hidden'); $('#ugcDownload').classList.add('hidden'); $('#ugcStatus').textContent = 'Renderizando…';
+    try {
+      const total = drawUgcFrame(0);
+      const url = await record(ugcCanvas, () => play(drawUgcFrame, total, p => { $('#ugcProgress').style.width = (p * 100) + '%'; }));
+      const a = $('#ugcDownload'); a.href = url; a.classList.remove('hidden');
+      $('#ugcStatus').textContent = `Vídeo pronto (${total.toFixed(1).replace('.', ',')} s).`;
+      addLib('Vídeo UGC', $('#ugcProduct').value.trim() || 'Sem título', total);
+    } catch (err) { $('#ugcStatus').textContent = err.message; }
+    busy = false;
+  });
+  drawUgcFrame(0.5);
+
+  // ---------- IA: Gemini (texto) + Nano Banana (imagem), direto ou via proxy ----------
+  const AIErr = (msg, code) => Object.assign(new Error(msg), { code });
+  const hasAI = () => !!(state.ai.key || state.ai.proxy);
+  const gemini = async (model, body) => {
+    if (!hasAI()) throw AIErr('Configure a chave do Gemini em Integrações IA.', 'NO_KEY');
+    const proxy = state.ai.proxy.replace(/\/$/, '');
+    const url = proxy ? proxy + '/generate' : `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(proxy ? {} : { 'x-goog-api-key': state.ai.key }) }, body: JSON.stringify(proxy ? { model, body } : body) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (res.status === 429) throw AIErr('O limite gratuito do Gemini acabou por agora. Aguarde alguns minutos ou ative o faturamento no AI Studio.', 429);
+      throw AIErr(`O Gemini recusou o pedido: ${data.error?.message || 'erro ' + res.status}`, res.status);
+    }
+    return data;
+  };
+  const aiText = async prompt => {
+    const d = await gemini(state.ai.textModel || 'gemini-flash-latest', { contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9, responseMimeType: 'application/json' } });
+    const t = d.candidates?.[0]?.content?.parts?.map(x => x.text || '').join('') || '';
+    if (!t.trim()) throw AIErr('A IA não retornou texto. Tente gerar de novo.');
+    return t;
+  };
+  const STOP = new Set(['a', 'as', 'com', 'como', 'da', 'das', 'de', 'do', 'dos', 'e', 'mas', 'ou', 'para', 'porque', 'que', 'sem']);
+  const cleanFala = x => {
+    const w = String(x).replace(/^[-*\d.)\s"']+|["']$/g, '').replace(/#[\p{L}\p{N}_-]+/gu, '').replace(/\s+([,.!?])/g, '$1').trim().split(/\s+/).slice(0, 20);
+    while (w.length > 1 && STOP.has(w.at(-1).toLowerCase().replace(/[^a-zá-úç]/g, ''))) w.pop();
+    const r = w.join(' ').replace(/[,;:]$/, ''); return !r ? '' : /[.!?]$/.test(r) ? r : r + '.';
+  };
+  const parseTakes = (txt, n) => {
+    let arr;
+    try { const j = JSON.parse(txt.replace(/^```(?:json)?/i, '').replace(/```$/, '').trim()); arr = Array.isArray(j) ? j : (j.takes || []); }
+    catch { arr = txt.split(/\n+/); }
+    return arr.map(x => cleanFala(typeof x === 'object' ? (x.fala || x.text || '') : x)).filter(Boolean).slice(0, n);
+  };
+  const fileToRef = (file, max = 1024) => new Promise(res => {
+    if (!file) return res(null);
+    const img = new Image();
+    img.onload = () => {
+      const r = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas');
+      c.width = Math.round(img.width * r); c.height = Math.round(img.height * r); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      const url = c.toDataURL('image/jpeg', 0.9); res({ mime: 'image/jpeg', b64: url.split(',')[1], url });
+    };
+    img.onerror = () => res(null); img.src = URL.createObjectURL(file);
+  });
+  const freeImage = prompt => new Promise((res, rej) => {
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0, 1400))}?width=720&height=1280&nologo=true&seed=${Math.floor(Math.random() * 1e6)}`;
+    const img = new Image(); img.onload = () => res(url); img.onerror = () => rej(AIErr('O gerador gratuito não respondeu. Ele aceita 1 pedido a cada 15 s; tente de novo em instantes.')); img.src = url;
+  });
+  const aiImage = async (prompt, refs = []) => {
+    refs = refs.filter(Boolean);
+    if (hasAI() && state.ai.imageModel) {
+      const parts = [{ text: prompt }, ...refs.map(r => ({ inlineData: { mimeType: r.mime, data: r.b64 } }))];
+      const d = await gemini(state.ai.imageModel, { contents: [{ role: 'user', parts }], generationConfig: { responseModalities: ['IMAGE', 'TEXT'], imageConfig: { aspectRatio: '9:16' } } });
+      const part = d.candidates?.[0]?.content?.parts?.find(x => x.inlineData || x.inline_data);
+      const inl = part?.inlineData || part?.inline_data;
+      if (!inl) throw AIErr('O modelo escolhido não devolveu imagem. Em Integrações IA, selecione um modelo com "image" no nome.');
+      return `data:${inl.mimeType || inl.mime_type || 'image/png'};base64,${inl.data}`;
+    }
+    if (state.ai.freeImages) { if (refs.length) toast('O gerador gratuito usa só o texto: as fotos de referência não entram.'); return freeImage(prompt); }
+    throw AIErr('Nenhum gerador de imagem ativo. Escolha um modelo de imagem ou ligue o gerador gratuito em Integrações IA.');
+  };
+  const withBusy = async (btn, statusEl, msg, fn) => {
+    btn.disabled = true; const old = btn.textContent; btn.textContent = msg; statusEl.textContent = '';
+    try { await fn(); } catch (err) { statusEl.textContent = err.message; statusEl.className = 'text-sm text-rose-600 self-center'; }
+    btn.disabled = false; btn.textContent = old;
+  };
+  const okStatus = (el, msg) => { el.textContent = msg; el.className = 'text-sm text-emerald-600 self-center'; };
+
+  // ---------- Integrações IA ----------
+  const fillSelect = (sel, items, current, extra = '') => { sel.innerHTML = extra + items.map(m => `<option value="${esc(m)}" ${m === current ? 'selected' : ''}>${esc(m)}</option>`).join(''); };
+  const renderIA = () => {
+    $('#iaKey').value = state.ai.key; $('#iaProxy').value = state.ai.proxy; $('#iaFree').checked = state.ai.freeImages;
+    fillSelect($('#iaText'), [...new Set([state.ai.textModel, 'gemini-flash-latest', 'gemini-flash-lite-latest'])], state.ai.textModel);
+    fillSelect($('#iaImage'), state.ai.imageModel ? [state.ai.imageModel] : [], state.ai.imageModel, '<option value="">Nenhum (usar gerador gratuito)</option>');
+  };
+  const readIA = () => { state.ai.key = $('#iaKey').value.trim(); state.ai.proxy = $('#iaProxy').value.trim(); state.ai.textModel = $('#iaText').value; state.ai.imageModel = $('#iaImage').value; state.ai.freeImages = $('#iaFree').checked; };
+  $('#iaForm').addEventListener('submit', e => { e.preventDefault(); readIA(); save(); const m = $('#iaMsg'); m.className = 'sm:col-span-2 text-sm text-emerald-600'; m.textContent = 'Integrações salvas.'; });
+  $('#iaTest').addEventListener('click', async () => {
+    readIA(); const m = $('#iaMsg'); m.className = 'sm:col-span-2 text-sm muted'; m.textContent = 'Testando…';
+    try {
+      if (!hasAI()) throw AIErr('Cole a chave do Gemini ou a URL do proxy.');
+      const proxy = state.ai.proxy.replace(/\/$/, '');
+      const res = await fetch(proxy ? proxy + '/models' : 'https://generativelanguage.googleapis.com/v1beta/models?pageSize=200', { headers: proxy ? {} : { 'x-goog-api-key': state.ai.key } });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw AIErr(`Conexão recusada: ${data.error?.message || 'erro ' + res.status}. Confira a chave.`);
+      const gen = (data.models || []).filter(x => (x.supportedGenerationMethods || []).includes('generateContent')).map(x => x.name.replace(/^models\//, ''));
+      const imgs = gen.filter(n => /image/i.test(n));
+      const txts = gen.filter(n => /^gemini/i.test(n) && !/image|tts|audio|live|embedding|robotics|computer/i.test(n));
+      if (!state.ai.imageModel && imgs.length) state.ai.imageModel = imgs.find(n => /flash/i.test(n)) || imgs[0];
+      fillSelect($('#iaText'), [...new Set(['gemini-flash-latest', ...txts])], state.ai.textModel);
+      fillSelect($('#iaImage'), imgs, state.ai.imageModel, '<option value="">Nenhum (usar gerador gratuito)</option>');
+      save(); m.className = 'sm:col-span-2 text-sm text-emerald-600';
+      m.textContent = `Conectado. ${txts.length} modelos de texto e ${imgs.length} de imagem disponíveis. Os modelos de imagem só funcionam com faturamento ativo no Google AI Studio.`;
+    } catch (err) { m.className = 'sm:col-span-2 text-sm text-rose-600'; m.textContent = err.message; }
+  });
+  renderIA();
+
+  // ---------- Base de conhecimento dos prompts (categorias, cenas, formatos) ----------
+  const CATEGORIES = {
+    moda: ['Moda e vestuário', ['Show realistic garment fit, fabric drape, seams, texture and movement on the body.', 'Never morph cuts, prints, logos, buttons, zippers or colors between frames.']],
+    beleza: ['Beleza e skincare', ['Use clean close-ups that preserve skin texture and the real shape, color and packaging of the product.', 'Show a plausible amount and a natural, safe application gesture.', 'Do not invent medical, dermatological or guaranteed-effect claims.']],
+    alimentos: ['Alimentos e bebidas', ['Food must look edible, fresh and physically plausible; preserve package shape and label geometry.', 'Do not invent nutritional, health or weight-loss claims.']],
+    limpeza: ['Limpeza', ['Keep the container and label visually stable.', 'Avoid unsafe chemical combinations; any cleaning result must be visually plausible, never a guaranteed outcome.']],
+    eletro: ['Eletrodomésticos', ['Keep the appliance on a stable surface with realistic scale, controls, doors and handles.', 'Do not invent buttons, displays, accessories or capabilities.', 'Hands interact with controls without clipping through the appliance.']],
+    eletronicos: ['Eletrônicos', ['Preserve ports, screen proportions, buttons and physical geometry from the reference.', 'Do not invent UI screens or specifications; prefer neutral screen content.']],
+    ferramentas: ['Ferramentas', ['Show correct scale, grip and safe ordinary use on a stable work surface.', 'Preserve guards, handles and housings from the reference.']],
+    casa: ['Casa e decoração', ['Keep size and placement believable relative to furniture.', 'Use natural residential lighting and realistic shadows; do not duplicate decor items.']],
+    fitness: ['Fitness', ['Use biomechanically plausible movement and safe exercise form.', 'Do not make body-transformation or guaranteed-performance claims.']],
+    pet: ['Pet', ['Keep animal behavior calm, safe and natural.', 'Preserve the product size relative to the pet; avoid extra animals.']],
+    auto: ['Automotivo', ['Maintain realistic scale and placement on or in the vehicle.', 'Do not invent compatibility or performance claims.']],
+    brinquedos: ['Brinquedos', ['Present the product as a general-audience item without introducing children unless requested.', 'Keep pieces, colors and geometry consistent.']],
+    outros: ['Outros', ['Preserve the physical product exactly as in the reference.', 'Do not invent specifications, accessories, claims or functionality.']],
+  };
+  const RADAR_CAT = { Beleza: 'beleza', Casa: 'casa', Fitness: 'fitness', Pets: 'pet', 'Eletrônicos': 'eletronicos', Moda: 'moda' };
+  const SCENES = [
+    ['academia', 'Academia', 'a clean modern gym with natural light'], ['arlivre', 'Ao ar livre', 'an outdoor park or garden in soft daylight'],
+    ['banheiro', 'Banheiro', 'a tidy residential bathroom with a mirror'], ['cafeteria', 'Cafeteria', 'a cozy coffee shop with warm light'],
+    ['casa', 'Casa', 'a lived-in modern Brazilian living room'], ['cozinha', 'Cozinha', 'a clean residential kitchen countertop'],
+    ['escritorio', 'Escritório', 'a home office desk with a laptop'], ['estudio', 'Estúdio caseiro', 'a simple home studio corner with soft light'],
+    ['loja', 'Loja', 'a small retail store aisle'], ['praia', 'Praia', 'a Brazilian beach at golden hour'],
+    ['quarto', 'Quarto', 'a bright bedroom with neutral decor'], ['outros', 'IA decide', 'a believable everyday environment that suits the product'],
+  ];
+  const CAMS = [
+    ['ugc', 'UGC clássico', 'Criador falando com a câmera', 'Third-person UGC frame: the creator faces the camera at chest-up or waist-up, holds the product at chest height and makes direct, friendly eye contact like a genuine recommendation.', 'Move from eye contact to one presentation gesture, one detail angle, then a settled final product frame.'],
+    ['pov', 'POV (mãos)', 'Demonstração em primeira pessoa', 'First-person POV, hands-only: the product fills most of the frame, front-facing and sharp; hands match the creator skin tone; face and body stay out of frame.', 'Start centered, show one or two useful angles with slow wrist motion and realistic grip, return to a stable hero view.'],
+    ['selfie', 'Blogueirinha', 'Close espontâneo e direto', 'Front-camera selfie vlog at arm length: complete face, shoulders and the free hand holding the product beside the face; slightly imperfect handheld framing.', 'Coordinate one product raise, one small turn or demonstration and a warm restrained finish with the spoken message.'],
+    ['espelho', 'Espelho', 'Selfie no espelho', 'Mirror selfie with exactly one phone and one coherent reflection; medium to full body so outfit and product stay readable.', 'Relaxed weight shift and small handheld movement only; no zoom or sudden angle change.'],
+    ['sofa', 'Review no sofá', 'Sentado, tom de conversa', 'Seated on a sofa in a real living room, eye-level smartphone medium shot, product held at chest or waist level.', 'Eye contact, a restrained lift or turn of the product, a brief inspection glance and a calm recommendation frame.'],
+    ['unboxing', 'Unboxing', 'Abrindo a embalagem', 'Overhead hands-only unboxing: an open package on a table, hands lift and reveal the real product; no face in frame.', 'Positioning, opening, reveal, one item lift or detail view and a tidy final composition. Never invent box contents.'],
+    ['maker', 'Estilo maker', 'Penteadeira com espelho', 'Over-the-shoulder at a vanity mirror: the creator applies the beauty product while the mirror shows one synchronized reflection.', 'Keep product, applicator and face contact visible; no decorative camera moves.'],
+    ['manequim', 'Manequim', 'Peça vestida no manequim', 'The creator stands beside exactly one mannequin wearing the garment and presents it with an open-palm or fabric-touch gesture.', 'Overview, one fabric detail, one fit explanation and a clean final garment view.'],
+    ['passos', 'Passo a passo', 'Demonstração prática', 'Step-by-step demonstration framing the working area so the practical action is understandable.', 'Establish the setup, perform two or three controlled actions, inspect the result, finish with one clean final step.'],
+  ];
+  const MOVES = ['Mostrar o produto com naturalidade', 'Aproximar o produto da câmera', 'Girar o produto devagar', 'Demonstrar o uso', 'Apontar para os detalhes'];
+  const TONES = ['Amigável e confiante', 'Animado', 'Calmo e sincero', 'Divertido', 'Premium e elegante'];
+  const VOICES = ['Feminina', 'Masculina', 'Sem fala (só ações)'];
+  const PITCHES = ['Natural e próxima', 'Enérgica', 'Suave', 'Grave e segura'];
+  const opts = (sel, arr, val) => { $(sel).innerHTML = arr.map(x => `<option ${x === val ? 'selected' : ''}>${x}</option>`).join(''); };
+  $('#wzCat').innerHTML = Object.entries(CATEGORIES).map(([k, [l]]) => `<option value="${k}">${l}</option>`).join('');
+  opts('#wzMove', MOVES); opts('#wzTone', TONES); opts('#wzVoice', VOICES); opts('#wzPitch', PITCHES);
+  const takeLen = plat => plat === 'Grok' ? 6 : 8;
+  const fillTakes = (sel, plat) => { const cur = $(sel).value || '2'; $(sel).innerHTML = [1, 2, 3, 4, 5].map(n => `<option value="${n}" ${String(n) === cur ? 'selected' : ''}>${n} take${n > 1 ? 's' : ''} · ${n * takeLen(plat)} s</option>`).join(''); };
+  let wzScene = 'casa', wzCam = 'ugc';
+  const chip = (id, label, sub, on, attr) => `<button type="button" ${attr}="${id}" aria-pressed="${on}" class="persona ${on ? 'selected' : ''} rounded-xl p-3 border border-app text-left"><span class="block text-sm font-semibold">${label}</span>${sub ? `<span class="block text-xs muted mt-0.5">${sub}</span>` : ''}</button>`;
+  const renderChips = () => {
+    $('#wzScenes').innerHTML = SCENES.map(([id, l]) => chip(id, l, '', id === wzScene, 'data-scene')).join('');
+    $('#wzCams').innerHTML = CAMS.map(([id, l, sub]) => chip(id, l, sub, id === wzCam, 'data-cam')).join('');
+  };
+  $('#wzScenes').addEventListener('click', e => { const b = e.target.closest('[data-scene]'); if (b) { wzScene = b.dataset.scene; renderChips(); } });
+  $('#wzCams').addEventListener('click', e => { const b = e.target.closest('[data-cam]'); if (b) { wzCam = b.dataset.cam; renderChips(); } });
+  renderChips();
+
+  const renderFalaInputs = (wrap, n, falas) => {
+    const old = $$(`${wrap} textarea`).map(t => t.value);
+    $(wrap).innerHTML = Array.from({ length: n }, (_, i) => `<div><label class="text-xs font-semibold muted" for="${wrap.slice(1)}${i}">Take ${i + 1}</label><textarea id="${wrap.slice(1)}${i}" rows="2" class="input mt-1">${esc(falas[i] ?? old[i] ?? '')}</textarea></div>`).join('');
+  };
+  const readFalas = wrap => $$(`${wrap} textarea`).map(t => cleanFala(t.value));
+  const syncWzTakes = () => { fillTakes('#wzTakes', $('#wzPlat').value); renderFalaInputs('#wzFalas', +$('#wzTakes').value, []); };
+  $('#wzPlat').addEventListener('change', syncWzTakes); $('#wzTakes').addEventListener('change', () => renderFalaInputs('#wzFalas', +$('#wzTakes').value, []));
+  syncWzTakes();
+
+  // falas locais (sem IA): tom observacional, sem promessas
+  const LOCAL = {
+    hook: ['Deixa eu te mostrar {p} de perto.', 'Achei {p} e fui ver os detalhes.', 'Pausa um segundo e olha {p}.', 'O destaque de hoje é {p}.', 'Quer ver {p} mais de perto?'],
+    mid: ['Repara no acabamento e nos detalhes.', 'Olha como ele aparece no uso real.', 'Vou aproximar para você enxergar melhor.', 'Dá para ver o tamanho real na mão.', 'Sem promessa: só uma apresentação clara.'],
+    cta: ['Se fez sentido para você, confira no TikTok Shop.', 'Quer ver as informações atuais? Toque no carrinho.', 'Para comparar com calma, veja no TikTok Shop.'],
+  };
+  const localFalas = (p, n) => Array.from({ length: n }, (_, i) => (i === 0 ? pick(LOCAL.hook) : i === n - 1 && n > 1 ? pick(LOCAL.cta) : pick(LOCAL.mid)).replace('{p}', p));
+  const brandHint = () => { const b = state.brand || {}; return [b.name && `Loja: ${b.name}.`, b.niche && `Nicho: ${b.niche}.`, b.words && `Use quando couber: ${b.words}.`, b.avoid && `Nunca use: ${b.avoid}.`].filter(Boolean).join(' '); };
+
+  const wzCfg = () => ({
+    name: $('#wzName').value.trim(), cat: $('#wzCat').value, price: num($('#wzPrice').value), instr: $('#wzInstr').value.trim(),
+    creator: $('#wzCreatorDesc').value.trim(), scene: SCENES.find(x => x[0] === wzScene), cam: CAMS.find(x => x[0] === wzCam),
+    move: $('#wzMove').value, tone: $('#wzTone').value, voice: $('#wzVoice').value, pitch: $('#wzPitch').value,
+    plat: $('#wzPlat').value, takes: +$('#wzTakes').value, extra: $('#wzExtra').value.trim(),
+  });
+  $('#wzFalasBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#wzStatus'), 'Escrevendo…', async () => {
+    const c = wzCfg(); if (!c.name) throw AIErr('Informe o nome do produto primeiro.');
+    if (c.voice.startsWith('Sem fala')) throw AIErr('Com a opção "Sem fala", os takes não têm diálogo. Escolha uma voz para gerar falas.');
+    let falas;
+    if (hasAI()) {
+      const prompt = `Você é roteirista de vídeos UGC para TikTok Shop no Brasil. Escreva ${c.takes} falas em português do Brasil, uma por take de ${takeLen(c.plat)} segundos, cada uma com no máximo 20 palavras e linguagem falada natural.
+Take 1: gancho que prende nos 2 primeiros segundos. Takes do meio: demonstração, detalhe visível ou resposta a uma objeção. Último take: CTA citando o TikTok Shop.
+Regras: não invente benefícios, especificações, resultados médicos ou garantias; fale só do que dá para ver na câmera. Sem hashtags e sem emojis.
+Produto: ${c.name}. Categoria: ${CATEGORIES[c.cat][0]}. ${c.price ? 'Preço: ' + brl(c.price) + '.' : ''} Direção: ${c.instr || 'nenhuma'}. Tom: ${c.tone}. Voz: ${c.voice}, ${c.pitch}. ${brandHint()}
+Responda somente JSON: {"takes":["fala 1","fala 2"]}`;
+      falas = parseTakes(await aiText(prompt), c.takes);
+      if (falas.length < c.takes) throw AIErr('A IA não retornou todas as falas. Tente gerar novamente.');
+    } else falas = localFalas(c.name, c.takes);
+    renderFalaInputs('#wzFalas', c.takes, falas); state.scripts++; save();
+    okStatus($('#wzStatus'), hasAI() ? 'Falas criadas pela IA. Edite se quiser.' : 'Falas criadas a partir dos modelos prontos.');
+  }));
+
+  const creatorPrompt = desc => `Photorealistic vertical 9:16 smartphone photo of a fictional ${desc || 'Brazilian content creator'}, facing the camera with a friendly natural expression, soft indoor daylight, authentic UGC look, real skin texture, no text, no watermark, not a celebrity.`;
+  let wzCreatorRef = null;
+  $('#wzCreatorImg').addEventListener('change', async e => { wzCreatorRef = await fileToRef(e.target.files[0]); if (wzCreatorRef) { $('#wzCreatorPrev').src = wzCreatorRef.url; $('#wzCreatorPrev').classList.remove('hidden'); } });
+  const urlToRef = async url => { if (url.startsWith('data:')) { const [h, b] = url.split(','); return { mime: h.match(/data:(.*?);/)[1], b64: b, url }; } return { mime: 'image/jpeg', b64: '', url, remote: true }; };
+  $('#wzCreatorGen').addEventListener('click', e => withBusy(e.currentTarget, $('#wzStatus'), 'Gerando…', async () => {
+    const url = await aiImage(creatorPrompt($('#wzCreatorDesc').value.trim()));
+    wzCreatorRef = await urlToRef(url); $('#wzCreatorPrev').src = url; $('#wzCreatorPrev').classList.remove('hidden');
+    okStatus($('#wzStatus'), 'Avatar gerado. Baixe a imagem para usar como referência no Flow.');
+  }));
+
+  const imageMergePrompt = (c, hasScene) => `[FLOW IMAGE MERGE — USE ${hasScene ? 'ALL THREE REFERENCE FILES' : 'THE CREATOR AND PRODUCT REFERENCE FILES'}]
+- PRODUCT IMAGE: the exact product (${c.name}). Preserve its shape, colors, label and proportions. Do not redesign it.
+- CREATOR IMAGE: the person to show. Keep face, hair, skin tone and body consistent.
+${hasScene ? '- SCENE IMAGE: use it only as environment, furniture and lighting reference. Ignore people in it.' : `- SETTING: ${c.scene[2]}.`}
+
+Create a highly realistic UGC-style vertical 9:16 photo that looks like a real frame from a social-media product video, never a polished studio campaign.
+CAMERA STYLE — ${c.cam[1]}: ${c.cam[3]}
+User direction: ${c.instr || 'none'}.
+CATEGORY RULES (${CATEGORIES[c.cat][0]}):
+${CATEGORIES[c.cat][1].map(r => '- ' + r).join('\n')}
+Soft, slightly warm natural light, smartphone dynamic range, realistic hands with five fingers, believable grip and scale.
+Reject CGI, 3D render, fake skin, floating product, distorted anatomy, studio backdrop, text overlays, watermark and UI elements.`;
+
+  let wzSceneRef = null, wzProdRef = null;
+  $('#wzSceneImg').addEventListener('change', async e => { wzSceneRef = await fileToRef(e.target.files[0]); });
+  $('#wzProdImg').addEventListener('change', async e => { wzProdRef = await fileToRef(e.target.files[0]); });
+  $('#wzImgBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#wzStatus'), 'Gerando imagem…', async () => {
+    const c = wzCfg(); if (!c.name) throw AIErr('Informe o nome do produto primeiro.');
+    const prompt = imageMergePrompt(c, !!wzSceneRef);
+    $('#wzRefPrompt').value = prompt; $('#wzRefWrap').classList.remove('hidden');
+    const refs = [wzProdRef, wzCreatorRef, wzSceneRef].filter(r => r && r.b64);
+    if (!(hasAI() && state.ai.imageModel)) {
+      if (!state.ai.freeImages) { okStatus($('#wzStatus'), 'Prompt de fusão pronto. Cole no Flow junto com as fotos.'); return; }
+      const url = await freeImage(`${c.cam[3]} The creator: ${c.creator}. Product: ${c.name}. Setting: ${c.scene[2]}. Photorealistic UGC smartphone photo, vertical, no text.`);
+      $('#wzRefImg').src = url; $('#wzRefDl').href = url;
+    } else {
+      if (!wzProdRef) throw AIErr('Envie a foto do produto para o Nano Banana manter o produto fiel.');
+      const url = await aiImage(prompt, refs); $('#wzRefImg').src = url; $('#wzRefDl').href = url;
+    }
+    $('#wzRefImg').classList.remove('hidden'); $('#wzRefDl').classList.remove('hidden');
+    okStatus($('#wzStatus'), 'Imagem de referência pronta para usar no Flow.');
+    addLib('Imagem de referência', c.name);
+  }));
+
+  const takeRole = (i, n) => n === 1 ? 'HOOK + DEMONSTRATION + CTA in a single take' : i === 0 ? 'HOOK — stop the scroll in the first 2 seconds' : i === n - 1 ? 'CTA — calm final product-focused frame' : i % 2 ? 'DEMONSTRATION + core benefit' : 'DETAIL / proof / objection handling';
+  const ugcTakePrompt = (c, i, falas) => {
+    const sec = takeLen(c.plat), n = c.takes, mute = c.voice.startsWith('Sem fala');
+    return `🎬 UGC PRODUCT VIDEO — ${c.plat} · 9:16 · ${n * sec}s total
+MANDATORY SPEECH LANGUAGE: Brazilian Portuguese (pt-BR), natural Brazilian accent.
+
+📦 PRODUCT
+Name: ${c.name}. Category: ${CATEGORIES[c.cat][0]}.${c.price ? ` Price reference: ${brl(c.price)}.` : ''}
+User direction: ${c.instr || 'none'}.
+Use the attached product image as the exact product reference. Never morph shape, color, label or proportions.
+
+🎭 CREATOR / AVATAR
+${c.creator || 'Use the attached creator reference.'}
+- Keep the creator visually consistent with the reference image across all frames.
+- Do not change face, hair, skin tone, body or clothing mid-video.
+- The avatar is fictional or user-approved; do not imply a real public figure.
+
+🏠 SCENE
+${c.scene[2]}.
+
+🎥 CAMERA STYLE — ${c.cam[1]}
+${c.cam[3]}
+FORMAT BLUEPRINT: ${c.cam[4]}
+
+🎬 PERFORMANCE
+Movement: ${c.move}. Tone: ${c.tone}. Voice: ${c.voice}. Voice personality: ${c.pitch}.
+Additional direction: ${c.extra || 'none'}.
+- Match gestures to the spoken sentence; avoid looping generic hand movement.
+- Product stays visible whenever the dialogue talks about it.
+
+CATEGORY RULES
+${CATEGORIES[c.cat][1].map(r => '- ' + r).join('\n')}
+
+📍 TAKE ${i + 1} of ${n}
+Duration: ${sec} seconds (${i * sec}s to ${(i + 1) * sec}s)
+Narrative role: ${takeRole(i, n)}
+${mute ? 'Audio/performance: NO SPEECH. No dialogue, narration or lip-sync. Natural ambient sound only.' : `Spoken dialogue (pt-BR, MAX 20 words): "${falas[i] || ''}"\nAudio: voice + natural ambient sound only, no background music.`}
+Continuity: ${i === 0 ? 'opening take; establish the creator, product and scene.' : 'start from the exact visual state left by the previous take.'}${i === n - 1 ? ' End on a clean, stable product frame.' : ' End in a pose that flows naturally into the next take.'}
+Avoid: subtitles, captions, on-screen text, watermark, logos, extra people, distorted hands.`;
+  };
+  const PLAT_URL = { 'Flow VEO3': 'https://labs.google/fx/tools/flow', Grok: 'https://grok.com/imagine' };
+  const renderPrompts = (wrap, title, prompts, plat) => {
+    $(wrap).innerHTML = `<div class="flex flex-wrap items-center justify-between gap-2"><h2 class="font-semibold">${esc(title)}</h2><a href="${PLAT_URL[plat]}" target="_blank" rel="noopener" class="text-sm font-semibold text-accent">Abrir ${esc(plat)}</a></div>` +
+      prompts.map((pr, i) => `<div class="surface border border-app rounded-2xl p-4"><div class="flex items-center justify-between gap-2"><p class="text-sm font-semibold">Take ${i + 1}</p><button type="button" data-copy-target="${wrap.slice(1)}P${i}" class="px-3 py-1.5 rounded-lg border border-app text-xs font-semibold">Copiar prompt</button></div><textarea id="${wrap.slice(1)}P${i}" rows="10" readonly class="input mt-2 font-mono text-xs">${esc(pr)}</textarea></div>`).join('') +
+      `<p class="muted text-xs">No ${esc(plat)}: crie um vídeo a partir da imagem de referência (frames to video), cole o prompt de cada take e junte os takes no Studio ou no CapCut.</p>`;
+  };
+  $('#wzForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const c = wzCfg(); if (!c.name) return toast('Informe o nome do produto.');
+    const falas = readFalas('#wzFalas');
+    if (!c.voice.startsWith('Sem fala') && falas.some(f => !f)) { $('#wzStatus').className = 'text-sm text-rose-600 self-center'; $('#wzStatus').textContent = 'Preencha ou gere as falas de todos os takes.'; return; }
+    renderPrompts('#wzOut', `Prompts para ${c.plat} · ${c.takes} take${c.takes > 1 ? 's' : ''}`, Array.from({ length: c.takes }, (_, i) => ugcTakePrompt(c, i, falas)), c.plat);
+    okStatus($('#wzStatus'), 'Prompts prontos. Copie cada take para o ' + c.plat + '.');
+    addLib('Prompts UGC', c.name, c.takes * takeLen(c.plat));
+    $('#wzOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ---------- Virais: Em alta + Historinhas ----------
+  const VCHARS = {
+    alta: [
+      ['fazendeiro', 'Fazendeiro galã', 'Flerte, humor e histórias do interior', 'a handsome fictional Brazilian farmer in his 30s, straw hat, plaid shirt, sun-tanned skin', 'Frente da casa rural', 'Camisa xadrez'],
+      ['vovo', 'Vovó conselheira', 'Conselhos, nostalgia e humor popular', 'a sweet fictional Brazilian grandmother in her 70s, grey hair in a bun, floral dress, reading glasses', 'Cozinha de casa de vó', 'Vestido florido'],
+      ['tiozao', 'Tiozão do churrasco', 'Humor e provocação leve', 'a cheerful fictional Brazilian man in his 50s, mustache, football jersey, holding a barbecue tong', 'Quintal com churrasqueira', 'Camisa de time'],
+      ['patroa', 'Patroa sincera', 'Opinião forte e identificação', 'a confident fictional Brazilian woman in her 40s, elegant casual outfit, expressive face', 'Sala de estar moderna', 'Blusa social'],
+    ],
+    frutas: [
+      ['banana', 'Banana', 'Dramática e fofoqueira', 'a photorealistic anthropomorphic banana character with expressive eyes and small arms, real banana peel texture', 'Fruteira da cozinha', ''],
+      ['morango', 'Morango', 'Romântico e sensível', 'a photorealistic anthropomorphic strawberry character with expressive eyes, real seeds and leaves', 'Feira livre', ''],
+      ['abacaxi', 'Abacaxi', 'Bravo, mas de bom coração', 'a photorealistic anthropomorphic pineapple character with a spiky crown and stern eyebrows', 'Bancada da cozinha', ''],
+      ['melancia', 'Melancia', 'Mãe protetora da fruteira', 'a photorealistic anthropomorphic watermelon character, round, green striped skin, warm smile', 'Geladeira aberta', ''],
+    ],
+  };
+  const STORIES = ['Confissão inesperada', 'Traição na feira', 'Ciúmes na fruteira', 'Primeiro encontro', 'Briga de vizinhas', 'Segredo de família'];
+  const GOALS = { alta: ['Flertar com o público', 'Humor e provocação leve', 'Dar um conselho', 'Fazer uma pergunta', 'Contar uma história'], frutas: ['Criar suspense', 'Fazer rir', 'Emocionar', 'Gerar comentários'] };
+  let vMode = 'alta', vChar = 'fazendeiro';
+  opts('#vrStory', STORIES);
+  const renderV = () => {
+    $$('.vtab').forEach(b => { const on = b.dataset.vmode === vMode; b.classList.toggle('gradient-btn', on); b.classList.toggle('text-white', on); b.setAttribute('aria-selected', on); });
+    $('#vrChars').innerHTML = VCHARS[vMode].map(([id, l, sub]) => chip(id, l, sub, id === vChar, 'data-vchar')).join('');
+    $('#vrStoryWrap').classList.toggle('hidden', vMode !== 'frutas'); opts('#vrGoal', GOALS[vMode]);
+  };
+  $$('.vtab').forEach(b => b.addEventListener('click', () => { vMode = b.dataset.vmode; vChar = VCHARS[vMode][0][0]; renderV(); }));
+  $('#vrChars').addEventListener('click', e => { const b = e.target.closest('[data-vchar]'); if (b) { vChar = b.dataset.vchar; renderV(); } });
+  const syncVTakes = () => { fillTakes('#vrTakes', $('#vrPlat').value); renderFalaInputs('#vrFalas', +$('#vrTakes').value, []); };
+  $('#vrPlat').addEventListener('change', syncVTakes); $('#vrTakes').addEventListener('change', () => renderFalaInputs('#vrFalas', +$('#vrTakes').value, []));
+  renderV(); syncVTakes();
+  const vCfg = () => {
+    const ch = VCHARS[vMode].find(x => x[0] === vChar);
+    return { ch, mode: vMode, story: $('#vrStory').value, goal: $('#vrGoal').value, place: $('#vrPlace').value.trim() || ch[4], outfit: $('#vrOutfit').value.trim() || ch[5], frame: $('#vrFrame').value, cam: $('#vrCam').value, action: $('#vrAction').value, plat: $('#vrPlat').value, takes: +$('#vrTakes').value, theme: $('#vrTheme').value.trim() };
+  };
+  const V_LOCAL = {
+    alta: ['Vem cá que eu preciso te contar uma coisa.', 'Na roça a gente aprende cedo: quem planta carinho colhe saudade.', 'E aí, você concorda comigo ou não?', 'Agora comenta aqui a sua opinião, porque eu quero saber quem concorda comigo.'],
+    frutas: ['Vocês não vão acreditar no que eu vi na fruteira hoje.', 'Ele jurou que era só amizade, mas estava todo vermelho.', 'Eu fingi que não vi, mas ninguém me engana.', 'Comenta aqui: eu perdoo ou não perdoo?'],
+  };
+  $('#vrFalasBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#vrStatus'), 'Escrevendo…', async () => {
+    const c = vCfg(); let falas;
+    if (hasAI()) {
+      const prompt = `Você escreve vídeos virais curtos para TikTok e Reels no Brasil. Personagem: ${c.ch[1]} (${c.ch[2]}). ${c.mode === 'frutas' ? 'Formato: historinha com frutas falantes. Enredo: ' + c.story + '.' : ''} Objetivo: ${c.goal}. Tema: ${c.theme || 'escolha um tema cotidiano com identificação popular'}.
+Escreva ${c.takes} falas em português do Brasil, uma por take de ${takeLen(c.plat)} segundos, no máximo 20 palavras cada, linguagem falada e regional quando couber. Take 1 é gancho; o último convida a comentar. Sem hashtags, sem emojis, sem ofensas e sem citar pessoas reais.
+Responda somente JSON: {"takes":["fala 1","fala 2"]}`;
+      falas = parseTakes(await aiText(prompt), c.takes);
+      if (falas.length < c.takes) throw AIErr('A IA não retornou todas as falas. Tente gerar novamente.');
+    } else { const base = V_LOCAL[c.mode]; falas = Array.from({ length: c.takes }, (_, i) => i === c.takes - 1 ? base.at(-1) : base[Math.min(i, base.length - 2)]); }
+    renderFalaInputs('#vrFalas', c.takes, falas); state.scripts++; save();
+    okStatus($('#vrStatus'), hasAI() ? 'Falas criadas pela IA. Você pode editar antes de gerar o prompt.' : 'Falas criadas a partir dos modelos prontos.');
+  }));
+  let vrAvatarRef = null;
+  $('#vrAvatar').addEventListener('change', async e => { vrAvatarRef = await fileToRef(e.target.files[0]); });
+  $('#vrImgBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#vrStatus'), 'Gerando…', async () => {
+    const c = vCfg();
+    const url = await aiImage(`Photorealistic vertical 9:16 frame of ${c.ch[3]}${c.outfit ? ', wearing ' + c.outfit : ''}, in ${c.place}, ${c.frame.toLowerCase()} framing, ${c.cam.toLowerCase()}, natural light, authentic social-media video look, no text, no watermark.`, vrAvatarRef ? [vrAvatarRef] : []);
+    $('#vrRefImg').src = url; $('#vrRefDl').href = url; $('#vrRefWrap').classList.remove('hidden');
+    okStatus($('#vrStatus'), 'Imagem de referência pronta para usar no Flow.');
+  }));
+  $('#vrForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const c = vCfg(), falas = readFalas('#vrFalas'), sec = takeLen(c.plat);
+    if (falas.some(f => !f)) { $('#vrStatus').className = 'text-sm text-rose-600 self-center'; $('#vrStatus').textContent = 'Preencha ou gere as falas de todos os takes.'; return; }
+    const prompts = falas.map((f, i) => `🎬 VIRAL SHORT — ${c.plat} · 9:16 · TAKE ${i + 1} of ${c.takes} · ${sec} seconds (${i * sec}s to ${(i + 1) * sec}s)
+MANDATORY SPEECH LANGUAGE: Brazilian Portuguese (pt-BR), natural Brazilian accent.
+
+CHARACTER: ${c.ch[3]}.${c.outfit ? ' Outfit: ' + c.outfit + '.' : ''} Use the attached reference image to fix the character identity; identity${c.mode === 'frutas' ? ', fruit anatomy' : ''} and recognizable details cannot change between takes.
+STORY: ${c.mode === 'frutas' ? c.story + '. ' : ''}Goal: ${c.goal}. Location: ${c.place}.${c.theme ? ' Theme: ' + c.theme + '.' : ''}
+CAMERA: ${c.cam}, ${c.frame.toLowerCase()} framing. ACTION: ${c.action}.
+${i === 0 ? 'Open with an immediate visual hook and establish the situation.' : i === c.takes - 1 ? 'Deliver the payoff and end looking at the camera, inviting comments.' : 'Escalate the situation and keep visual continuity with the previous take.'}
+
+PERFORMANCE
+Only ${c.ch[1]} speaks in this take. Exact Brazilian Portuguese dialogue (do not translate or change): "${f}"
+Lip-sync must match the dialogue. Voice + natural ambient sound only, no background music.
+Avoid: subtitles, on-screen text, watermark, extra characters, morphing.`);
+    renderPrompts('#vrOut', `${c.ch[1]} · ${c.takes} take${c.takes > 1 ? 's' : ''} para ${c.plat}`, prompts, c.plat);
+    okStatus($('#vrStatus'), 'Prompts prontos.'); addLib(c.mode === 'frutas' ? 'Historinha' : 'Viral em alta', `${c.ch[1]}${c.theme ? ' · ' + c.theme : ''}`, c.takes * sec);
+    $('#vrOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ---------- Modelo TikTok Shop ----------
+  let shopP = null, shopM = null;
+  const prev = (input, imgEl, setter) => $(input).addEventListener('change', async e => { const img = await loadImg(e.target.files[0]).catch(() => null); setter(img); if (img) { $(imgEl).src = img.src; $(imgEl).classList.remove('hidden'); } });
+  prev('#shopProduct', '#shopProductPrev', i => shopP = i);
+  prev('#shopModel', '#shopModelPrev', i => shopM = i);
+  const drawShop = (canvas, variant) => {
+    const ctx = canvas.getContext('2d'), W = 720, H = 1280;
+    ctx.filter = variant ? 'saturate(1.15) contrast(1.05)' : 'none';
+    drawCover(ctx, shopM, W, H, variant ? 1.12 : 1); ctx.filter = 'none';
+    const g = ctx.createLinearGradient(0, H * 0.55, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.75)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    const s = variant ? 300 : 260, x = variant ? 60 : W - s - 50, y = variant ? 640 : 740;
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 30; ctx.fillStyle = '#fff'; roundRect(ctx, x - 10, y - 10, s + 20, s + 20, 28); ctx.fill(); ctx.restore();
+    ctx.save(); roundRect(ctx, x, y, s, s, 22); ctx.clip(); const r = Math.max(s / shopP.width, s / shopP.height); ctx.drawImage(shopP, x + (s - shopP.width * r) / 2, y + (s - shopP.height * r) / 2, shopP.width * r, shopP.height * r); ctx.restore();
+    ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = '800 60px Manrope';
+    wrap(ctx, $('#shopTitle').value || 'Achadinho do dia', 640).forEach((l, i) => { ctx.lineWidth = 10; ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.strokeText(l, W / 2, 120 + i * 68); ctx.fillText(l, W / 2, 120 + i * 68); });
+    const price = brl($('#shopPrice').value); ctx.font = '800 44px Inter'; const pw = ctx.measureText(price).width + 60;
+    ctx.fillStyle = variant ? '#F43F5E' : '#F97316'; roundRect(ctx, (W - pw) / 2, 1130, pw, 80, 40); ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillText(price, W / 2, 1184);
+  };
+  $('#shopCam').innerHTML = CAMS.filter(x => ['ugc', 'selfie', 'espelho', 'sofa', 'manequim'].includes(x[0])).map(x => `<option value="${x[0]}">${x[1]}</option>`).join('');
+  const shopMergePrompt = (camId, variant) => {
+    const cam = CAMS.find(x => x[0] === camId);
+    return `[FLOW IMAGE MERGE — USE THE MODEL AND PRODUCT REFERENCE FILES]
+- PRODUCT IMAGE: the exact product to sell. Preserve shape, colors, label and proportions.
+- MODEL IMAGE: the person who presents it. Keep face, hair, skin tone and body identical.
+Create a highly realistic UGC-style vertical 9:16 TikTok Shop photo. ${cam[3]}
+${variant ? 'VARIATION: change pose, angle and background composition while keeping the same model and product.' : 'Natural, trustworthy, lightly premium mood.'}
+Realistic hands and grip, smartphone lighting. No text, no price tags, no watermark, no UI.`;
+  };
+  const showShop = (canvas, link, url) => new Promise(res => { const img = new Image(); img.onload = () => { const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, 720, 1280); drawCover(ctx, img, 720, 1280); link.href = url; link.classList.remove('hidden'); res(); }; img.src = url; });
+  $('#shopAI').addEventListener('click', async () => {
+    const fp = $('#shopProduct').files[0], fm = $('#shopModel').files[0];
+    $('#shopPrompt').value = shopMergePrompt($('#shopCam').value, false); $('#shopPromptWrap').classList.remove('hidden');
+    if (!fp || !fm) { $('#shopMsg').textContent = 'Envie a foto do produto e a da modelo.'; return; }
+    if (!(hasAI() && state.ai.imageModel)) { $('#shopMsg').textContent = 'Nenhum modelo de imagem configurado. Use o prompt abaixo no Flow (é grátis) ou configure o Nano Banana em Integrações IA.'; return; }
+    const btn = $('#shopAI'); btn.disabled = true; $('#shopMsg').textContent = 'Gerando resultado e variação com o Nano Banana…';
+    try {
+      const refs = [await fileToRef(fp), await fileToRef(fm)];
+      const [a, b] = await Promise.all([aiImage(shopMergePrompt($('#shopCam').value, false), refs), aiImage(shopMergePrompt($('#shopCam').value, true), refs)]);
+      await showShop($('#shopA'), $('#shopADl'), a); await showShop($('#shopB'), $('#shopBDl'), b);
+      $('#shopMsg').textContent = 'Resultado e variação prontos.'; addLib('Criativo', ($('#shopTitle').value || 'TikTok Shop') + ' · IA');
+    } catch (err) { $('#shopMsg').textContent = err.message; }
+    btn.disabled = false;
+  });
+  $('#shopGenerate').addEventListener('click', () => {
+    if (!shopP || !shopM) { $('#shopMsg').textContent = 'Envie a foto do produto e a da modelo para gerar o criativo.'; return; }
+    drawShop($('#shopA'), false); drawShop($('#shopB'), true);
+    $('#shopADl').href = $('#shopA').toDataURL('image/png'); $('#shopBDl').href = $('#shopB').toDataURL('image/png');
+    $('#shopADl').classList.remove('hidden'); $('#shopBDl').classList.remove('hidden');
+    $('#shopMsg').textContent = 'Criativo e variação prontos.';
+    addLib('Criativo', $('#shopTitle').value || 'TikTok Shop');
+  });
+
+
+  // ---------- Studio ----------
+  const stCanvas = $('#stCanvas'), sctx = stCanvas.getContext('2d');
+  let stUrl = null, stDur = 0;
+  const drawStudio = (video, prog) => {
+    const W = 720, H = 1280; sctx.fillStyle = '#000'; sctx.fillRect(0, 0, W, H);
+    const z = $('#stZoom').checked ? 1 + 0.06 * prog : 1;
+    const r = Math.max(W / video.videoWidth, H / video.videoHeight) * z; const w = video.videoWidth * r, h = video.videoHeight * r;
+    sctx.drawImage(video, (W - w) / 2, (H - h) / 2, w, h);
+    sctx.textAlign = 'center';
+    const hook = $('#stHook').value.trim();
+    if (hook) { sctx.font = '800 52px Manrope'; wrap(sctx, hook, 640).forEach((l, i) => { sctx.lineWidth = 10; sctx.strokeStyle = 'rgba(0,0,0,0.6)'; sctx.strokeText(l, W / 2, 130 + i * 60); sctx.fillStyle = '#fff'; sctx.fillText(l, W / 2, 130 + i * 60); }); }
+    const cap = $('#stCaption').value.trim();
+    if (cap) { sctx.font = '800 44px Manrope'; const cw = sctx.measureText(cap).width + 40; sctx.fillStyle = 'rgba(0,0,0,0.65)'; roundRect(sctx, (W - cw) / 2, 1080, cw, 70, 14); sctx.fill(); sctx.fillStyle = '#FDE047'; sctx.fillText(cap, W / 2, 1130); }
+  };
+  const newVideo = () => { const v = document.createElement('video'); v.src = stUrl; v.playsInline = true; v.preload = 'auto'; return v; };
+  $('#stFile').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    if (stUrl) URL.revokeObjectURL(stUrl); stUrl = URL.createObjectURL(f);
+    const v = newVideo(); v.muted = true;
+    v.onloadeddata = () => { stDur = v.duration || 0; $('#stEnd').value = Math.min(stDur, 60).toFixed(1); v.currentTime = Math.min(0.5, stDur / 2); };
+    v.onseeked = () => { drawStudio(v, 0); $('#stExport').disabled = false; $('#stStatus').textContent = `Vídeo carregado: ${stDur.toFixed(1)} s. Ajuste os textos e exporte.`; };
+    v.onerror = () => { $('#stStatus').textContent = 'Não conseguimos abrir esse arquivo. Tente um MP4 ou WebM.'; };
+  });
+  $('#stExport').addEventListener('click', async () => {
+    if (!stUrl) return;
+    const start = Math.min(num($('#stStart').value), stDur), end = Math.min(num($('#stEnd').value) || stDur, stDur);
+    if (end - start < 0.5) { $('#stStatus').textContent = 'O trecho precisa ter pelo menos 0,5 s. Ajuste início e fim.'; return; }
+    $('#stExport').disabled = true; $('#stDownload').classList.add('hidden'); $('#stStatus').textContent = 'Exportando… mantenha esta aba aberta.';
+    const v = newVideo(); let ac;
+    try {
+      await new Promise((r, j) => { v.onloadeddata = r; v.onerror = j; });
+      const tracks = [];
+      try { ac = new AudioContext(); const src = ac.createMediaElementSource(v); const dest = ac.createMediaStreamDestination(); src.connect(dest); tracks.push(...dest.stream.getAudioTracks()); } catch {}
+      v.currentTime = start; await new Promise(r => v.onseeked = r);
+      const url = await record(stCanvas, () => new Promise(res => {
+        v.play();
+        const tick = () => { const p = Math.min((v.currentTime - start) / (end - start), 1); drawStudio(v, p); $('#stProgress').style.width = (p * 100) + '%'; if (v.currentTime >= end || v.ended) { v.pause(); res(); } else requestAnimationFrame(tick); };
+        requestAnimationFrame(tick);
+      }), tracks);
+      $('#stDownload').href = url; $('#stDownload').classList.remove('hidden');
+      $('#stStatus').textContent = 'Exportação concluída.';
+      addLib('Vídeo Studio', $('#stHook').value.trim() || 'Edição', end - start);
+    } catch (err) { $('#stStatus').textContent = err?.message || 'Não foi possível exportar. Tente novamente com outro arquivo.'; }
+    ac?.close(); $('#stExport').disabled = false;
+  });
+
+  // ---------- Personalize ----------
+  const bf = { bName: 'name', bNiche: 'niche', bWords: 'words', bAvoid: 'avoid' };
+  Object.entries(bf).forEach(([id, k]) => $('#' + id).value = state.brand[k] || '');
+  $('#brandForm').addEventListener('submit', e => { e.preventDefault(); Object.entries(bf).forEach(([id, k]) => state.brand[k] = $('#' + id).value.trim()); save(); $('#brandMsg').textContent = 'Preferências salvas. Os próximos roteiros já usam esses dados.'; });
+
+  // ---------- Academy ----------
+  const LESSONS = ['Como escolher produtos no Radar', 'Anatomia de um gancho que prende', 'Roteiro UGC em 5 frases', 'Gravando sem câmera: personas e narração', 'Criativos para TikTok Shop', 'Teste A/B de criativos', 'Escalando com anúncios', 'Programa de indicação'];
+  const renderAcad = () => {
+    const done = state.academy.length, pct = Math.round(done / LESSONS.length * 100);
+    $('#acadPct').textContent = pct + '%'; $('#acadBar').style.width = pct + '%';
+    $('#acadList').innerHTML = LESSONS.map((l, i) => `<li class="surface border border-app rounded-xl p-4 flex items-center gap-3"><input type="checkbox" id="les${i}" data-les="${i}" ${state.academy.includes(i) ? 'checked' : ''} class="w-4 h-4 accent-violet-600"><label for="les${i}" class="text-sm flex-1"><span class="muted mr-2">Aula ${i + 1}</span>${l}</label></li>`).join('');
+  };
+  $('#acadList').addEventListener('change', e => { const i = +e.target.dataset.les; state.academy = e.target.checked ? [...new Set([...state.academy, i])] : state.academy.filter(x => x !== i); save(); renderAcad(); });
+  renderAcad();
+
+  // ---------- Indique e Ganhe ----------
+  const calcRef = () => { const pct = Math.min(num($('#refPct').value), 100) / 100; $('#refTotal').textContent = brl((num($('#refMonthly').value) * 319.90 + num($('#refLife').value) * 597) * pct); };
+  ['#refMonthly', '#refLife', '#refPct'].forEach(s => $(s).addEventListener('input', calcRef)); calcRef();
+  $('#copyRef').addEventListener('click', () => navigator.clipboard?.writeText($('#refLink').value).then(() => toast('Link copiado'), () => toast('Não foi possível copiar. Selecione o link manualmente.')));
+
+  // ---------- boot ----------
+  if (state.user && location.hash.startsWith('#app')) enterApp();
+})();
+</script>
+</body>
+</html>
