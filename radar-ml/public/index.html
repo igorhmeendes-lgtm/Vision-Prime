@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Radar ML</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>tailwind.config = { darkMode: 'class' };</script>
+  <script>
+    try { if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); } catch {}
+  </script>
+  <style>
+    .tab-active { border-color: rgb(59 130 246); color: rgb(37 99 235); }
+    .dark .tab-active { color: rgb(96 165 250); }
+    td, th { white-space: nowrap; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 antialiased">
+  <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+    <div class="mx-auto flex max-w-[1400px] flex-wrap items-center gap-3 px-4 py-3">
+      <div class="flex items-center gap-2">
+        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">R</div>
+        <div>
+          <h1 class="text-base font-semibold leading-tight">Radar ML</h1>
+          <p id="conn" class="text-xs text-slate-500">verificando conexão…</p>
+        </div>
+      </div>
+      <div class="ml-auto flex flex-wrap items-center gap-2">
+        <a id="btnConnect" href="/auth/connect" class="hidden rounded-lg bg-yellow-400 px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-yellow-300">Conectar Mercado Livre</a>
+        <button data-job="research" class="job rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Pesquisar mercado</button>
+        <button data-job="operations" class="job rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Sincronizar operação</button>
+        <button id="theme" aria-label="Alternar tema claro/escuro" class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Tema</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[1400px] space-y-6 px-4 py-6">
+    <section id="kpis" class="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6"></section>
+
+    <nav class="flex gap-1 overflow-x-auto border-b border-slate-200 text-sm dark:border-slate-800">
+      <button data-tab="opps" class="tab tab-active whitespace-nowrap border-b-2 px-3 py-2 font-medium">Oportunidades</button>
+      <button data-tab="items" class="tab whitespace-nowrap border-b-2 border-transparent px-3 py-2 font-medium">Meus anúncios</button>
+      <button data-tab="orders" class="tab whitespace-nowrap border-b-2 border-transparent px-3 py-2 font-medium">Pedidos → fornecedor</button>
+      <button data-tab="suppliers" class="tab whitespace-nowrap border-b-2 border-transparent px-3 py-2 font-medium">Fornecedores</button>
+      <button data-tab="stock" class="tab whitespace-nowrap border-b-2 border-transparent px-3 py-2 font-medium">Sincronização de estoque</button>
+    </nav>
+
+    <!-- Oportunidades -->
+    <section id="tab-opps" class="space-y-3">
+      <div class="flex flex-wrap items-end gap-2">
+        <input id="fQ" placeholder="Buscar título…" class="w-56 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900" />
+        <select id="fCat" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900"><option value="">Todas as categorias</option></select>
+        <select id="fSort" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900">
+          <option value="score">Ordenar: score de oportunidade</option>
+          <option value="demand">Ordenar: demanda</option>
+          <option value="conversion">Ordenar: conversão</option>
+          <option value="margin">Ordenar: margem</option>
+        </select>
+        <label class="flex items-center gap-2 px-2 py-2 text-sm"><input id="fViable" type="checkbox" class="h-4 w-4" /> Só viáveis</label>
+        <div id="trends" class="ml-auto flex max-w-full flex-wrap gap-1 text-xs"></div>
+      </div>
+      <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60">
+            <tr>
+              <th class="px-3 py-2">Produto</th><th class="px-3 py-2">Rank</th><th class="px-3 py-2 text-right">Visitas 30d</th>
+              <th class="px-3 py-2 text-right">Conversão</th><th class="px-3 py-2 text-right">Vend.</th><th class="px-3 py-2 text-right">Menor preço</th>
+              <th class="px-3 py-2">Fornecedor</th><th class="px-3 py-2 text-right">Tarifa + frete</th><th class="px-3 py-2 text-right">Lucro líq.</th>
+              <th class="px-3 py-2 text-right">Margem</th><th class="px-3 py-2 text-right">Preço mín. alvo</th><th class="px-3 py-2">Score</th>
+            </tr>
+          </thead>
+          <tbody id="oppRows" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+      <p class="text-xs text-slate-500">Rank = posição em "Mais vendidos" da categoria. Conversão "medida" = Δvendas/Δvisitas entre coletas; aparece após 2+ pesquisas quando o ML expõe as vendas do anúncio. Lucro calculado no menor preço concorrente, já descontando tarifa ML, frete grátis, imposto e reserva de devolução.</p>
+    </section>
+
+    <!-- Meus anúncios -->
+    <section id="tab-items" class="hidden">
+      <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60">
+            <tr><th class="px-3 py-2">Anúncio</th><th class="px-3 py-2">SKU</th><th class="px-3 py-2 text-right">Preço</th><th class="px-3 py-2 text-right">Estoque ML</th>
+            <th class="px-3 py-2 text-right">Estoque fornecedor</th><th class="px-3 py-2 text-right">Visitas 30d</th><th class="px-3 py-2 text-right">Vendas 30d</th><th class="px-3 py-2 text-right">Conversão</th></tr>
+          </thead>
+          <tbody id="itemRows" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Pedidos -->
+    <section id="tab-orders" class="hidden space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="/api/orders/export.csv" class="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">Baixar pedidos pendentes (CSV p/ fornecedor)</a>
+        <span class="text-xs text-slate-500">Inclui link da etiqueta PDF do Mercado Envios de cada pedido.</span>
+      </div>
+      <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60">
+            <tr><th class="px-3 py-2">Pedido</th><th class="px-3 py-2">Data</th><th class="px-3 py-2">Produto / SKU</th><th class="px-3 py-2 text-right">Qtd</th>
+            <th class="px-3 py-2 text-right">Total</th><th class="px-3 py-2">Status ML</th><th class="px-3 py-2">Despachar até</th><th class="px-3 py-2">Prazo</th><th class="px-3 py-2">Fornecedor</th><th class="px-3 py-2">Etiqueta</th></tr>
+          </thead>
+          <tbody id="orderRows" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Fornecedores -->
+    <section id="tab-suppliers" class="hidden grid gap-4 lg:grid-cols-3">
+      <div class="space-y-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+        <h2 class="font-semibold">Adicionar fornecedor</h2>
+        <form id="formUpload" class="space-y-2">
+          <label class="block text-xs font-medium text-slate-500">Nome do fornecedor
+            <input name="name" required class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950" /></label>
+          <label class="block text-xs font-medium text-slate-500">Arquivo CSV do catálogo
+            <input name="file" type="file" accept=".csv,text/csv" required class="mt-1 w-full text-sm" /></label>
+          <button class="w-full rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">Importar CSV</button>
+        </form>
+        <div class="border-t border-slate-200 pt-4 dark:border-slate-800">
+          <form id="formUrl" class="space-y-2">
+            <p class="text-xs text-slate-500">Ou feed CSV online (atualiza sozinho a cada sincronização):</p>
+            <input name="name" required placeholder="Nome do fornecedor" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950" />
+            <input name="source" required type="url" placeholder="https://fornecedor.com/feed.csv" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950" />
+            <button class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Conectar feed</button>
+          </form>
+        </div>
+        <p class="text-xs text-slate-500">Colunas obrigatórias: <b>sku, titulo, custo, estoque</b>. Recomendadas: ean, peso_g (ou peso_kg), altura_cm, largura_cm, comprimento_cm. Separador ; ou , — aceita 12,90. Modelo em <code>data/fornecedores/exemplo-fornecedor.csv</code>.</p>
+      </div>
+      <div class="lg:col-span-2 overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60">
+            <tr><th class="px-3 py-2">Fornecedor</th><th class="px-3 py-2">Origem</th><th class="px-3 py-2 text-right">SKUs</th><th class="px-3 py-2 text-right">Com estoque</th><th class="px-3 py-2">Atualizado</th><th class="px-3 py-2"></th></tr>
+          </thead>
+          <tbody id="supRows" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Estoque -->
+    <section id="tab-stock" class="hidden space-y-3">
+      <p id="stockMode" class="text-sm"></p>
+      <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60">
+            <tr><th class="px-3 py-2">Quando</th><th class="px-3 py-2">Anúncio</th><th class="px-3 py-2">SKU</th><th class="px-3 py-2 text-right">ML</th><th class="px-3 py-2 text-right">Alvo</th><th class="px-3 py-2">Tipo</th><th class="px-3 py-2">Resultado</th></tr>
+          </thead>
+          <tbody id="stockRows" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="pointer-events-none fixed bottom-4 right-4 z-50 hidden max-w-sm rounded-lg bg-slate-900 px-4 py-3 text-sm text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"></div>
+
+  <dialog id="matchDlg" class="w-full max-w-lg rounded-xl p-0 backdrop:bg-black/40 dark:bg-slate-900 dark:text-slate-200">
+    <form method="dialog" id="matchForm" class="space-y-3 p-5">
+      <h3 class="font-semibold">Vincular ao SKU do fornecedor</h3>
+      <p id="matchTitle" class="text-sm text-slate-500"></p>
+      <label class="block text-xs font-medium text-slate-500">Fornecedor
+        <select id="matchSupplier" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"></select></label>
+      <label class="block text-xs font-medium text-slate-500">Produto (SKU)
+        <select id="matchSku" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"></select></label>
+      <div class="flex justify-end gap-2 pt-2">
+        <button value="unlink" class="rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-700">Desvincular</button>
+        <button value="cancel" class="rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-700">Cancelar</button>
+        <button value="save" class="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Salvar vínculo</button>
+      </div>
+    </form>
+  </dialog>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const brl = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const pct = (v) => `${(Number(v) || 0).toLocaleString('pt-BR', { maximumFractionDigits: 2 })}%`;
+const int = (v) => (Number(v) || 0).toLocaleString('pt-BR');
+const date = (v) => (v ? new Date(v).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '—');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const td = (html, cls = '') => `<td class="px-3 py-2 ${cls}">${html}</td>`;
+const badge = (text, tone) => {
+  const tones = { green: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300', red: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
+    amber: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300', slate: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300', blue: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' };
+  return `<span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium ${tones[tone] || tones.slate}">${esc(text)}</span>`;
+};
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+  return data;
+}
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.add('hidden'), 5000);
+}
+
+// ---------- KPIs ----------
+async function loadKpis() {
+  const k = await api('/api/kpis');
+  const tone = (v, good, warn) => (v >= good ? 'text-emerald-600 dark:text-emerald-400' : v >= warn ? 'text-amber-600 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400');
+  const cards = [
+    ['OTD (envio no prazo)', k.otd_sample ? pct(k.otd_pct) : '—', `${k.otd_sample} envios medidos • meta ≥ 95%`, k.otd_sample ? tone(k.otd_pct, 95, 90) : ''],
+    ['Acuracidade de SKU', k.sku_linked ? pct(k.sku_accuracy_pct) : '—', `${k.sku_surplus} sobra • ${k.sku_shortage} falta • ${k.sku_linked} SKUs`, k.sku_linked ? tone(k.sku_accuracy_pct, 98, 95) : ''],
+    ['Impacto de cortes (30d)', brl(k.cuts_value), `${k.cuts_orders} ${k.cuts_orders === 1 ? 'pedido cancelado' : 'pedidos cancelados'} • ${pct(k.cuts_rate_pct)} dos pedidos`, k.cuts_orders ? 'text-rose-600 dark:text-rose-400' : ''],
+    ['Conversão dos anúncios', pct(k.conversion_pct), `${int(k.sales_orders)} vendas • ${brl(k.sales_value)}`, ''],
+    ['Oportunidades viáveis', `${int(k.opportunities_viable)}`, `de ${int(k.opportunities_total)} analisadas (7 dias)`, 'text-blue-600 dark:text-blue-400'],
+    ['Cobertura do fornecedor', k.supplier_coverage_days ? `${int(k.supplier_coverage_days)} dias` : '—', 'estoque do fornecedor ÷ venda diária', ''],
+  ];
+  $('#kpis').innerHTML = cards.map(([label, value, sub, cls]) => `
+    <div class="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-xs font-medium uppercase tracking-wide text-slate-500">${label}</p>
+      <p class="mt-1 text-2xl font-semibold tabular-nums ${cls}">${value}</p>
+      <p class="mt-1 text-xs text-slate-500">${sub}</p>
+    </div>`).join('');
+}
+
+// ---------- Status ----------
+let status;
+async function loadStatus() {
+  status = await api('/api/status');
+  const { ml } = status;
+  $('#conn').innerHTML = ml.mock ? '🟡 Modo simulado (ML_MOCK=1)' : ml.connected ? `🟢 Conectado • vendedor ${esc(ml.user_id)}` : '🔴 Mercado Livre não conectado';
+  $('#btnConnect').classList.toggle('hidden', ml.connected);
+  document.querySelectorAll('.job').forEach((b) => {
+    const running = status.running.includes(b.dataset.job);
+    b.disabled = running; b.classList.toggle('opacity-50', running);
+    const last = status.jobs.find((j) => j.job === b.dataset.job);
+    b.title = last ? `Última: ${date(last.finished_at)} ${last.ok ? '✓' : '✗ ' + last.message}` : 'Nunca executado';
+  });
+  $('#stockMode').innerHTML = status.config.stock.autoSync
+    ? badge('Aplicando no ML', 'green') + ` reserva de segurança ${status.config.stock.safetyBuffer} un • teto ${status.config.stock.maxPublished} un`
+    : badge('Simulação', 'amber') + ' — nada é alterado no ML. Ative com AUTO_SYNC_STOCK=1 após conferir este registro.';
+  const cats = new Set([...$('#fCat').options].map((o) => o.value));
+  for (const c of status.config.categories) if (!cats.has(c)) $('#fCat').add(new Option(c, c));
+}
+
+// ---------- Oportunidades ----------
+let opps = [];
+async function loadOpps() {
+  const qs = new URLSearchParams({ sort: $('#fSort').value, q: $('#fQ').value, category: $('#fCat').value, viable: $('#fViable').checked ? '1' : '' });
+  opps = await api(`/api/opportunities?${qs}`);
+  $('#oppRows').innerHTML = opps.length ? opps.map((o, i) => {
+    const conv = o.conversion_source === 'medida' ? `${pct(o.conversion_pct)} ${badge('medida', 'green')}` : badge('sem dados', 'slate');
+    const sup = o.sku
+      ? `<button data-match="${i}" class="text-left hover:underline">${esc(o.sku)}</button><br><span class="text-xs text-slate-500">custo ${brl(o.supplier_cost)} • est. ${int(o.supplier_stock)} ${o.match_method === 'titulo' ? '• ' + Math.round(o.similarity * 100) + '% similar' : ''}</span>`
+      : `<button data-match="${i}" class="text-blue-600 hover:underline dark:text-blue-400">+ vincular</button>`;
+    const profit = !o.sku ? '—' : o.loss > 0 ? `<span class="text-rose-600 dark:text-rose-400">prejuízo ${brl(o.loss)}</span>` : brl(o.net_profit);
+    const bar = `<div class="flex items-center gap-2"><div class="h-2 w-16 rounded bg-slate-200 dark:bg-slate-700"><div class="h-2 rounded ${o.score >= 60 ? 'bg-emerald-500' : o.score >= 40 ? 'bg-amber-500' : 'bg-slate-400'}" style="width:${Math.min(100, o.score || 0)}%"></div></div><span class="tabular-nums">${Math.round(o.score || 0)}</span></div>
+      <span class="text-xs text-slate-500" title="${esc((o.reasons || []).join(' • '))}">${esc((o.reasons || [])[0] || (o.viable ? 'Viável' : ''))}</span>`;
+    return `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+      ${td(`<div class="flex items-center gap-2">${o.thumbnail ? `<img src="${esc(o.thumbnail)}" class="h-10 w-10 rounded object-cover" loading="lazy" alt="">` : ''}
+        <div class="w-[280px] whitespace-normal"><a href="${esc(o.permalink)}" target="_blank" rel="noopener" class="font-medium hover:underline">${esc(o.title)}</a>
+        <p class="text-xs text-slate-500">${esc(o.category_name || o.category_id)} • ${brl(o.price)}</p></div></div>`)}
+      ${td(`#${o.highlight_position || '—'}`)}
+      ${td(int(o.visits_30d), 'text-right tabular-nums')}
+      ${td(conv, 'text-right')}
+      ${td(int(o.sellers_count), 'text-right tabular-nums')}
+      ${td(brl(o.min_competitor_price || o.price), 'text-right tabular-nums')}
+      ${td(sup)}
+      ${td(o.sku ? brl(o.sale_fee + o.shipping_cost) : '—', 'text-right tabular-nums')}
+      ${td(profit, 'text-right tabular-nums')}
+      ${td(o.sku ? (o.viable ? badge(pct(o.net_margin_pct), 'green') : badge(pct(o.net_margin_pct), 'red')) : '—', 'text-right')}
+      ${td(o.recommended_price ? brl(o.recommended_price) : '—', 'text-right tabular-nums')}
+      ${td(bar)}
+    </tr>`;
+  }).join('') : `<tr><td colspan="12" class="px-3 py-10 text-center text-slate-500">Nenhuma oportunidade ainda. Conecte o Mercado Livre, importe um fornecedor e clique em <b>Pesquisar mercado</b>.</td></tr>`;
+}
+
+// ---------- Vínculo manual ----------
+let suppliersCache = [];
+let matchTarget = null;
+async function fillSkus() {
+  const products = await api(`/api/suppliers/${encodeURIComponent($('#matchSupplier').value)}/products`);
+  $('#matchSku').innerHTML = products.map((p) => `<option value="${esc(p.sku)}">${esc(p.sku)} — ${esc(p.title)} (${brl(p.cost)}, est. ${int(p.stock)})</option>`).join('');
+  if (matchTarget?.sku) $('#matchSku').value = matchTarget.sku;
+}
+$('#oppRows').addEventListener('click', async (e) => {
+  const btn = e.target.closest('[data-match]'); if (!btn) return;
+  matchTarget = opps[btn.dataset.match];
+  suppliersCache = await api('/api/suppliers');
+  if (!suppliersCache.length) return toast('Cadastre um fornecedor primeiro (aba Fornecedores).');
+  $('#matchTitle').textContent = matchTarget.title;
+  $('#matchSupplier').innerHTML = suppliersCache.map((s) => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+  if (matchTarget.supplier_id) $('#matchSupplier').value = matchTarget.supplier_id;
+  await fillSkus();
+  $('#matchDlg').showModal();
+});
+$('#matchSupplier').addEventListener('change', fillSkus);
+$('#matchDlg').addEventListener('close', async () => {
+  const action = $('#matchDlg').returnValue;
+  if (!matchTarget || !['save', 'unlink'].includes(action)) return;
+  const body = action === 'save' ? { supplier_id: $('#matchSupplier').value, sku: $('#matchSku').value } : {};
+  try {
+    await api(`/api/opportunities/${matchTarget.item_id}/match`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    toast(action === 'save' ? 'Vínculo salvo e margem recalculada.' : 'Vínculo removido.');
+    loadOpps(); loadKpis();
+  } catch (err) { toast(err.message); }
+});
+
+// ---------- Outras abas ----------
+async function loadItems() {
+  const rows = await api('/api/my-items');
+  $('#itemRows').innerHTML = rows.length ? rows.map((r) => {
+    const supplierStock = r.supplier_stock ?? null;
+    return `<tr>
+      ${td(`<a href="${esc(r.permalink)}" target="_blank" rel="noopener" class="font-medium hover:underline">${esc(r.title)}</a><p class="text-xs text-slate-500">${esc(r.item_id)}</p>`)}
+      ${td(r.sku ? esc(r.sku) : badge('sem SKU', 'amber'))}
+      ${td(brl(r.price), 'text-right tabular-nums')}
+      ${td(int(r.available_quantity), 'text-right tabular-nums')}
+      ${td(supplierStock === null ? badge('não vinculado', 'amber') : int(supplierStock), 'text-right tabular-nums')}
+      ${td(int(r.visits_30d), 'text-right tabular-nums')}
+      ${td(int(r.sales_30d), 'text-right tabular-nums')}
+      ${td(r.conversion_pct >= 3 ? badge(pct(r.conversion_pct), 'green') : r.conversion_pct > 0 ? badge(pct(r.conversion_pct), 'amber') : badge('0%', 'slate'), 'text-right')}
+    </tr>`;
+  }).join('') : '<tr><td colspan="8" class="px-3 py-10 text-center text-slate-500">Nenhum anúncio ativo sincronizado.</td></tr>';
+}
+
+const SUPPLIER_STATUS = { pendente: 'Pendente', enviado_ao_fornecedor: 'Enviado ao fornecedor', despachado: 'Despachado', problema: 'Problema' };
+async function loadOrders() {
+  const rows = await api('/api/orders');
+  const now = new Date().toISOString();
+  $('#orderRows').innerHTML = rows.length ? rows.map((r) => {
+    let prazo = badge('—', 'slate');
+    if (r.status === 'cancelled') prazo = badge('cancelado', 'red');
+    else if (r.date_shipped && r.handling_limit) prazo = r.date_shipped <= r.handling_limit ? badge('no prazo', 'green') : badge('atrasado', 'red');
+    else if (r.handling_limit) prazo = r.handling_limit < now ? badge('vencido', 'red') : badge('aguardando', 'blue');
+    const sel = `<select data-order="${esc(r.order_id)}" class="rounded border border-slate-300 bg-white px-2 py-1 text-xs dark:border-slate-700 dark:bg-slate-950">${Object.entries(SUPPLIER_STATUS).map(([v, l]) => `<option value="${v}" ${v === r.supplier_status ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
+    return `<tr>
+      ${td(esc(r.order_id))}${td(date(r.date_created))}
+      ${td(`<div class="max-w-[260px] whitespace-normal">${esc(r.title)}</div><span class="text-xs text-slate-500">${esc(r.sku || 'sem SKU')}</span>`)}
+      ${td(int(r.quantity), 'text-right')}${td(brl(r.total), 'text-right tabular-nums')}
+      ${td(badge(r.status, r.status === 'paid' ? 'green' : r.status === 'cancelled' ? 'red' : 'slate'))}
+      ${td(date(r.handling_limit))}${td(prazo)}${td(sel)}
+      ${td(r.shipment_id ? `<a href="/api/shipments/${encodeURIComponent(r.shipment_id)}/label" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400">PDF</a>` : '—')}
+    </tr>`;
+  }).join('') : '<tr><td colspan="10" class="px-3 py-10 text-center text-slate-500">Nenhum pedido nos últimos 30 dias.</td></tr>';
+}
+$('#orderRows').addEventListener('change', async (e) => {
+  const sel = e.target.closest('[data-order]'); if (!sel) return;
+  try {
+    await api(`/api/orders/${sel.dataset.order}/supplier-status`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: sel.value }) });
+    toast('Status atualizado.');
+  } catch (err) { toast(err.message); }
+});
+
+async function loadSuppliers() {
+  const rows = await api('/api/suppliers');
+  $('#supRows').innerHTML = rows.length ? rows.map((s) => `<tr>
+    ${td(`<b>${esc(s.name)}</b>`)}${td(`${badge(s.type === 'url' ? 'feed' : 'arquivo', 'blue')} <span class="text-xs text-slate-500">${esc(s.source)}</span>`)}
+    ${td(int(s.products), 'text-right')}${td(int(s.in_stock), 'text-right')}${td(date(s.updated_at))}
+    ${td(`<button data-imp="${esc(s.id)}" class="text-blue-600 hover:underline dark:text-blue-400">reimportar</button> · <button data-del="${esc(s.id)}" class="text-rose-600 hover:underline">remover</button>`)}
+  </tr>`).join('') : '<tr><td colspan="6" class="px-3 py-10 text-center text-slate-500">Nenhum fornecedor. Importe o CSV do catálogo ao lado.</td></tr>';
+}
+$('#supRows').addEventListener('click', async (e) => {
+  const imp = e.target.closest('[data-imp]'); const del = e.target.closest('[data-del]');
+  try {
+    if (imp) { const r = await api(`/api/suppliers/${imp.dataset.imp}/import`, { method: 'POST' }); toast(`${r.imported} produtos importados.`); }
+    if (del && confirm(`Remover o fornecedor "${del.dataset.del}" e todo o catálogo dele?`)) { await api(`/api/suppliers/${del.dataset.del}`, { method: 'DELETE' }); toast('Fornecedor removido.'); }
+    loadSuppliers();
+  } catch (err) { toast(err.message); }
+});
+$('#formUpload').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  try {
+    const text = await f.get('file').text();
+    const r = await api(`/api/suppliers/upload?name=${encodeURIComponent(f.get('name'))}`, { method: 'POST', headers: { 'Content-Type': 'text/csv' }, body: text });
+    toast(`${r.import.imported} produtos importados${r.import.warnings.length ? ` • ${r.import.warnings.length} avisos` : ''}.`);
+    e.target.reset(); loadSuppliers();
+  } catch (err) { toast(err.message); }
+});
+$('#formUrl').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  try {
+    const r = await api('/api/suppliers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: f.get('name'), type: 'url', source: f.get('source') }) });
+    toast(`${r.import.imported} produtos importados do feed.`);
+    e.target.reset(); loadSuppliers();
+  } catch (err) { toast(err.message); }
+});
+
+async function loadStock() {
+  const rows = await api('/api/stock-log');
+  $('#stockRows').innerHTML = rows.length ? rows.map((r) => `<tr>
+    ${td(date(r.ts))}${td(esc(r.item_id) + (r.variation_id ? ` <span class="text-xs text-slate-500">var. ${esc(r.variation_id)}</span>` : ''))}${td(esc(r.sku))}
+    ${td(int(r.ml_qty), 'text-right')}${td(int(r.target_qty), 'text-right')}
+    ${td(r.ml_qty > r.target_qty ? badge('sobra (risco de venda sem estoque)', 'red') : badge('falta (venda perdida)', 'amber'))}
+    ${td(r.applied ? badge('aplicado', 'green') : badge(r.message, r.message.startsWith('erro') ? 'red' : 'slate'))}
+  </tr>`).join('') : '<tr><td colspan="7" class="px-3 py-10 text-center text-slate-500">Estoques alinhados — nenhuma divergência registrada.</td></tr>';
+}
+
+async function loadTrends() {
+  const trends = await api('/api/trends');
+  const words = [...new Set(trends.flatMap((t) => t.keywords))].slice(0, 12);
+  $('#trends').innerHTML = words.length ? `<span class="py-1 text-slate-500">Em alta:</span>` + words.map((w) => `<button data-trend="${esc(w)}" class="rounded-full bg-blue-50 px-2 py-1 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300">${esc(w)}</button>`).join('') : '';
+}
+$('#trends').addEventListener('click', (e) => { const b = e.target.closest('[data-trend]'); if (b) { $('#fQ').value = b.dataset.trend.split(' ')[0]; loadOpps(); } });
+
+// ---------- Navegação / ações ----------
+const loaders = { opps: loadOpps, items: loadItems, orders: loadOrders, suppliers: loadSuppliers, stock: loadStock };
+let currentTab = 'opps';
+document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => {
+  currentTab = t.dataset.tab;
+  document.querySelectorAll('.tab').forEach((x) => { x.classList.toggle('tab-active', x === t); x.classList.toggle('border-transparent', x !== t); });
+  document.querySelectorAll('[id^="tab-"]').forEach((s) => s.classList.toggle('hidden', s.id !== `tab-${currentTab}`));
+  try { localStorage.setItem('tab', currentTab); } catch {}
+  loaders[currentTab]().catch((err) => toast(err.message));
+}));
+document.querySelectorAll('.job').forEach((b) => b.addEventListener('click', async () => {
+  b.disabled = true; b.classList.add('opacity-50');
+  toast(b.dataset.job === 'research' ? 'Pesquisando mais vendidos e cruzando com fornecedores…' : 'Sincronizando fornecedores, pedidos, anúncios e estoque…');
+  try { await api(`/api/jobs/${b.dataset.job}/run`, { method: 'POST' }); toast('Concluído.'); }
+  catch (err) { toast(err.message); }
+  refreshAll();
+}));
+let debounce;
+$('#fQ').addEventListener('input', () => { clearTimeout(debounce); debounce = setTimeout(loadOpps, 300); });
+['#fCat', '#fSort', '#fViable'].forEach((s) => $(s).addEventListener('change', loadOpps));
+$('#theme').addEventListener('click', () => {
+  const dark = document.documentElement.classList.toggle('dark');
+  try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch {}
+});
+
+function refreshAll() {
+  Promise.all([loadStatus(), loadKpis(), loadTrends(), loaders[currentTab]()]).catch((err) => toast(err.message));
+}
+try { const saved = localStorage.getItem('tab'); if (saved && loaders[saved]) document.querySelector(`[data-tab="${saved}"]`).click(); } catch {}
+refreshAll();
+setInterval(() => loadStatus().catch(() => {}), 15000);
+</script>
+</body>
+</html>
