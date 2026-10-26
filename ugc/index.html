@@ -256,9 +256,9 @@
       </section>
 
       <!-- Criar UGC -->
-      <section data-view="criar" class="hidden">
-        <h1 class="font-display font-extrabold text-2xl">Criar vídeo UGC</h1>
-        <p class="muted text-sm mt-1">Monte o roteiro, escolha a persona e gere um vídeo 9:16 em WebM.</p>
+      <section data-view="legenda" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Vídeo legendado</h1>
+        <p class="muted text-sm mt-1">Gera no navegador um vídeo 9:16 em WebM, com foto do produto, legendas animadas e CTA. Não usa IA nem tem custo.</p>
         <div class="grid lg:grid-cols-[1fr_340px] gap-6 mt-6">
           <form id="ugcForm" class="surface border border-app rounded-2xl p-5 space-y-4">
             <div>
@@ -304,7 +304,9 @@
           <div class="surface border border-app rounded-2xl p-4 space-y-3">
             <div><label class="text-sm font-medium" for="shopTitle">Chamada</label><input id="shopTitle" class="input mt-1" value="Achadinho do dia"></div>
             <div><label class="text-sm font-medium" for="shopPrice">Preço (R$)</label><input id="shopPrice" type="number" min="0" step="0.01" class="input mt-1" value="49.90"></div>
-            <button id="shopGenerate" class="w-full py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar resultado</button>
+            <div><label class="text-sm font-medium" for="shopCam">Formato</label><select id="shopCam" class="input mt-1"></select></div>
+            <button id="shopAI" class="w-full py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar com IA (Nano Banana)</button>
+            <button id="shopGenerate" class="w-full py-2.5 rounded-xl border border-app font-semibold text-sm">Montagem rápida (sem IA)</button>
             <p id="shopMsg" class="text-xs muted"></p>
           </div>
         </div>
@@ -312,6 +314,7 @@
           <div class="surface border border-app rounded-2xl p-3"><p class="text-sm font-medium mb-2">Resultado</p><canvas id="shopA" width="720" height="1280" class="w-full rounded-xl bg-slate-200 dark:bg-slate-800"></canvas><a id="shopADl" class="hidden mt-2 block text-center text-sm font-semibold text-accent" download="resultado.png">Baixar PNG</a></div>
           <div class="surface border border-app rounded-2xl p-3"><p class="text-sm font-medium mb-2">Variação</p><canvas id="shopB" width="720" height="1280" class="w-full rounded-xl bg-slate-200 dark:bg-slate-800"></canvas><a id="shopBDl" class="hidden mt-2 block text-center text-sm font-semibold text-accent" download="variacao.png">Baixar PNG</a></div>
         </div>
+        <div id="shopPromptWrap" class="hidden surface border border-app rounded-2xl p-4 mt-4 max-w-2xl"><p class="text-sm muted">Sem modelo de imagem configurado? Cole este prompt no Flow com as duas fotos. Funciona com os créditos gratuitos diários.</p><textarea id="shopPrompt" rows="6" class="input mt-2 font-mono text-xs" readonly></textarea><button type="button" data-copy-target="shopPrompt" class="mt-2 px-3 py-2 rounded-lg border border-app text-sm font-semibold">Copiar prompt</button></div>
       </section>
 
       <!-- Viral Boost -->
@@ -326,6 +329,126 @@
           <button class="sm:col-span-2 lg:col-span-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar 3 roteiros</button>
         </form>
         <div id="viralOut" class="grid lg:grid-cols-3 gap-4 mt-4"></div>
+      </section>
+
+
+      <!-- Criar UGC (assistente igual ao fluxo Creator) -->
+      <section data-view="criar" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Criar vídeo UGC com IA</h1>
+        <p class="muted text-sm mt-1">Configure o vídeo: a IA escreve as falas, gera a imagem de referência e monta um prompt por take para o Google Flow (VEO 3) ou o Grok.</p>
+        <div id="aiBanner" class="hidden mt-4 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 p-3 text-sm">Sem chave de IA configurada: as falas saem dos modelos prontos e as imagens do gerador gratuito. <button data-go="ia" class="font-semibold text-accent">Configurar Integrações IA</button></div>
+        <form id="wzForm" class="mt-6 space-y-4">
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">1. Produto</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
+              <div class="lg:col-span-2"><label class="text-sm font-medium" for="wzName">Nome do produto</label><input id="wzName" class="input mt-1" required placeholder="Ex.: Escova secadora 3 em 1"></div>
+              <div><label class="text-sm font-medium" for="wzCat">Categoria</label><select id="wzCat" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzPrice">Preço (R$)</label><input id="wzPrice" type="number" min="0" step="0.01" class="input mt-1" placeholder="0,00"></div>
+              <div class="lg:col-span-2"><label class="text-sm font-medium" for="wzProdImg">Foto do produto</label><input id="wzProdImg" type="file" accept="image/*" class="input mt-1 text-xs"></div>
+              <div class="lg:col-span-2"><label class="text-sm font-medium" for="wzInstr">Como mostrar o produto (opcional)</label><input id="wzInstr" class="input mt-1" placeholder="Ex.: mostrar a escova secando a ponta do cabelo"></div>
+            </div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">2. Criador (influenciador)</h2>
+            <div class="grid sm:grid-cols-2 gap-3 mt-3">
+              <div><label class="text-sm font-medium" for="wzCreatorImg">Enviar foto do avatar</label><input id="wzCreatorImg" type="file" accept="image/*" class="input mt-1 text-xs"><p class="muted text-xs mt-1">Use só avatares fictícios ou pessoas que autorizaram o uso da imagem.</p></div>
+              <div><label class="text-sm font-medium" for="wzCreatorDesc">Ou descreva para a IA criar</label><div class="flex gap-2 mt-1"><input id="wzCreatorDesc" class="input" value="Mulher brasileira de 28 anos, cabelo castanho ondulado, sorriso simpático, roupa casual"><button type="button" id="wzCreatorGen" class="px-3 rounded-xl border border-app text-sm font-semibold whitespace-nowrap">Gerar avatar</button></div></div>
+            </div>
+            <img id="wzCreatorPrev" class="hidden mt-3 w-28 aspect-[9/16] object-cover rounded-xl border border-app" alt="Avatar selecionado">
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">3. Cena</h2>
+            <div id="wzScenes" class="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-3"></div>
+            <div class="mt-3"><label class="text-sm font-medium" for="wzSceneImg">Foto do cenário (opcional)</label><input id="wzSceneImg" type="file" accept="image/*" class="input mt-1 text-xs max-w-sm"></div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">4. Formato de câmera</h2>
+            <div id="wzCams" class="grid sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-3"></div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <h2 class="font-semibold">5. Performance e duração</h2>
+            <div class="grid sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-3">
+              <div><label class="text-sm font-medium" for="wzMove">Movimento</label><select id="wzMove" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzTone">Tom</label><select id="wzTone" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzVoice">Voz</label><select id="wzVoice" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzPitch">Personalidade da voz</label><select id="wzPitch" class="input mt-1"></select></div>
+              <div><label class="text-sm font-medium" for="wzPlat">Plataforma</label><select id="wzPlat" class="input mt-1"><option>Flow VEO3</option><option>Grok</option></select></div>
+              <div><label class="text-sm font-medium" for="wzTakes">Duração</label><select id="wzTakes" class="input mt-1"></select></div>
+            </div>
+            <div class="mt-3"><label class="text-sm font-medium" for="wzExtra">Direção extra (opcional)</label><input id="wzExtra" class="input mt-1" placeholder="Ex.: terminar apontando para o carrinho"></div>
+          </div>
+          <div class="surface border border-app rounded-2xl p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2"><h2 class="font-semibold">6. Falas por take</h2><button type="button" id="wzFalasBtn" class="px-4 py-2 rounded-xl border border-app text-sm font-semibold">Gerar falas com IA</button></div>
+            <p class="muted text-xs mt-1">No máximo 20 palavras por take. Você pode editar antes de gerar os prompts.</p>
+            <div id="wzFalas" class="space-y-2 mt-3"></div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" id="wzImgBtn" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Gerar imagem de referência</button>
+            <button id="wzPromptBtn" class="px-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar prompts para o Flow</button>
+            <p id="wzStatus" class="text-sm muted self-center" role="status"></p>
+          </div>
+        </form>
+        <div id="wzRefWrap" class="hidden surface border border-app rounded-2xl p-5 mt-4">
+          <h2 class="font-semibold">Imagem de referência</h2>
+          <div class="grid md:grid-cols-[200px_1fr] gap-4 mt-3">
+            <div><img id="wzRefImg" class="hidden w-full aspect-[9/16] object-cover rounded-xl border border-app" alt="Imagem de referência gerada"><a id="wzRefDl" class="hidden mt-2 block text-center text-sm font-semibold text-accent" download="referencia.png">Baixar imagem</a></div>
+            <div><p class="text-sm muted">Prompt de fusão de imagens. Cole no Flow com as fotos de produto, criador e cena; usa os créditos gratuitos do Nano Banana.</p><textarea id="wzRefPrompt" rows="8" class="input mt-2 font-mono text-xs" readonly></textarea><button type="button" data-copy-target="wzRefPrompt" class="mt-2 px-3 py-2 rounded-lg border border-app text-sm font-semibold">Copiar prompt</button></div>
+          </div>
+        </div>
+        <div id="wzOut" class="mt-4 space-y-3"></div>
+      </section>
+
+      <!-- Virais: Em alta + Historinhas -->
+      <section data-view="virais" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Virais: Em alta e Historinhas</h1>
+        <p class="muted text-sm mt-1">Escolha um personagem, ajuste as decisões da cena e gere as falas e os prompts prontos para o Flow ou o Grok.</p>
+        <div class="flex gap-2 mt-5" role="tablist">
+          <button type="button" data-vmode="alta" class="vtab px-4 py-2 rounded-xl border border-app text-sm font-semibold">Personagens em alta</button>
+          <button type="button" data-vmode="frutas" class="vtab px-4 py-2 rounded-xl border border-app text-sm font-semibold">Historinhas de frutas</button>
+        </div>
+        <form id="vrForm" class="surface border border-app rounded-2xl p-5 mt-4 space-y-4">
+          <div><p class="text-sm font-medium">Personagem</p><div id="vrChars" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2 mt-2"></div></div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div id="vrStoryWrap"><label class="text-sm font-medium" for="vrStory">História</label><select id="vrStory" class="input mt-1"></select></div>
+            <div><label class="text-sm font-medium" for="vrGoal">Objetivo</label><select id="vrGoal" class="input mt-1"></select></div>
+            <div><label class="text-sm font-medium" for="vrPlace">Cenário</label><input id="vrPlace" class="input mt-1" placeholder="Deixar a IA decidir"></div>
+            <div><label class="text-sm font-medium" for="vrOutfit">Roupa / visual</label><input id="vrOutfit" class="input mt-1" placeholder="Deixar a IA decidir"></div>
+            <div><label class="text-sm font-medium" for="vrFrame">Enquadramento</label><select id="vrFrame" class="input mt-1"><option>Close no rosto</option><option selected>Meio corpo</option><option>Corpo inteiro</option></select></div>
+            <div><label class="text-sm font-medium" for="vrCam">Estilo de câmera</label><select id="vrCam" class="input mt-1"><option>Câmera frontal parada</option><option>Câmera acompanhando</option><option>Gravação casual por outra pessoa</option><option>Selfie na mão</option></select></div>
+            <div><label class="text-sm font-medium" for="vrAction">Ação</label><select id="vrAction" class="input mt-1"><option>Fazendo gestos sutis</option><option>Caminhando devagar</option><option>Apontando para a câmera</option><option>Falando de forma séria</option></select></div>
+            <div><label class="text-sm font-medium" for="vrPlat">Plataforma</label><select id="vrPlat" class="input mt-1"><option>Flow VEO3</option><option>Grok</option></select></div>
+            <div class="sm:col-span-2"><label class="text-sm font-medium" for="vrTheme">Tema / detalhe que ajuda a IA</label><input id="vrTheme" class="input mt-1" placeholder="Ex.: o preço do tomate subiu de novo"></div>
+            <div><label class="text-sm font-medium" for="vrTakes">Takes</label><select id="vrTakes" class="input mt-1"></select></div>
+            <div><label class="text-sm font-medium" for="vrAvatar">Foto do personagem (opcional)</label><input id="vrAvatar" type="file" accept="image/*" class="input mt-1 text-xs"></div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2"><p class="text-sm font-medium">Falas</p><button type="button" id="vrFalasBtn" class="px-4 py-2 rounded-xl border border-app text-sm font-semibold">Gerar falas com IA</button></div>
+          <div id="vrFalas" class="space-y-2"></div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" id="vrImgBtn" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Gerar imagem do personagem</button>
+            <button class="px-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Gerar prompts</button>
+            <p id="vrStatus" class="text-sm muted self-center" role="status"></p>
+          </div>
+          <div id="vrRefWrap" class="hidden"><img id="vrRefImg" class="w-32 aspect-[9/16] object-cover rounded-xl border border-app" alt="Personagem gerado"><a id="vrRefDl" class="mt-1 inline-block text-sm font-semibold text-accent" download="personagem.png">Baixar imagem de referência</a></div>
+        </form>
+        <div id="vrOut" class="mt-4 space-y-3"></div>
+      </section>
+
+      <!-- Integrações IA -->
+      <section data-view="ia" class="hidden">
+        <h1 class="font-display font-extrabold text-2xl">Integrações IA</h1>
+        <p class="muted text-sm mt-1">Mesma estrutura da plataforma de referência: Gemini para texto e Nano Banana (Gemini Image) para imagens. Os vídeos são gerados fora daqui, no Google Flow (VEO 3) ou no Grok, usando os prompts.</p>
+        <form id="iaForm" class="surface border border-app rounded-2xl p-5 mt-6 grid sm:grid-cols-2 gap-3 max-w-3xl">
+          <div class="sm:col-span-2"><label class="text-sm font-medium" for="iaKey">Chave da API do Gemini</label><input id="iaKey" type="password" class="input mt-1" autocomplete="off" placeholder="AIza..."><p class="muted text-xs mt-1">Crie grátis em aistudio.google.com/apikey. A chave fica salva só neste navegador. Em produção, use o proxy abaixo para não expor a chave.</p></div>
+          <div class="sm:col-span-2"><label class="text-sm font-medium" for="iaProxy">URL do proxy (opcional, recomendado para publicar)</label><input id="iaProxy" class="input mt-1" placeholder="https://criavende-ia.SEU-USUARIO.workers.dev"><p class="muted text-xs mt-1">Cloudflare Worker em ugc/worker/gemini-proxy.js. Com o proxy preenchido, a chave acima é ignorada.</p></div>
+          <div><label class="text-sm font-medium" for="iaText">Modelo de texto</label><select id="iaText" class="input mt-1"><option value="gemini-flash-latest">gemini-flash-latest</option></select></div>
+          <div><label class="text-sm font-medium" for="iaImage">Modelo de imagem (Nano Banana)</label><select id="iaImage" class="input mt-1"><option value="">Nenhum (usar gerador gratuito)</option></select></div>
+          <label class="sm:col-span-2 flex items-center gap-2 text-sm"><input id="iaFree" type="checkbox"> Usar o gerador gratuito Pollinations quando não houver modelo de imagem (não aceita fotos de referência)</label>
+          <div class="sm:col-span-2 flex flex-wrap gap-2">
+            <button type="button" id="iaTest" class="px-4 py-2.5 rounded-xl border border-app font-semibold text-sm">Testar conexão e listar modelos</button>
+            <button class="px-4 py-2.5 rounded-xl gradient-btn text-white font-semibold text-sm">Salvar integrações</button>
+          </div>
+          <p id="iaMsg" class="sm:col-span-2 text-sm min-h-[1.25rem]" role="status"></p>
+        </form>
       </section>
 
       <!-- Studio -->
@@ -422,6 +545,12 @@
   let state;
   try { state = { ...defaults, ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { state = { ...defaults }; }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  state.ai = { key: '', proxy: '', textModel: 'gemini-flash-latest', imageModel: '', freeImages: true, ...(state.ai || {}) };
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-copy-target]'); if (!b) return;
+    const el = document.getElementById(b.dataset.copyTarget);
+    navigator.clipboard?.writeText(el.value ?? el.textContent).then(() => toast('Copiado'), () => { el.select?.(); toast('Não foi possível copiar. O texto foi selecionado: use Ctrl+C.'); });
+  });
 
   // ---------- tema ----------
   const applyTheme = () => {
@@ -436,7 +565,7 @@
 
   // ---------- landing ----------
   $('#year').textContent = new Date().getFullYear();
-  const baseFeat = ['Radar de Produtos', 'Criador UGC com IA', 'Viral Boost (roteiros)', 'Studio (editor de vídeo)', 'Personalize IA', 'Academy (treinamento)', 'Indique e Ganhe'];
+  const baseFeat = ['Radar de Produtos', 'Criador UGC com IA (prompts VEO 3 e Grok)', 'Em alta e Historinhas virais', 'Viral Boost (roteiros)', 'Studio (editor de vídeo)', 'Personalize IA', 'Academy (treinamento)', 'Indique e Ganhe'];
   const fullFeat = [...baseFeat, 'Comunidade exclusiva', 'Mentoria em grupo mensal'];
   const li = f => `<li class="flex gap-2"><svg class="w-4 h-4 mt-0.5 text-accent shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>${f}</li>`;
   $('[data-features="base"]').innerHTML = baseFeat.map(li).join('');
@@ -455,7 +584,7 @@
   const FAQ = [
     ['O que é a CriaVende?', 'Uma plataforma para criar vídeos UGC, roteiros e criativos de TikTok Shop sem precisar gravar.'],
     ['Preciso saber editar vídeos?', 'Não. Você escreve ou gera o roteiro, escolhe a persona e a plataforma monta o vídeo.'],
-    ['Os vídeos são gerados por IA?', 'Sim. Roteiros, legendas e composição são automáticos; avatares falantes dependem do provedor de IA conectado.'],
+    ['Os vídeos são gerados por IA?', 'Sim. A plataforma escreve as falas com o Gemini, cria a imagem de referência com o Nano Banana e entrega um prompt por take para gerar o vídeo no Google Flow (VEO 3) ou no Grok.'],
     ['Posso usar os vídeos em anúncios?', 'Sim. Os arquivos são seus e saem no formato 9:16, pronto para TikTok, Reels e Shorts.'],
     ['Quanto tempo leva para criar um vídeo?', 'Menos de 5 minutos do roteiro ao arquivo final.'],
     ['Posso cancelar quando quiser?', 'Sim. O plano mensal pode ser cancelado a qualquer momento, sem multa.'],
@@ -480,10 +609,11 @@
   // ---------- navegação ----------
   const VIEWS = [
     ['painel', 'Painel'], ['radar', 'Radar de Produtos'], ['criar', 'Criar UGC'], ['shop', 'Modelo TikTok Shop'],
-    ['viral', 'Viral Boost'], ['studio', 'Studio'], ['biblioteca', 'Meus conteúdos'], ['personalize', 'Personalize IA'],
+    ['virais', 'Em alta e Historinhas'], ['viral', 'Viral Boost'], ['legenda', 'Vídeo legendado'], ['studio', 'Studio'],
+    ['biblioteca', 'Meus conteúdos'], ['personalize', 'Personalize IA'], ['ia', 'Integrações IA'],
     ['academy', 'Academy'], ['indique', 'Indique e Ganhe'],
   ];
-  const DOCK = ['painel', 'radar', 'criar', 'viral', 'studio'];
+  const DOCK = ['painel', 'radar', 'criar', 'virais', 'shop'];
   const navBtn = ([id, label]) => `<button data-go="${id}" class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">${label}</button>`;
   $('#sideNav').innerHTML = VIEWS.map(navBtn).join('');
   $('#mobileNav').innerHTML = VIEWS.map(navBtn).join('');
@@ -496,6 +626,7 @@
     $('#mobileMenu').classList.add('hidden');
     if (id === 'painel') renderPainel();
     if (id === 'biblioteca') renderLib();
+    if (id === 'criar') $('#aiBanner').classList.toggle('hidden', hasAI());
     window.scrollTo(0, 0);
   };
   document.addEventListener('click', e => {
@@ -519,10 +650,12 @@
   // ---------- biblioteca / KPIs ----------
   const addLib = (tipo, titulo, dur = 0) => { state.library.unshift({ data: new Date().toISOString(), tipo, titulo, dur }); state.library = state.library.slice(0, 200); save(); };
   const renderPainel = () => {
-    const vids = state.library.filter(i => i.tipo !== 'Criativo').length;
-    const criativos = state.library.filter(i => i.tipo === 'Criativo').length;
-    const horas = (vids * 45 + criativos * 20 + state.scripts * 10) / 60;
-    const kpis = [['Vídeos gerados', vids], ['Criativos TikTok Shop', criativos], ['Roteiros gerados', state.scripts], ['Horas economizadas', horas.toFixed(1).replace('.', ',')]];
+    const count = tipos => state.library.filter(i => tipos.includes(i.tipo)).length;
+    const vids = count(['Vídeo UGC', 'Vídeo Studio']);
+    const prompts = count(['Prompts UGC', 'Historinha', 'Viral em alta']);
+    const imagens = count(['Criativo', 'Imagem de referência']);
+    const horas = (vids * 45 + prompts * 30 + imagens * 20 + state.scripts * 10) / 60;
+    const kpis = [['Vídeos exportados', vids], ['Prompts de vídeo (Flow/Grok)', prompts], ['Criativos e imagens', imagens], ['Horas economizadas', horas.toFixed(1).replace('.', ',')]];
     $('#kpis').innerHTML = kpis.map(([l, v]) => `<div class="surface border border-app rounded-2xl p-5"><p class="muted text-xs">${l}</p><p class="font-display font-extrabold text-3xl mt-1">${v}</p></div>`).join('');
     $('#recentList').innerHTML = state.library.slice(0, 5).map(i => `<li class="flex justify-between gap-2"><span class="truncate">${esc(i.titulo)}</span><span class="muted shrink-0">${esc(i.tipo)}</span></li>`).join('') || '<li class="muted">Nenhum conteúdo ainda. <button data-go="criar" class="text-accent font-semibold">Criar o primeiro vídeo</button></li>';
   };
@@ -549,7 +682,9 @@
   $('#radarBody').addEventListener('click', e => {
     if (e.target.id === 'radarReset') { $('#radarSearch').value = ''; $('#radarCat').value = ''; renderRadar(); return; }
     const b = e.target.closest('[data-use]'); if (!b) return;
-    $('#ugcProduct').value = b.dataset.use; $('#ugcScript').value = buildScripts(b.dataset.use, 'entrega resultado rápido', '', 'amiga')[0].lines.join('\n');
+    const prod = PRODUCTS.find(x => x.nome === b.dataset.use);
+    $('#wzName').value = prod.nome; $('#wzPrice').value = prod.preco; $('#wzCat').value = RADAR_CAT[prod.cat] || 'outros';
+    renderFalaInputs('#wzFalas', num($('#wzTakes').value) || 2, []);
     location.hash = '#app/criar';
   });
   renderRadar();
@@ -587,11 +722,11 @@
     $('#viralOut').onclick = ev => {
       const c = ev.target.closest('[data-copy]'), s = ev.target.closest('[data-send]');
       if (c) { navigator.clipboard?.writeText(out[c.dataset.copy].lines.join('\n')).then(() => toast('Roteiro copiado'), () => toast('Não foi possível copiar. Selecione o texto manualmente.')); }
-      if (s) { $('#ugcProduct').value = p; $('#ugcScript').value = out[s.dataset.send].lines.join('\n'); location.hash = '#app/criar'; }
+      if (s) { $('#ugcProduct').value = p; $('#ugcScript').value = out[s.dataset.send].lines.join('\n'); drawUgcFrame(0.5); location.hash = '#app/legenda'; }
     };
   });
 
-  // ---------- Criar UGC (render em canvas + MediaRecorder) ----------
+  // ---------- Vídeo legendado (render em canvas + MediaRecorder) ----------
   const PERSONAS = [
     { id: 'ju', nome: 'Ju', handle: '@ju.indica', c1: '#7C3AED', c2: '#F43F5E', voice: 'female' },
     { id: 'rafa', nome: 'Rafa', handle: '@rafa.testa', c1: '#0EA5E9', c2: '#22C55E', voice: 'male' },
@@ -707,6 +842,377 @@
   });
   drawUgcFrame(0.5);
 
+  // ---------- IA: Gemini (texto) + Nano Banana (imagem), direto ou via proxy ----------
+  const AIErr = (msg, code) => Object.assign(new Error(msg), { code });
+  const hasAI = () => !!(state.ai.key || state.ai.proxy);
+  const gemini = async (model, body) => {
+    if (!hasAI()) throw AIErr('Configure a chave do Gemini em Integrações IA.', 'NO_KEY');
+    const proxy = state.ai.proxy.replace(/\/$/, '');
+    const url = proxy ? proxy + '/generate' : `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(proxy ? {} : { 'x-goog-api-key': state.ai.key }) }, body: JSON.stringify(proxy ? { model, body } : body) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (res.status === 429) throw AIErr('O limite gratuito do Gemini acabou por agora. Aguarde alguns minutos ou ative o faturamento no AI Studio.', 429);
+      throw AIErr(`O Gemini recusou o pedido: ${data.error?.message || 'erro ' + res.status}`, res.status);
+    }
+    return data;
+  };
+  const aiText = async prompt => {
+    const d = await gemini(state.ai.textModel || 'gemini-flash-latest', { contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9, responseMimeType: 'application/json' } });
+    const t = d.candidates?.[0]?.content?.parts?.map(x => x.text || '').join('') || '';
+    if (!t.trim()) throw AIErr('A IA não retornou texto. Tente gerar de novo.');
+    return t;
+  };
+  const STOP = new Set(['a', 'as', 'com', 'como', 'da', 'das', 'de', 'do', 'dos', 'e', 'mas', 'ou', 'para', 'porque', 'que', 'sem']);
+  const cleanFala = x => {
+    const w = String(x).replace(/^[-*\d.)\s"']+|["']$/g, '').replace(/#[\p{L}\p{N}_-]+/gu, '').replace(/\s+([,.!?])/g, '$1').trim().split(/\s+/).slice(0, 20);
+    while (w.length > 1 && STOP.has(w.at(-1).toLowerCase().replace(/[^a-zá-úç]/g, ''))) w.pop();
+    const r = w.join(' ').replace(/[,;:]$/, ''); return !r ? '' : /[.!?]$/.test(r) ? r : r + '.';
+  };
+  const parseTakes = (txt, n) => {
+    let arr;
+    try { const j = JSON.parse(txt.replace(/^```(?:json)?/i, '').replace(/```$/, '').trim()); arr = Array.isArray(j) ? j : (j.takes || []); }
+    catch { arr = txt.split(/\n+/); }
+    return arr.map(x => cleanFala(typeof x === 'object' ? (x.fala || x.text || '') : x)).filter(Boolean).slice(0, n);
+  };
+  const fileToRef = (file, max = 1024) => new Promise(res => {
+    if (!file) return res(null);
+    const img = new Image();
+    img.onload = () => {
+      const r = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas');
+      c.width = Math.round(img.width * r); c.height = Math.round(img.height * r); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      const url = c.toDataURL('image/jpeg', 0.9); res({ mime: 'image/jpeg', b64: url.split(',')[1], url });
+    };
+    img.onerror = () => res(null); img.src = URL.createObjectURL(file);
+  });
+  const freeImage = prompt => new Promise((res, rej) => {
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0, 1400))}?width=720&height=1280&nologo=true&seed=${Math.floor(Math.random() * 1e6)}`;
+    const img = new Image(); img.onload = () => res(url); img.onerror = () => rej(AIErr('O gerador gratuito não respondeu. Ele aceita 1 pedido a cada 15 s; tente de novo em instantes.')); img.src = url;
+  });
+  const aiImage = async (prompt, refs = []) => {
+    refs = refs.filter(Boolean);
+    if (hasAI() && state.ai.imageModel) {
+      const parts = [{ text: prompt }, ...refs.map(r => ({ inlineData: { mimeType: r.mime, data: r.b64 } }))];
+      const d = await gemini(state.ai.imageModel, { contents: [{ role: 'user', parts }], generationConfig: { responseModalities: ['IMAGE', 'TEXT'], imageConfig: { aspectRatio: '9:16' } } });
+      const part = d.candidates?.[0]?.content?.parts?.find(x => x.inlineData || x.inline_data);
+      const inl = part?.inlineData || part?.inline_data;
+      if (!inl) throw AIErr('O modelo escolhido não devolveu imagem. Em Integrações IA, selecione um modelo com "image" no nome.');
+      return `data:${inl.mimeType || inl.mime_type || 'image/png'};base64,${inl.data}`;
+    }
+    if (state.ai.freeImages) { if (refs.length) toast('O gerador gratuito usa só o texto: as fotos de referência não entram.'); return freeImage(prompt); }
+    throw AIErr('Nenhum gerador de imagem ativo. Escolha um modelo de imagem ou ligue o gerador gratuito em Integrações IA.');
+  };
+  const withBusy = async (btn, statusEl, msg, fn) => {
+    btn.disabled = true; const old = btn.textContent; btn.textContent = msg; statusEl.textContent = '';
+    try { await fn(); } catch (err) { statusEl.textContent = err.message; statusEl.className = 'text-sm text-rose-600 self-center'; }
+    btn.disabled = false; btn.textContent = old;
+  };
+  const okStatus = (el, msg) => { el.textContent = msg; el.className = 'text-sm text-emerald-600 self-center'; };
+
+  // ---------- Integrações IA ----------
+  const fillSelect = (sel, items, current, extra = '') => { sel.innerHTML = extra + items.map(m => `<option value="${esc(m)}" ${m === current ? 'selected' : ''}>${esc(m)}</option>`).join(''); };
+  const renderIA = () => {
+    $('#iaKey').value = state.ai.key; $('#iaProxy').value = state.ai.proxy; $('#iaFree').checked = state.ai.freeImages;
+    fillSelect($('#iaText'), [...new Set([state.ai.textModel, 'gemini-flash-latest', 'gemini-flash-lite-latest'])], state.ai.textModel);
+    fillSelect($('#iaImage'), state.ai.imageModel ? [state.ai.imageModel] : [], state.ai.imageModel, '<option value="">Nenhum (usar gerador gratuito)</option>');
+  };
+  const readIA = () => { state.ai.key = $('#iaKey').value.trim(); state.ai.proxy = $('#iaProxy').value.trim(); state.ai.textModel = $('#iaText').value; state.ai.imageModel = $('#iaImage').value; state.ai.freeImages = $('#iaFree').checked; };
+  $('#iaForm').addEventListener('submit', e => { e.preventDefault(); readIA(); save(); const m = $('#iaMsg'); m.className = 'sm:col-span-2 text-sm text-emerald-600'; m.textContent = 'Integrações salvas.'; });
+  $('#iaTest').addEventListener('click', async () => {
+    readIA(); const m = $('#iaMsg'); m.className = 'sm:col-span-2 text-sm muted'; m.textContent = 'Testando…';
+    try {
+      if (!hasAI()) throw AIErr('Cole a chave do Gemini ou a URL do proxy.');
+      const proxy = state.ai.proxy.replace(/\/$/, '');
+      const res = await fetch(proxy ? proxy + '/models' : 'https://generativelanguage.googleapis.com/v1beta/models?pageSize=200', { headers: proxy ? {} : { 'x-goog-api-key': state.ai.key } });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw AIErr(`Conexão recusada: ${data.error?.message || 'erro ' + res.status}. Confira a chave.`);
+      const gen = (data.models || []).filter(x => (x.supportedGenerationMethods || []).includes('generateContent')).map(x => x.name.replace(/^models\//, ''));
+      const imgs = gen.filter(n => /image/i.test(n));
+      const txts = gen.filter(n => /^gemini/i.test(n) && !/image|tts|audio|live|embedding|robotics|computer/i.test(n));
+      if (!state.ai.imageModel && imgs.length) state.ai.imageModel = imgs.find(n => /flash/i.test(n)) || imgs[0];
+      fillSelect($('#iaText'), [...new Set(['gemini-flash-latest', ...txts])], state.ai.textModel);
+      fillSelect($('#iaImage'), imgs, state.ai.imageModel, '<option value="">Nenhum (usar gerador gratuito)</option>');
+      save(); m.className = 'sm:col-span-2 text-sm text-emerald-600';
+      m.textContent = `Conectado. ${txts.length} modelos de texto e ${imgs.length} de imagem disponíveis. Os modelos de imagem só funcionam com faturamento ativo no Google AI Studio.`;
+    } catch (err) { m.className = 'sm:col-span-2 text-sm text-rose-600'; m.textContent = err.message; }
+  });
+  renderIA();
+
+  // ---------- Base de conhecimento dos prompts (categorias, cenas, formatos) ----------
+  const CATEGORIES = {
+    moda: ['Moda e vestuário', ['Show realistic garment fit, fabric drape, seams, texture and movement on the body.', 'Never morph cuts, prints, logos, buttons, zippers or colors between frames.']],
+    beleza: ['Beleza e skincare', ['Use clean close-ups that preserve skin texture and the real shape, color and packaging of the product.', 'Show a plausible amount and a natural, safe application gesture.', 'Do not invent medical, dermatological or guaranteed-effect claims.']],
+    alimentos: ['Alimentos e bebidas', ['Food must look edible, fresh and physically plausible; preserve package shape and label geometry.', 'Do not invent nutritional, health or weight-loss claims.']],
+    limpeza: ['Limpeza', ['Keep the container and label visually stable.', 'Avoid unsafe chemical combinations; any cleaning result must be visually plausible, never a guaranteed outcome.']],
+    eletro: ['Eletrodomésticos', ['Keep the appliance on a stable surface with realistic scale, controls, doors and handles.', 'Do not invent buttons, displays, accessories or capabilities.', 'Hands interact with controls without clipping through the appliance.']],
+    eletronicos: ['Eletrônicos', ['Preserve ports, screen proportions, buttons and physical geometry from the reference.', 'Do not invent UI screens or specifications; prefer neutral screen content.']],
+    ferramentas: ['Ferramentas', ['Show correct scale, grip and safe ordinary use on a stable work surface.', 'Preserve guards, handles and housings from the reference.']],
+    casa: ['Casa e decoração', ['Keep size and placement believable relative to furniture.', 'Use natural residential lighting and realistic shadows; do not duplicate decor items.']],
+    fitness: ['Fitness', ['Use biomechanically plausible movement and safe exercise form.', 'Do not make body-transformation or guaranteed-performance claims.']],
+    pet: ['Pet', ['Keep animal behavior calm, safe and natural.', 'Preserve the product size relative to the pet; avoid extra animals.']],
+    auto: ['Automotivo', ['Maintain realistic scale and placement on or in the vehicle.', 'Do not invent compatibility or performance claims.']],
+    brinquedos: ['Brinquedos', ['Present the product as a general-audience item without introducing children unless requested.', 'Keep pieces, colors and geometry consistent.']],
+    outros: ['Outros', ['Preserve the physical product exactly as in the reference.', 'Do not invent specifications, accessories, claims or functionality.']],
+  };
+  const RADAR_CAT = { Beleza: 'beleza', Casa: 'casa', Fitness: 'fitness', Pets: 'pet', 'Eletrônicos': 'eletronicos', Moda: 'moda' };
+  const SCENES = [
+    ['academia', 'Academia', 'a clean modern gym with natural light'], ['arlivre', 'Ao ar livre', 'an outdoor park or garden in soft daylight'],
+    ['banheiro', 'Banheiro', 'a tidy residential bathroom with a mirror'], ['cafeteria', 'Cafeteria', 'a cozy coffee shop with warm light'],
+    ['casa', 'Casa', 'a lived-in modern Brazilian living room'], ['cozinha', 'Cozinha', 'a clean residential kitchen countertop'],
+    ['escritorio', 'Escritório', 'a home office desk with a laptop'], ['estudio', 'Estúdio caseiro', 'a simple home studio corner with soft light'],
+    ['loja', 'Loja', 'a small retail store aisle'], ['praia', 'Praia', 'a Brazilian beach at golden hour'],
+    ['quarto', 'Quarto', 'a bright bedroom with neutral decor'], ['outros', 'IA decide', 'a believable everyday environment that suits the product'],
+  ];
+  const CAMS = [
+    ['ugc', 'UGC clássico', 'Criador falando com a câmera', 'Third-person UGC frame: the creator faces the camera at chest-up or waist-up, holds the product at chest height and makes direct, friendly eye contact like a genuine recommendation.', 'Move from eye contact to one presentation gesture, one detail angle, then a settled final product frame.'],
+    ['pov', 'POV (mãos)', 'Demonstração em primeira pessoa', 'First-person POV, hands-only: the product fills most of the frame, front-facing and sharp; hands match the creator skin tone; face and body stay out of frame.', 'Start centered, show one or two useful angles with slow wrist motion and realistic grip, return to a stable hero view.'],
+    ['selfie', 'Blogueirinha', 'Close espontâneo e direto', 'Front-camera selfie vlog at arm length: complete face, shoulders and the free hand holding the product beside the face; slightly imperfect handheld framing.', 'Coordinate one product raise, one small turn or demonstration and a warm restrained finish with the spoken message.'],
+    ['espelho', 'Espelho', 'Selfie no espelho', 'Mirror selfie with exactly one phone and one coherent reflection; medium to full body so outfit and product stay readable.', 'Relaxed weight shift and small handheld movement only; no zoom or sudden angle change.'],
+    ['sofa', 'Review no sofá', 'Sentado, tom de conversa', 'Seated on a sofa in a real living room, eye-level smartphone medium shot, product held at chest or waist level.', 'Eye contact, a restrained lift or turn of the product, a brief inspection glance and a calm recommendation frame.'],
+    ['unboxing', 'Unboxing', 'Abrindo a embalagem', 'Overhead hands-only unboxing: an open package on a table, hands lift and reveal the real product; no face in frame.', 'Positioning, opening, reveal, one item lift or detail view and a tidy final composition. Never invent box contents.'],
+    ['maker', 'Estilo maker', 'Penteadeira com espelho', 'Over-the-shoulder at a vanity mirror: the creator applies the beauty product while the mirror shows one synchronized reflection.', 'Keep product, applicator and face contact visible; no decorative camera moves.'],
+    ['manequim', 'Manequim', 'Peça vestida no manequim', 'The creator stands beside exactly one mannequin wearing the garment and presents it with an open-palm or fabric-touch gesture.', 'Overview, one fabric detail, one fit explanation and a clean final garment view.'],
+    ['passos', 'Passo a passo', 'Demonstração prática', 'Step-by-step demonstration framing the working area so the practical action is understandable.', 'Establish the setup, perform two or three controlled actions, inspect the result, finish with one clean final step.'],
+  ];
+  const MOVES = ['Mostrar o produto com naturalidade', 'Aproximar o produto da câmera', 'Girar o produto devagar', 'Demonstrar o uso', 'Apontar para os detalhes'];
+  const TONES = ['Amigável e confiante', 'Animado', 'Calmo e sincero', 'Divertido', 'Premium e elegante'];
+  const VOICES = ['Feminina', 'Masculina', 'Sem fala (só ações)'];
+  const PITCHES = ['Natural e próxima', 'Enérgica', 'Suave', 'Grave e segura'];
+  const opts = (sel, arr, val) => { $(sel).innerHTML = arr.map(x => `<option ${x === val ? 'selected' : ''}>${x}</option>`).join(''); };
+  $('#wzCat').innerHTML = Object.entries(CATEGORIES).map(([k, [l]]) => `<option value="${k}">${l}</option>`).join('');
+  opts('#wzMove', MOVES); opts('#wzTone', TONES); opts('#wzVoice', VOICES); opts('#wzPitch', PITCHES);
+  const takeLen = plat => plat === 'Grok' ? 6 : 8;
+  const fillTakes = (sel, plat) => { const cur = $(sel).value || '2'; $(sel).innerHTML = [1, 2, 3, 4, 5].map(n => `<option value="${n}" ${String(n) === cur ? 'selected' : ''}>${n} take${n > 1 ? 's' : ''} · ${n * takeLen(plat)} s</option>`).join(''); };
+  let wzScene = 'casa', wzCam = 'ugc';
+  const chip = (id, label, sub, on, attr) => `<button type="button" ${attr}="${id}" aria-pressed="${on}" class="persona ${on ? 'selected' : ''} rounded-xl p-3 border border-app text-left"><span class="block text-sm font-semibold">${label}</span>${sub ? `<span class="block text-xs muted mt-0.5">${sub}</span>` : ''}</button>`;
+  const renderChips = () => {
+    $('#wzScenes').innerHTML = SCENES.map(([id, l]) => chip(id, l, '', id === wzScene, 'data-scene')).join('');
+    $('#wzCams').innerHTML = CAMS.map(([id, l, sub]) => chip(id, l, sub, id === wzCam, 'data-cam')).join('');
+  };
+  $('#wzScenes').addEventListener('click', e => { const b = e.target.closest('[data-scene]'); if (b) { wzScene = b.dataset.scene; renderChips(); } });
+  $('#wzCams').addEventListener('click', e => { const b = e.target.closest('[data-cam]'); if (b) { wzCam = b.dataset.cam; renderChips(); } });
+  renderChips();
+
+  const renderFalaInputs = (wrap, n, falas) => {
+    const old = $$(`${wrap} textarea`).map(t => t.value);
+    $(wrap).innerHTML = Array.from({ length: n }, (_, i) => `<div><label class="text-xs font-semibold muted" for="${wrap.slice(1)}${i}">Take ${i + 1}</label><textarea id="${wrap.slice(1)}${i}" rows="2" class="input mt-1">${esc(falas[i] ?? old[i] ?? '')}</textarea></div>`).join('');
+  };
+  const readFalas = wrap => $$(`${wrap} textarea`).map(t => cleanFala(t.value));
+  const syncWzTakes = () => { fillTakes('#wzTakes', $('#wzPlat').value); renderFalaInputs('#wzFalas', +$('#wzTakes').value, []); };
+  $('#wzPlat').addEventListener('change', syncWzTakes); $('#wzTakes').addEventListener('change', () => renderFalaInputs('#wzFalas', +$('#wzTakes').value, []));
+  syncWzTakes();
+
+  // falas locais (sem IA): tom observacional, sem promessas
+  const LOCAL = {
+    hook: ['Deixa eu te mostrar {p} de perto.', 'Achei {p} e fui ver os detalhes.', 'Pausa um segundo e olha {p}.', 'O destaque de hoje é {p}.', 'Quer ver {p} mais de perto?'],
+    mid: ['Repara no acabamento e nos detalhes.', 'Olha como ele aparece no uso real.', 'Vou aproximar para você enxergar melhor.', 'Dá para ver o tamanho real na mão.', 'Sem promessa: só uma apresentação clara.'],
+    cta: ['Se fez sentido para você, confira no TikTok Shop.', 'Quer ver as informações atuais? Toque no carrinho.', 'Para comparar com calma, veja no TikTok Shop.'],
+  };
+  const localFalas = (p, n) => Array.from({ length: n }, (_, i) => (i === 0 ? pick(LOCAL.hook) : i === n - 1 && n > 1 ? pick(LOCAL.cta) : pick(LOCAL.mid)).replace('{p}', p));
+  const brandHint = () => { const b = state.brand || {}; return [b.name && `Loja: ${b.name}.`, b.niche && `Nicho: ${b.niche}.`, b.words && `Use quando couber: ${b.words}.`, b.avoid && `Nunca use: ${b.avoid}.`].filter(Boolean).join(' '); };
+
+  const wzCfg = () => ({
+    name: $('#wzName').value.trim(), cat: $('#wzCat').value, price: num($('#wzPrice').value), instr: $('#wzInstr').value.trim(),
+    creator: $('#wzCreatorDesc').value.trim(), scene: SCENES.find(x => x[0] === wzScene), cam: CAMS.find(x => x[0] === wzCam),
+    move: $('#wzMove').value, tone: $('#wzTone').value, voice: $('#wzVoice').value, pitch: $('#wzPitch').value,
+    plat: $('#wzPlat').value, takes: +$('#wzTakes').value, extra: $('#wzExtra').value.trim(),
+  });
+  $('#wzFalasBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#wzStatus'), 'Escrevendo…', async () => {
+    const c = wzCfg(); if (!c.name) throw AIErr('Informe o nome do produto primeiro.');
+    if (c.voice.startsWith('Sem fala')) throw AIErr('Com a opção "Sem fala", os takes não têm diálogo. Escolha uma voz para gerar falas.');
+    let falas;
+    if (hasAI()) {
+      const prompt = `Você é roteirista de vídeos UGC para TikTok Shop no Brasil. Escreva ${c.takes} falas em português do Brasil, uma por take de ${takeLen(c.plat)} segundos, cada uma com no máximo 20 palavras e linguagem falada natural.
+Take 1: gancho que prende nos 2 primeiros segundos. Takes do meio: demonstração, detalhe visível ou resposta a uma objeção. Último take: CTA citando o TikTok Shop.
+Regras: não invente benefícios, especificações, resultados médicos ou garantias; fale só do que dá para ver na câmera. Sem hashtags e sem emojis.
+Produto: ${c.name}. Categoria: ${CATEGORIES[c.cat][0]}. ${c.price ? 'Preço: ' + brl(c.price) + '.' : ''} Direção: ${c.instr || 'nenhuma'}. Tom: ${c.tone}. Voz: ${c.voice}, ${c.pitch}. ${brandHint()}
+Responda somente JSON: {"takes":["fala 1","fala 2"]}`;
+      falas = parseTakes(await aiText(prompt), c.takes);
+      if (falas.length < c.takes) throw AIErr('A IA não retornou todas as falas. Tente gerar novamente.');
+    } else falas = localFalas(c.name, c.takes);
+    renderFalaInputs('#wzFalas', c.takes, falas); state.scripts++; save();
+    okStatus($('#wzStatus'), hasAI() ? 'Falas criadas pela IA. Edite se quiser.' : 'Falas criadas a partir dos modelos prontos.');
+  }));
+
+  const creatorPrompt = desc => `Photorealistic vertical 9:16 smartphone photo of a fictional ${desc || 'Brazilian content creator'}, facing the camera with a friendly natural expression, soft indoor daylight, authentic UGC look, real skin texture, no text, no watermark, not a celebrity.`;
+  let wzCreatorRef = null;
+  $('#wzCreatorImg').addEventListener('change', async e => { wzCreatorRef = await fileToRef(e.target.files[0]); if (wzCreatorRef) { $('#wzCreatorPrev').src = wzCreatorRef.url; $('#wzCreatorPrev').classList.remove('hidden'); } });
+  const urlToRef = async url => { if (url.startsWith('data:')) { const [h, b] = url.split(','); return { mime: h.match(/data:(.*?);/)[1], b64: b, url }; } return { mime: 'image/jpeg', b64: '', url, remote: true }; };
+  $('#wzCreatorGen').addEventListener('click', e => withBusy(e.currentTarget, $('#wzStatus'), 'Gerando…', async () => {
+    const url = await aiImage(creatorPrompt($('#wzCreatorDesc').value.trim()));
+    wzCreatorRef = await urlToRef(url); $('#wzCreatorPrev').src = url; $('#wzCreatorPrev').classList.remove('hidden');
+    okStatus($('#wzStatus'), 'Avatar gerado. Baixe a imagem para usar como referência no Flow.');
+  }));
+
+  const imageMergePrompt = (c, hasScene) => `[FLOW IMAGE MERGE — USE ${hasScene ? 'ALL THREE REFERENCE FILES' : 'THE CREATOR AND PRODUCT REFERENCE FILES'}]
+- PRODUCT IMAGE: the exact product (${c.name}). Preserve its shape, colors, label and proportions. Do not redesign it.
+- CREATOR IMAGE: the person to show. Keep face, hair, skin tone and body consistent.
+${hasScene ? '- SCENE IMAGE: use it only as environment, furniture and lighting reference. Ignore people in it.' : `- SETTING: ${c.scene[2]}.`}
+
+Create a highly realistic UGC-style vertical 9:16 photo that looks like a real frame from a social-media product video, never a polished studio campaign.
+CAMERA STYLE — ${c.cam[1]}: ${c.cam[3]}
+User direction: ${c.instr || 'none'}.
+CATEGORY RULES (${CATEGORIES[c.cat][0]}):
+${CATEGORIES[c.cat][1].map(r => '- ' + r).join('\n')}
+Soft, slightly warm natural light, smartphone dynamic range, realistic hands with five fingers, believable grip and scale.
+Reject CGI, 3D render, fake skin, floating product, distorted anatomy, studio backdrop, text overlays, watermark and UI elements.`;
+
+  let wzSceneRef = null, wzProdRef = null;
+  $('#wzSceneImg').addEventListener('change', async e => { wzSceneRef = await fileToRef(e.target.files[0]); });
+  $('#wzProdImg').addEventListener('change', async e => { wzProdRef = await fileToRef(e.target.files[0]); });
+  $('#wzImgBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#wzStatus'), 'Gerando imagem…', async () => {
+    const c = wzCfg(); if (!c.name) throw AIErr('Informe o nome do produto primeiro.');
+    const prompt = imageMergePrompt(c, !!wzSceneRef);
+    $('#wzRefPrompt').value = prompt; $('#wzRefWrap').classList.remove('hidden');
+    const refs = [wzProdRef, wzCreatorRef, wzSceneRef].filter(r => r && r.b64);
+    if (!(hasAI() && state.ai.imageModel)) {
+      if (!state.ai.freeImages) { okStatus($('#wzStatus'), 'Prompt de fusão pronto. Cole no Flow junto com as fotos.'); return; }
+      const url = await freeImage(`${c.cam[3]} The creator: ${c.creator}. Product: ${c.name}. Setting: ${c.scene[2]}. Photorealistic UGC smartphone photo, vertical, no text.`);
+      $('#wzRefImg').src = url; $('#wzRefDl').href = url;
+    } else {
+      if (!wzProdRef) throw AIErr('Envie a foto do produto para o Nano Banana manter o produto fiel.');
+      const url = await aiImage(prompt, refs); $('#wzRefImg').src = url; $('#wzRefDl').href = url;
+    }
+    $('#wzRefImg').classList.remove('hidden'); $('#wzRefDl').classList.remove('hidden');
+    okStatus($('#wzStatus'), 'Imagem de referência pronta para usar no Flow.');
+    addLib('Imagem de referência', c.name);
+  }));
+
+  const takeRole = (i, n) => n === 1 ? 'HOOK + DEMONSTRATION + CTA in a single take' : i === 0 ? 'HOOK — stop the scroll in the first 2 seconds' : i === n - 1 ? 'CTA — calm final product-focused frame' : i % 2 ? 'DEMONSTRATION + core benefit' : 'DETAIL / proof / objection handling';
+  const ugcTakePrompt = (c, i, falas) => {
+    const sec = takeLen(c.plat), n = c.takes, mute = c.voice.startsWith('Sem fala');
+    return `🎬 UGC PRODUCT VIDEO — ${c.plat} · 9:16 · ${n * sec}s total
+MANDATORY SPEECH LANGUAGE: Brazilian Portuguese (pt-BR), natural Brazilian accent.
+
+📦 PRODUCT
+Name: ${c.name}. Category: ${CATEGORIES[c.cat][0]}.${c.price ? ` Price reference: ${brl(c.price)}.` : ''}
+User direction: ${c.instr || 'none'}.
+Use the attached product image as the exact product reference. Never morph shape, color, label or proportions.
+
+🎭 CREATOR / AVATAR
+${c.creator || 'Use the attached creator reference.'}
+- Keep the creator visually consistent with the reference image across all frames.
+- Do not change face, hair, skin tone, body or clothing mid-video.
+- The avatar is fictional or user-approved; do not imply a real public figure.
+
+🏠 SCENE
+${c.scene[2]}.
+
+🎥 CAMERA STYLE — ${c.cam[1]}
+${c.cam[3]}
+FORMAT BLUEPRINT: ${c.cam[4]}
+
+🎬 PERFORMANCE
+Movement: ${c.move}. Tone: ${c.tone}. Voice: ${c.voice}. Voice personality: ${c.pitch}.
+Additional direction: ${c.extra || 'none'}.
+- Match gestures to the spoken sentence; avoid looping generic hand movement.
+- Product stays visible whenever the dialogue talks about it.
+
+CATEGORY RULES
+${CATEGORIES[c.cat][1].map(r => '- ' + r).join('\n')}
+
+📍 TAKE ${i + 1} of ${n}
+Duration: ${sec} seconds (${i * sec}s to ${(i + 1) * sec}s)
+Narrative role: ${takeRole(i, n)}
+${mute ? 'Audio/performance: NO SPEECH. No dialogue, narration or lip-sync. Natural ambient sound only.' : `Spoken dialogue (pt-BR, MAX 20 words): "${falas[i] || ''}"\nAudio: voice + natural ambient sound only, no background music.`}
+Continuity: ${i === 0 ? 'opening take; establish the creator, product and scene.' : 'start from the exact visual state left by the previous take.'}${i === n - 1 ? ' End on a clean, stable product frame.' : ' End in a pose that flows naturally into the next take.'}
+Avoid: subtitles, captions, on-screen text, watermark, logos, extra people, distorted hands.`;
+  };
+  const PLAT_URL = { 'Flow VEO3': 'https://labs.google/fx/tools/flow', Grok: 'https://grok.com/imagine' };
+  const renderPrompts = (wrap, title, prompts, plat) => {
+    $(wrap).innerHTML = `<div class="flex flex-wrap items-center justify-between gap-2"><h2 class="font-semibold">${esc(title)}</h2><a href="${PLAT_URL[plat]}" target="_blank" rel="noopener" class="text-sm font-semibold text-accent">Abrir ${esc(plat)}</a></div>` +
+      prompts.map((pr, i) => `<div class="surface border border-app rounded-2xl p-4"><div class="flex items-center justify-between gap-2"><p class="text-sm font-semibold">Take ${i + 1}</p><button type="button" data-copy-target="${wrap.slice(1)}P${i}" class="px-3 py-1.5 rounded-lg border border-app text-xs font-semibold">Copiar prompt</button></div><textarea id="${wrap.slice(1)}P${i}" rows="10" readonly class="input mt-2 font-mono text-xs">${esc(pr)}</textarea></div>`).join('') +
+      `<p class="muted text-xs">No ${esc(plat)}: crie um vídeo a partir da imagem de referência (frames to video), cole o prompt de cada take e junte os takes no Studio ou no CapCut.</p>`;
+  };
+  $('#wzForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const c = wzCfg(); if (!c.name) return toast('Informe o nome do produto.');
+    const falas = readFalas('#wzFalas');
+    if (!c.voice.startsWith('Sem fala') && falas.some(f => !f)) { $('#wzStatus').className = 'text-sm text-rose-600 self-center'; $('#wzStatus').textContent = 'Preencha ou gere as falas de todos os takes.'; return; }
+    renderPrompts('#wzOut', `Prompts para ${c.plat} · ${c.takes} take${c.takes > 1 ? 's' : ''}`, Array.from({ length: c.takes }, (_, i) => ugcTakePrompt(c, i, falas)), c.plat);
+    okStatus($('#wzStatus'), 'Prompts prontos. Copie cada take para o ' + c.plat + '.');
+    addLib('Prompts UGC', c.name, c.takes * takeLen(c.plat));
+    $('#wzOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ---------- Virais: Em alta + Historinhas ----------
+  const VCHARS = {
+    alta: [
+      ['fazendeiro', 'Fazendeiro galã', 'Flerte, humor e histórias do interior', 'a handsome fictional Brazilian farmer in his 30s, straw hat, plaid shirt, sun-tanned skin', 'Frente da casa rural', 'Camisa xadrez'],
+      ['vovo', 'Vovó conselheira', 'Conselhos, nostalgia e humor popular', 'a sweet fictional Brazilian grandmother in her 70s, grey hair in a bun, floral dress, reading glasses', 'Cozinha de casa de vó', 'Vestido florido'],
+      ['tiozao', 'Tiozão do churrasco', 'Humor e provocação leve', 'a cheerful fictional Brazilian man in his 50s, mustache, football jersey, holding a barbecue tong', 'Quintal com churrasqueira', 'Camisa de time'],
+      ['patroa', 'Patroa sincera', 'Opinião forte e identificação', 'a confident fictional Brazilian woman in her 40s, elegant casual outfit, expressive face', 'Sala de estar moderna', 'Blusa social'],
+    ],
+    frutas: [
+      ['banana', 'Banana', 'Dramática e fofoqueira', 'a photorealistic anthropomorphic banana character with expressive eyes and small arms, real banana peel texture', 'Fruteira da cozinha', ''],
+      ['morango', 'Morango', 'Romântico e sensível', 'a photorealistic anthropomorphic strawberry character with expressive eyes, real seeds and leaves', 'Feira livre', ''],
+      ['abacaxi', 'Abacaxi', 'Bravo, mas de bom coração', 'a photorealistic anthropomorphic pineapple character with a spiky crown and stern eyebrows', 'Bancada da cozinha', ''],
+      ['melancia', 'Melancia', 'Mãe protetora da fruteira', 'a photorealistic anthropomorphic watermelon character, round, green striped skin, warm smile', 'Geladeira aberta', ''],
+    ],
+  };
+  const STORIES = ['Confissão inesperada', 'Traição na feira', 'Ciúmes na fruteira', 'Primeiro encontro', 'Briga de vizinhas', 'Segredo de família'];
+  const GOALS = { alta: ['Flertar com o público', 'Humor e provocação leve', 'Dar um conselho', 'Fazer uma pergunta', 'Contar uma história'], frutas: ['Criar suspense', 'Fazer rir', 'Emocionar', 'Gerar comentários'] };
+  let vMode = 'alta', vChar = 'fazendeiro';
+  opts('#vrStory', STORIES);
+  const renderV = () => {
+    $$('.vtab').forEach(b => { const on = b.dataset.vmode === vMode; b.classList.toggle('gradient-btn', on); b.classList.toggle('text-white', on); b.setAttribute('aria-selected', on); });
+    $('#vrChars').innerHTML = VCHARS[vMode].map(([id, l, sub]) => chip(id, l, sub, id === vChar, 'data-vchar')).join('');
+    $('#vrStoryWrap').classList.toggle('hidden', vMode !== 'frutas'); opts('#vrGoal', GOALS[vMode]);
+  };
+  $$('.vtab').forEach(b => b.addEventListener('click', () => { vMode = b.dataset.vmode; vChar = VCHARS[vMode][0][0]; renderV(); }));
+  $('#vrChars').addEventListener('click', e => { const b = e.target.closest('[data-vchar]'); if (b) { vChar = b.dataset.vchar; renderV(); } });
+  const syncVTakes = () => { fillTakes('#vrTakes', $('#vrPlat').value); renderFalaInputs('#vrFalas', +$('#vrTakes').value, []); };
+  $('#vrPlat').addEventListener('change', syncVTakes); $('#vrTakes').addEventListener('change', () => renderFalaInputs('#vrFalas', +$('#vrTakes').value, []));
+  renderV(); syncVTakes();
+  const vCfg = () => {
+    const ch = VCHARS[vMode].find(x => x[0] === vChar);
+    return { ch, mode: vMode, story: $('#vrStory').value, goal: $('#vrGoal').value, place: $('#vrPlace').value.trim() || ch[4], outfit: $('#vrOutfit').value.trim() || ch[5], frame: $('#vrFrame').value, cam: $('#vrCam').value, action: $('#vrAction').value, plat: $('#vrPlat').value, takes: +$('#vrTakes').value, theme: $('#vrTheme').value.trim() };
+  };
+  const V_LOCAL = {
+    alta: ['Vem cá que eu preciso te contar uma coisa.', 'Na roça a gente aprende cedo: quem planta carinho colhe saudade.', 'E aí, você concorda comigo ou não?', 'Agora comenta aqui a sua opinião, porque eu quero saber quem concorda comigo.'],
+    frutas: ['Vocês não vão acreditar no que eu vi na fruteira hoje.', 'Ele jurou que era só amizade, mas estava todo vermelho.', 'Eu fingi que não vi, mas ninguém me engana.', 'Comenta aqui: eu perdoo ou não perdoo?'],
+  };
+  $('#vrFalasBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#vrStatus'), 'Escrevendo…', async () => {
+    const c = vCfg(); let falas;
+    if (hasAI()) {
+      const prompt = `Você escreve vídeos virais curtos para TikTok e Reels no Brasil. Personagem: ${c.ch[1]} (${c.ch[2]}). ${c.mode === 'frutas' ? 'Formato: historinha com frutas falantes. Enredo: ' + c.story + '.' : ''} Objetivo: ${c.goal}. Tema: ${c.theme || 'escolha um tema cotidiano com identificação popular'}.
+Escreva ${c.takes} falas em português do Brasil, uma por take de ${takeLen(c.plat)} segundos, no máximo 20 palavras cada, linguagem falada e regional quando couber. Take 1 é gancho; o último convida a comentar. Sem hashtags, sem emojis, sem ofensas e sem citar pessoas reais.
+Responda somente JSON: {"takes":["fala 1","fala 2"]}`;
+      falas = parseTakes(await aiText(prompt), c.takes);
+      if (falas.length < c.takes) throw AIErr('A IA não retornou todas as falas. Tente gerar novamente.');
+    } else { const base = V_LOCAL[c.mode]; falas = Array.from({ length: c.takes }, (_, i) => i === c.takes - 1 ? base.at(-1) : base[Math.min(i, base.length - 2)]); }
+    renderFalaInputs('#vrFalas', c.takes, falas); state.scripts++; save();
+    okStatus($('#vrStatus'), hasAI() ? 'Falas criadas pela IA. Você pode editar antes de gerar o prompt.' : 'Falas criadas a partir dos modelos prontos.');
+  }));
+  let vrAvatarRef = null;
+  $('#vrAvatar').addEventListener('change', async e => { vrAvatarRef = await fileToRef(e.target.files[0]); });
+  $('#vrImgBtn').addEventListener('click', e => withBusy(e.currentTarget, $('#vrStatus'), 'Gerando…', async () => {
+    const c = vCfg();
+    const url = await aiImage(`Photorealistic vertical 9:16 frame of ${c.ch[3]}${c.outfit ? ', wearing ' + c.outfit : ''}, in ${c.place}, ${c.frame.toLowerCase()} framing, ${c.cam.toLowerCase()}, natural light, authentic social-media video look, no text, no watermark.`, vrAvatarRef ? [vrAvatarRef] : []);
+    $('#vrRefImg').src = url; $('#vrRefDl').href = url; $('#vrRefWrap').classList.remove('hidden');
+    okStatus($('#vrStatus'), 'Imagem de referência pronta para usar no Flow.');
+  }));
+  $('#vrForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const c = vCfg(), falas = readFalas('#vrFalas'), sec = takeLen(c.plat);
+    if (falas.some(f => !f)) { $('#vrStatus').className = 'text-sm text-rose-600 self-center'; $('#vrStatus').textContent = 'Preencha ou gere as falas de todos os takes.'; return; }
+    const prompts = falas.map((f, i) => `🎬 VIRAL SHORT — ${c.plat} · 9:16 · TAKE ${i + 1} of ${c.takes} · ${sec} seconds (${i * sec}s to ${(i + 1) * sec}s)
+MANDATORY SPEECH LANGUAGE: Brazilian Portuguese (pt-BR), natural Brazilian accent.
+
+CHARACTER: ${c.ch[3]}.${c.outfit ? ' Outfit: ' + c.outfit + '.' : ''} Use the attached reference image to fix the character identity; identity${c.mode === 'frutas' ? ', fruit anatomy' : ''} and recognizable details cannot change between takes.
+STORY: ${c.mode === 'frutas' ? c.story + '. ' : ''}Goal: ${c.goal}. Location: ${c.place}.${c.theme ? ' Theme: ' + c.theme + '.' : ''}
+CAMERA: ${c.cam}, ${c.frame.toLowerCase()} framing. ACTION: ${c.action}.
+${i === 0 ? 'Open with an immediate visual hook and establish the situation.' : i === c.takes - 1 ? 'Deliver the payoff and end looking at the camera, inviting comments.' : 'Escalate the situation and keep visual continuity with the previous take.'}
+
+PERFORMANCE
+Only ${c.ch[1]} speaks in this take. Exact Brazilian Portuguese dialogue (do not translate or change): "${f}"
+Lip-sync must match the dialogue. Voice + natural ambient sound only, no background music.
+Avoid: subtitles, on-screen text, watermark, extra characters, morphing.`);
+    renderPrompts('#vrOut', `${c.ch[1]} · ${c.takes} take${c.takes > 1 ? 's' : ''} para ${c.plat}`, prompts, c.plat);
+    okStatus($('#vrStatus'), 'Prompts prontos.'); addLib(c.mode === 'frutas' ? 'Historinha' : 'Viral em alta', `${c.ch[1]}${c.theme ? ' · ' + c.theme : ''}`, c.takes * sec);
+    $('#vrOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
   // ---------- Modelo TikTok Shop ----------
   let shopP = null, shopM = null;
   const prev = (input, imgEl, setter) => $(input).addEventListener('change', async e => { const img = await loadImg(e.target.files[0]).catch(() => null); setter(img); if (img) { $(imgEl).src = img.src; $(imgEl).classList.remove('hidden'); } });
@@ -725,6 +1231,31 @@
     const price = brl($('#shopPrice').value); ctx.font = '800 44px Inter'; const pw = ctx.measureText(price).width + 60;
     ctx.fillStyle = variant ? '#F43F5E' : '#F97316'; roundRect(ctx, (W - pw) / 2, 1130, pw, 80, 40); ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillText(price, W / 2, 1184);
   };
+  $('#shopCam').innerHTML = CAMS.filter(x => ['ugc', 'selfie', 'espelho', 'sofa', 'manequim'].includes(x[0])).map(x => `<option value="${x[0]}">${x[1]}</option>`).join('');
+  const shopMergePrompt = (camId, variant) => {
+    const cam = CAMS.find(x => x[0] === camId);
+    return `[FLOW IMAGE MERGE — USE THE MODEL AND PRODUCT REFERENCE FILES]
+- PRODUCT IMAGE: the exact product to sell. Preserve shape, colors, label and proportions.
+- MODEL IMAGE: the person who presents it. Keep face, hair, skin tone and body identical.
+Create a highly realistic UGC-style vertical 9:16 TikTok Shop photo. ${cam[3]}
+${variant ? 'VARIATION: change pose, angle and background composition while keeping the same model and product.' : 'Natural, trustworthy, lightly premium mood.'}
+Realistic hands and grip, smartphone lighting. No text, no price tags, no watermark, no UI.`;
+  };
+  const showShop = (canvas, link, url) => new Promise(res => { const img = new Image(); img.onload = () => { const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, 720, 1280); drawCover(ctx, img, 720, 1280); link.href = url; link.classList.remove('hidden'); res(); }; img.src = url; });
+  $('#shopAI').addEventListener('click', async () => {
+    const fp = $('#shopProduct').files[0], fm = $('#shopModel').files[0];
+    $('#shopPrompt').value = shopMergePrompt($('#shopCam').value, false); $('#shopPromptWrap').classList.remove('hidden');
+    if (!fp || !fm) { $('#shopMsg').textContent = 'Envie a foto do produto e a da modelo.'; return; }
+    if (!(hasAI() && state.ai.imageModel)) { $('#shopMsg').textContent = 'Nenhum modelo de imagem configurado. Use o prompt abaixo no Flow (é grátis) ou configure o Nano Banana em Integrações IA.'; return; }
+    const btn = $('#shopAI'); btn.disabled = true; $('#shopMsg').textContent = 'Gerando resultado e variação com o Nano Banana…';
+    try {
+      const refs = [await fileToRef(fp), await fileToRef(fm)];
+      const [a, b] = await Promise.all([aiImage(shopMergePrompt($('#shopCam').value, false), refs), aiImage(shopMergePrompt($('#shopCam').value, true), refs)]);
+      await showShop($('#shopA'), $('#shopADl'), a); await showShop($('#shopB'), $('#shopBDl'), b);
+      $('#shopMsg').textContent = 'Resultado e variação prontos.'; addLib('Criativo', ($('#shopTitle').value || 'TikTok Shop') + ' · IA');
+    } catch (err) { $('#shopMsg').textContent = err.message; }
+    btn.disabled = false;
+  });
   $('#shopGenerate').addEventListener('click', () => {
     if (!shopP || !shopM) { $('#shopMsg').textContent = 'Envie a foto do produto e a da modelo para gerar o criativo.'; return; }
     drawShop($('#shopA'), false); drawShop($('#shopB'), true);
@@ -733,6 +1264,7 @@
     $('#shopMsg').textContent = 'Criativo e variação prontos.';
     addLib('Criativo', $('#shopTitle').value || 'TikTok Shop');
   });
+
 
   // ---------- Studio ----------
   const stCanvas = $('#stCanvas'), sctx = stCanvas.getContext('2d');
